@@ -25,6 +25,7 @@
             <div class="container mx-auto flex justify-between items-center">
                 <span class="text-2xl font-bold text-orange-500 tracking-wider">ASPWeBSM <span class="text-white text-sm opacity-70">v1.0</span>
                 </span>
+                <asp:LinkButton runat="server" ID="btnLogOut" OnClick="btnLogOut_Click"><span class="text-1xl font-bold text-red-500 tracking-wider mr-0">LOG OUT</span></asp:LinkButton>
             </div>
         </nav>
 
