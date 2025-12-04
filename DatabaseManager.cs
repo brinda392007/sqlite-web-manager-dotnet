@@ -8,7 +8,7 @@ namespace ASPWeBSM
     {
         // Connection string from Web.config
         private static string _connectionString =
-            ConfigurationManager.ConnectionStrings["AppDb"].ConnectionString;
+            ConfigurationManager.ConnectionStrings["MyDB"].ConnectionString;
 
         public static SqlConnection GetConnection()
         {

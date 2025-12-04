@@ -77,7 +77,6 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- SELECT: if @UserId > 0, return only that user's files; else all
     IF (@EVENT = 'SELECT')
     BEGIN
         IF (@UserId > 0)

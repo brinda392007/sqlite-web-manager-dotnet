@@ -38,11 +38,11 @@
                                         <ItemTemplate>
                                             <tr class="border-b border-slate-700 transition-colors hover:bg-slate-750">
                                                 <td class="px-6 py-4 font-medium">
-    <a href='<%# "Analyze.aspx?uploadId=" + Eval("Id") %>'
-       class="text-orange-400 hover:text-orange-300 underline decoration-dotted">
-        <%# Eval("FileName") %>
-    </a>
-</td>
+                                                    <a href='<%# "Analyze.aspx?uploadId=" + Eval("Id") %>'
+                                                        class="text-orange-400 hover:text-orange-300 underline decoration-dotted">
+                                                        <%# Eval("FileName") %>
+                                                    </a>
+                                                </td>
 
                                                 <td class="px-6 py-4">
                                                     <%# FormatSize(Eval("Size")) %>
