@@ -1,0 +1,6 @@
+# Visual Studio / .NET stuff we don't want in git
+.vs/
+bin/
+obj/
+*.user
+*.suo

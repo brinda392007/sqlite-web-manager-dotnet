@@ -1,0 +1,41 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="ASPWeBSM.Site" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta charset="utf-8" />
+    <title>ASPWeBSM</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <style>
+        .font-vt323 {
+            font-family: 'VT323', monospace;
+        }
+    </style>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body class="bg-slate-900 text-slate-200 antialiased">
+    <form id="form1" runat="server">
+        <asp:ScriptManager ID="ScriptManager1" runat="server" />
+
+        <nav class="bg-slate-950 p-4 border-b-2 border-orange-500 shadow-lg">
+            <div class="container mx-auto flex justify-between items-center">
+                <span class="text-2xl font-bold text-orange-500 tracking-wider">ASPWeBSM <span class="text-white text-sm opacity-70">v1.0</span>
+                </span>
+            </div>
+        </nav>
+
+        <div class="container mx-auto mt-6 p-4">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>
