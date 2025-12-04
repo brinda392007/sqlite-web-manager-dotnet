@@ -44,7 +44,8 @@ namespace ASPWeBSM
                         {
                             txtUser.Text = "";
                             txtPassword.Text = "";
-                            btnLogin.Text = "Invalid, Try again";
+                            Response.Redirect("Default.aspx");
+                            //btnLogin.Text = "Invalid, Try again";
                         }
                     }
                 }
