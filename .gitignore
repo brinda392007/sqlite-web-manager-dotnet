@@ -416,3 +416,7 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# To ignore the Foreign connection string
+connectionStrings.local.config
+
