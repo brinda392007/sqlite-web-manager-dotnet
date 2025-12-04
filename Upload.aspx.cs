@@ -11,6 +11,7 @@ namespace ASPWeBSM
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            UiHelper.ShowSessionToast(this);
         }
 
         protected void btnUpload_Click(object sender, EventArgs e)
@@ -27,6 +28,8 @@ namespace ASPWeBSM
                     {
                         lblStatus.Text = "Uploaded file is not a .db file.";
                         lblStatus.ForeColor = Color.Red;
+                        UiHelper.ShowToast(this, "Please upload a .db file.", "error");
+
                         return;
                     }
 
@@ -39,19 +42,29 @@ namespace ASPWeBSM
                     int userId = Convert.ToInt32(Session["UserId"]);
 
                     SaveFileToDatabase(userId, filename, contentType, fileData, size);
-                    Response.Redirect("Default.aspx"); 
+
+                    //lblStatus.Text = "Uploaded: " + filename;
+                    //lblStatus.ForeColor = Color.LightGreen;
+
+                    // IMPORTANT: store toast in session, then redirect
+                    UiHelper.SetToast("File uploaded successfully.", "success");
+                    Response.Redirect("Default.aspx");
 
                 }
                 catch (Exception ex)
                 {
                     lblStatus.Text = "Upload Failed: " + ex.Message;
                     lblStatus.ForeColor = Color.Red;
+
+                    UiHelper.ShowToast(this, "Upload failed: " + ex.Message, "error");
                 }
             }
             else
             {
                 lblStatus.Text = "No file detected";
                 lblStatus.ForeColor = Color.Yellow;
+
+                UiHelper.ShowToast(this, "No file selected.", "error");
             }
         }
 

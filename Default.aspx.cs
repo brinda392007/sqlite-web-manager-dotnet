@@ -13,6 +13,7 @@ namespace ASPWeBSM
             if (!IsPostBack)
             {
                 lblWelcome.Text = "Welcome, Operator " + Session["Username"];
+                UiHelper.ShowSessionToast(this);  // shows login toast
             }
 
             LoadFiles();
@@ -72,6 +73,8 @@ namespace ASPWeBSM
                         cmd.Parameters.AddWithValue("@UserId", userId);
 
                         cmd.ExecuteNonQuery();
+
+                        UiHelper.ShowToast(this, "File deleted successfully.", "success");
                     }
                 }
 
