@@ -13,5 +13,18 @@ namespace ASPWeBSM
         {
 
         }
+
+        protected void btnLogOut_Click(object sender, EventArgs e)
+        {
+            if (Session["UserId"] == null)
+            {
+
+            }
+            else
+            {
+                Session["UserId"] = null;
+                Response.Redirect("Login.aspx");
+            }
+        }
     }
 }
