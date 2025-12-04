@@ -13,6 +13,7 @@ namespace ASPWeBSM
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            UiHelper.ShowSessionToast(this);
         }
 
         protected void btnRegister_Click(object sender, EventArgs e)
@@ -38,7 +39,7 @@ namespace ASPWeBSM
                     object newId = cmd.ExecuteScalar();
                 }
             }
-
+            UiHelper.SetToast("Registration successful. You can now log in.", "success");
             // Optional but nice: redirect to login after successful registration
             Response.Redirect("Login.aspx");
         }

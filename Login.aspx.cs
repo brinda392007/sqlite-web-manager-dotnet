@@ -13,6 +13,7 @@ namespace ASPWeBSM
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            UiHelper.ShowSessionToast(this);
         }
 
         protected void btnLogin_Click(object sender, EventArgs e)
@@ -38,14 +39,14 @@ namespace ASPWeBSM
                         {
                             Session["UserId"] = reader["Id"];
                             Session["Username"] = reader["Username"];
+                            UiHelper.SetToast("Login successful", "success");
                             Response.Redirect("Default.aspx");
                         }
                         else
                         {
                             txtUser.Text = "";
                             txtPassword.Text = "";
-                            Response.Redirect("Default.aspx");
-                            //btnLogin.Text = "Invalid, Try again";
+                            UiHelper.ShowToast(this, "Invalid username or password.", "error");
                         }
                     }
                 }
