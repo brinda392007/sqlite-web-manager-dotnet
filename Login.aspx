@@ -2,34 +2,34 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-        <div class="flex items-center justify-center min-h-screen bg-slate-900">
-    <div class="bg-slate-800 p-8 rounded-2xl shadow-2xl w-96 border border-slate-700">
+        <div class="flex min-h-screen items-center justify-center bg-slate-900">
+    <div class="w-96 rounded-2xl border border-slate-700 bg-slate-800 p-8 shadow-2xl">
 
-        <h2 class="text-3xl font-bold mb-6 text-center text-white">
+        <h2 class="mb-6 text-center text-3xl font-bold text-white">
             Access <span class="text-orange-500">Control</span>
         </h2>
 
         <div class="mb-4">
-            <label class="block text-slate-400 text-sm font-bold mb-2">Username</label>
+            <label class="mb-2 block text-sm font-bold text-slate-400">Username</label>
             <asp:TextBox ID="txtUser" runat="server" 
-                CssClass="w-full p-3 bg-slate-900 text-white rounded border border-slate-600 focus:outline-none focus:border-orange-500 transition-colors placeholder-slate-500" 
+                CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none" 
                 placeholder="Username"></asp:TextBox>
         </div>
 
         <div class="mb-8">
-            <label class="block text-slate-400 text-sm font-bold mb-2">Password</label>
+            <label class="mb-2 block text-sm font-bold text-slate-400">Password</label>
             <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" 
-                CssClass="w-full p-3 bg-slate-900 text-white rounded border border-slate-600 focus:outline-none focus:border-orange-500 transition-colors placeholder-slate-500" 
+                CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none" 
                 placeholder="••••••••"></asp:TextBox>
         </div>
 
         <div class="mb-4">
             <asp:Button ID="btnLogin" runat="server" Text="Enter System" OnClick="btnLogin_Click" 
-                CssClass="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded transition duration-500 transform hover:scale-105 shadow-lg shadow-orange-500/30" />
+                CssClass="w-full transform rounded bg-orange-500 px-4 py-3 font-bold text-white shadow-lg shadow-orange-500/30 transition duration-500 hover:scale-105 hover:bg-orange-600" />
         </div>
 
         <p class="mt-4 text-center text-sm text-slate-400">
-            Need an account? <a href="Register.aspx" class="text-orange-400 hover:text-orange-300 font-semibold underline decoration-dotted">Register</a>
+            Need an account? <a href="Register.aspx" class="font-semibold text-orange-400 underline decoration-dotted hover:text-orange-300">Register</a>
         </p>
     </div>
 </div>

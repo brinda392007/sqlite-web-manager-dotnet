@@ -39,9 +39,8 @@ namespace ASPWeBSM
                     int userId = Convert.ToInt32(Session["UserId"]);
 
                     SaveFileToDatabase(userId, filename, contentType, fileData, size);
+                    Response.Redirect("Default.aspx"); 
 
-                    lblStatus.Text = "Uploaded: " + filename;
-                    lblStatus.ForeColor = Color.LightGreen;
                 }
                 catch (Exception ex)
                 {
