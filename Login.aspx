@@ -1,36 +1,37 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="ASPWeBSM.Login" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-        <div class="flex min-h-screen items-center justify-center bg-slate-900">
-    <div class="w-96 rounded-2xl border border-slate-700 bg-slate-800 p-8 shadow-2xl">
+    <div class="flex min-h-screen items-center justify-center bg-slate-900">
+        <div class="w-96 rounded-2xl border border-slate-700 bg-slate-800 p-8 shadow-2xl">
 
-        <h2 class="mb-6 text-center text-3xl font-bold text-white">
-            Access <span class="text-orange-500">Control</span>
-        </h2>
+            <h2 class="mb-6 text-center text-3xl font-bold text-white">Access <span class="text-orange-500">Control</span>
+            </h2>
 
-        <div class="mb-4">
-            <label class="mb-2 block text-sm font-bold text-slate-400">Username</label>
-            <asp:TextBox ID="txtUser" runat="server" 
-                CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none" 
-                placeholder="Username"></asp:TextBox>
+            <div class="mb-4">
+                <label class="mb-2 block text-sm font-bold text-slate-400">Username</label>
+                <asp:TextBox ID="txtUser" runat="server"
+                    CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
+                    placeholder="Username"></asp:TextBox>
+            </div>
+
+            <div class="mb-8">
+                <label class="mb-2 block text-sm font-bold text-slate-400">Password</label>
+                <asp:TextBox ID="txtPassword" runat="server" TextMode="Password"
+                    CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
+                    placeholder="••••••••"></asp:TextBox>
+            </div>
+
+            <div class="mb-4">
+                <asp:Button ID="btnLogin" runat="server" Text="Enter System" OnClick="btnLogin_Click"
+                    CssClass="w-full transform rounded bg-orange-500 px-4 py-3 font-bold text-white shadow-lg shadow-orange-500/30 transition duration-500 hover:scale-105 hover:bg-orange-600" />
+            </div>
+
+            <p class="mt-4 text-center text-sm text-slate-400">
+                Need an account? <a href="Register.aspx" class="font-semibold text-orange-400 underline decoration-dotted hover:text-orange-300">Register</a><br />
+                <a href="ForgetPassword.aspx" class="font-semibold text-orange-400 underline decoration-dotted hover:text-orange-300">Forgot Password?</a>
+            </p>
         </div>
-
-        <div class="mb-8">
-            <label class="mb-2 block text-sm font-bold text-slate-400">Password</label>
-            <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" 
-                CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none" 
-                placeholder="••••••••"></asp:TextBox>
-        </div>
-
-        <div class="mb-4">
-            <asp:Button ID="btnLogin" runat="server" Text="Enter System" OnClick="btnLogin_Click" 
-                CssClass="w-full transform rounded bg-orange-500 px-4 py-3 font-bold text-white shadow-lg shadow-orange-500/30 transition duration-500 hover:scale-105 hover:bg-orange-600" />
-        </div>
-
-        <p class="mt-4 text-center text-sm text-slate-400">
-            Need an account? <a href="Register.aspx" class="font-semibold text-orange-400 underline decoration-dotted hover:text-orange-300">Register</a>
-        </p>
     </div>
-</div>
 </asp:Content>
