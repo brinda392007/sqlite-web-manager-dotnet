@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using BCrypt.Net;
 
 namespace ASPWeBSM
 {
@@ -61,6 +62,28 @@ END";
                 {
                     cmd.ExecuteNonQuery();
                 }
+            }
+        }
+
+        internal static void resetPassword(string email, string newPassword)
+        {
+            try
+            {
+                using(var conn = GetConnection())
+                {
+                    conn.Open();
+                    string sql = "UPDATE Users SET Password = @pass WHERE Email = @email";
+                    using(var cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@pass", newPassword);
+                        cmd.Parameters.AddWithValue("@email", email);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
     }

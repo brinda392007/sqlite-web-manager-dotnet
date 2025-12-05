@@ -420,3 +420,5 @@ FodyWeavers.xsd
 # To ignore the Foreign connection string
 connectionStrings.local.config
 
+# to keep the apppassword safe
+AppSettingsSecrets.config
