@@ -6,6 +6,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Drawing; // Don't forget this for Color
+
 
 namespace ASPWeBSM
 {
@@ -18,6 +20,19 @@ namespace ASPWeBSM
 
         protected void btnRegister_Click(object sender, EventArgs e)
         {
+
+            // --- 1. NEW: Password Match Validation ---
+            if (txtPassword.Text != txtConfirmPassword.Text)
+            {
+                lblMessage.Text = "Passwords do not match. Please enter the same password twice.";
+                lblMessage.ForeColor = Color.Red;
+                return; // Stop execution if passwords don't match
+            }
+
+            // Clear any previous error message before proceeding
+            lblMessage.Text = string.Empty;
+
+
             string username = txtUser.Text;
             string email = txtEmail.Text;
             string password = txtPassword.Text;
