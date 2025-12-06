@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="ASPWeBSM.Login" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="flex min-h-screen items-center justify-center bg-slate-900">
@@ -14,6 +15,8 @@
                 <asp:TextBox ID="txtUser" runat="server"
                     CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
                     placeholder="Username"></asp:TextBox>
+
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator1"  runat="server" ControlToValidate="txtUser" ErrorMessage="Please Enter Username" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
             </div>
 
             <div class="mb-8">
@@ -27,6 +30,7 @@
                         <i id="toggleIconLogin" class="fas fa-eye"></i>
                     </span>
                 </div>
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator2"  runat="server" ControlToValidate="txtPassword" ErrorMessage="Please Enter Password" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
             </div>
 
             <div class="mb-4">

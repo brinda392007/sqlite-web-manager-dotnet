@@ -15,6 +15,8 @@
                 <asp:TextBox ID="txtUser" runat="server"
                     CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
                     placeholder="Username"></asp:TextBox>
+
+                <asp:RequiredFieldValidator ID="reqUsername"  runat="server" ControlToValidate="txtUser" ErrorMessage="Please Enter username" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
             </div>
 
             <div class="mb-4">
@@ -22,6 +24,7 @@
                 <asp:TextBox ID="txtEmail" runat="server" TextMode="Email"
                     CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
                     placeholder="you@example.com"></asp:TextBox>
+                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1"  runat="server" ControlToValidate="txtEmail" ErrorMessage="Please Enter Email" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
             </div>
 
             <div class="mb-4">
