@@ -1,9 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="ASPWeBSM.Login" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 </asp:Content>
-
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="flex min-h-screen items-center justify-center bg-slate-900">
         <div class="w-96 rounded-2xl border border-slate-700 bg-slate-800 p-8 shadow-2xl">
@@ -20,15 +18,9 @@
 
             <div class="mb-8">
                 <label class="mb-2 block text-sm font-bold text-slate-400">Password</label>
-                <div class="relative">
-                    <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" ClientIDMode="Static"
-                        CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none pr-10"
-                        placeholder="••••••••"></asp:TextBox>
-                    <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-slate-400 hover:text-orange-500"
-                          onclick="togglePasswordVisibility('txtPassword', 'toggleIconLogin')">
-                        <i id="toggleIconLogin" class="fas fa-eye"></i>
-                    </span>
-                </div>
+                <asp:TextBox ID="txtPassword" runat="server" TextMode="Password"
+                    CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
+                    placeholder="••••••••"></asp:TextBox>
             </div>
 
             <div class="mb-4">
@@ -42,21 +34,4 @@
             </p>
         </div>
     </div>
-
-    <script type="text/javascript">
-        function togglePasswordVisibility(passwordTextBoxId, iconId) {
-            var passwordInput = document.getElementById(passwordTextBoxId);
-            var icon = document.getElementById(iconId);
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        }
-    </script>
 </asp:Content>

@@ -1,41 +1,23 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Web.Configuration;
 using BCrypt.Net;
 
 namespace ASPWeBSM
 {
-    // The class is made static as it only contains static members
-    public static class DatabaseManager
+    public class DatabaseManager
     {
-        private static string _connectionString;
-
-        // Static constructor runs once when the class is first accessed
-        static DatabaseManager()
-        {
-            // Fix: Use "AppDb" to match the Web.config entry.
-            ConnectionStringSettings cs = WebConfigurationManager.ConnectionStrings["AppDb"];
-
-            if (cs == null)
-            {
-                // Better error handling than a NullReferenceException
-                throw new InvalidOperationException("Fatal Error: Connection string 'AppDb' not found in Web.config.");
-            }
-
-            _connectionString = cs.ConnectionString;
-        }
+        // Connection string from Web.config
+        private static string _connectionString =
+            ConfigurationManager.ConnectionStrings["MyDB"].ConnectionString;
 
         public static SqlConnection GetConnection()
         {
-            // Now returns the correctly initialized connection string
             return new SqlConnection(_connectionString);
         }
 
         public static void Initialize()
         {
-            // You should also confirm that you are calling DatabaseManager.Initialize() 
-            // once when your application starts (e.g., in Global.asax Application_Start)
             using (var conn = GetConnection())
             {
                 conn.Open();
@@ -87,15 +69,11 @@ END";
         {
             try
             {
-                // NOTE: It is a strong security practice to hash the newPassword 
-                // before storing it in the database!
-                // string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
-
-                using (var conn = GetConnection())
+                using(var conn = GetConnection())
                 {
                     conn.Open();
                     string sql = "UPDATE Users SET Password = @pass WHERE Email = @email";
-                    using (var cmd = new SqlCommand(sql, conn))
+                    using(var cmd = new SqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@pass", newPassword);
                         cmd.Parameters.AddWithValue("@email", email);
@@ -105,7 +83,6 @@ END";
             }
             catch (Exception ex)
             {
-                // In a real application, log this exception (e.g., to a file or logging service)
                 Console.WriteLine(ex);
             }
         }
