@@ -93,6 +93,7 @@
     <Content Include="Login.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="AppSettingsSecrets.config" />
+    <Content Include="connectionStrings.local.config" />
     <None Include="Download.ashx" />
     <Content Include="ResetPassword.aspx" />
     <Content Include="Upload.aspx" />
