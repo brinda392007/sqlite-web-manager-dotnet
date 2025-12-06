@@ -18,9 +18,15 @@
 
             <div class="mb-8">
                 <label class="mb-2 block text-sm font-bold text-slate-400">Password</label>
-                <asp:TextBox ID="txtPassword" runat="server" TextMode="Password"
-                    CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
-                    placeholder="••••••••"></asp:TextBox>
+                <div class="relative">
+                    <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" ClientIDMode="Static"
+                        CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 pr-10 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
+                        placeholder="••••••••"></asp:TextBox>
+                    <span class="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3 text-slate-400 hover:text-orange-500"
+                          onclick="togglePasswordVisibility('txtPassword', 'toggleIconLogin')">
+                        <i id="toggleIconLogin" class="fas fa-eye"></i>
+                    </span>
+                </div>
             </div>
 
             <div class="mb-4">
@@ -34,4 +40,19 @@
             </p>
         </div>
     </div>
+    <script type="text/javascript">
+        function togglePasswordVisibility(passwordTextBoxId, iconId) {
+            var passwordInput = document.getElementById(passwordTextBoxId);
+            var icon = document.getElementById(iconId);
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </asp:Content>
