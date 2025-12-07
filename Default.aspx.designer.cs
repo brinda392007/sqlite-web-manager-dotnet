@@ -60,39 +60,39 @@ namespace ASPWeBSM
         protected global::System.Web.UI.WebControls.Label lblEmpty;
 
         /// <summary>
-        /// Button1 control.
+        /// btnRefreshGenerated control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button1;
+        protected global::System.Web.UI.WebControls.Button btnRefreshGenerated;
 
         /// <summary>
-        /// UpdatePanel1 control.
+        /// UpdatePanelGenerated control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+        protected global::System.Web.UI.UpdatePanel UpdatePanelGenerated;
 
         /// <summary>
-        /// Repeater1 control.
+        /// rptGenerated control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater Repeater1;
+        protected global::System.Web.UI.WebControls.Repeater rptGenerated;
 
         /// <summary>
-        /// Label1 control.
+        /// lblGeneratedEmpty control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
+        protected global::System.Web.UI.WebControls.Label lblGeneratedEmpty;
     }
 }

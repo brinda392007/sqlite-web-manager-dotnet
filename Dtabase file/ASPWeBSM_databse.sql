@@ -46,3 +46,7 @@ CREATE TABLE dbo.GeneratedFiles
         CONSTRAINT FK_GeneratedFiles_Users FOREIGN KEY (UserId) REFERENCES dbo.Users(Id),
         CONSTRAINT FK_GeneratedFiles_Uploads FOREIGN KEY (UploadId) REFERENCES dbo.Uploads(Id)
     );
+
+    Select * FROM GeneratedFiles
+
+    Delete  from Users Where Id=8
