@@ -9,8 +9,7 @@
 
         <div class="mb-6 flex items-center justify-between">
             <a href="Default.aspx"
-               class="flex items-center gap-2 text-slate-400 hover:text-orange-400">
-                ← Back to Command Center
+                class="flex items-center gap-2 text-slate-400 hover:text-orange-400">← Back to Command Center
             </a>
 
             <asp:Label ID="lblDbName" runat="server"
@@ -39,6 +38,7 @@
                                     <th class="px-4 py-3 text-center">Update</th>
                                     <th class="px-4 py-3 text-center">Delete</th>
                                     <th class="px-4 py-3 text-center">Select By Id</th>
+                                    <th class="px-4 py-3 text-center">Select all</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -65,10 +65,13 @@
                             <td class="px-4 py-3 text-center">
                                 <asp:CheckBox ID="chkSelectById" runat="server" />
                             </td>
+                            <td class="px-4 py-3 text-center">
+                                <asp:CheckBox ID="chkSelectAll" runat="server" AutoPostBack="true" OnCheckedChanged="chkSelectAll_CheckedChanged" />
+                            </td>
                         </tr>
                     </ItemTemplate>
                     <FooterTemplate>
-                            </tbody>
+                        </tbody>
                         </table>
                     </FooterTemplate>
                 </asp:Repeater>

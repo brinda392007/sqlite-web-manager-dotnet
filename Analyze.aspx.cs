@@ -25,6 +25,7 @@ namespace ASPWeBSM
             public bool Update { get; set; }
             public bool Delete { get; set; }
             public bool SelectById { get; set; }
+            public bool SelectAll { get; set; }
         }
 
         private class ColumnInfo
@@ -123,7 +124,7 @@ namespace ASPWeBSM
                 sqliteConn.Open();
 
                 string sql = "SELECT name FROM sqlite_master WHERE type='table' " +
-                             "AND name NOT LIKE 'sqlite_%' ORDER BY name";
+                            "AND name NOT LIKE 'sqlite_%' ORDER BY name";
 
                 using (var cmd = new SQLiteCommand(sql, sqliteConn))
                 using (SQLiteDataReader reader = cmd.ExecuteReader())
@@ -162,11 +163,26 @@ namespace ASPWeBSM
                 var chkUpdate = (CheckBox)item.FindControl("chkUpdate");
                 var chkDelete = (CheckBox)item.FindControl("chkDelete");
                 var chkSelectById = (CheckBox)item.FindControl("chkSelectById");
+                var chkSelectAll = (CheckBox)item.FindControl("chkSelectAll");
 
                 if (hfTableName == null) continue;
 
+                if (chkSelectAll.Checked)
+                {
+                    list.Add(new TableOperationSelection
+                    {
+                        TableName = hfTableName.Value,
+                        Select = true,
+                        Insert = true,
+                        Update = true,
+                        Delete = true,
+                        SelectById = true,
+                    });
+                    return list;
+                }
+
                 if (chkSelect.Checked || chkInsert.Checked || chkUpdate.Checked ||
-                    chkDelete.Checked || chkSelectById.Checked)
+                chkDelete.Checked || chkSelectById.Checked)
                 {
                     list.Add(new TableOperationSelection
                     {
@@ -194,7 +210,6 @@ namespace ASPWeBSM
                 if (s.Insert) ops.Add("INSERT");
                 if (s.Update) ops.Add("UPDATE");
                 if (s.Delete) ops.Add("DELETE");
-                if (s.SelectById) ops.Add("SELECT_BY_ID");
 
                 parts.Add($"{s.TableName}: {string.Join(", ", ops)}");
             }
@@ -316,6 +331,30 @@ namespace ASPWeBSM
             string fileName = SaveGeneratedFile(full.ToString(), summary, "SP_AND_Methods");
 
             lblMessage.Text = $"SP + C# methods generated in file: {fileName}. You can download it later from your downloads panel.";
+        }
+
+        //handles the Select all button
+        protected void chkSelectAll_CheckedChanged(object sender, EventArgs e)
+        {
+            //get the select all square that was checked
+            CheckBox chkAll = (CheckBox)sender;
+
+            //find the specific row
+            RepeaterItem item = (RepeaterItem)chkAll.NamingContainer;
+
+            CheckBox select = (CheckBox)item.FindControl("chkSelect");
+            CheckBox insert= (CheckBox)item.FindControl("chkInsert");
+            CheckBox update = (CheckBox)item.FindControl("chkUpdate");
+            CheckBox delete = (CheckBox)item.FindControl("chkDelete");
+            CheckBox selectById = (CheckBox)item.FindControl("chkSelectById");
+
+            bool isChecked = chkAll.Checked;
+
+            if (select != null) select.Checked = isChecked;
+            if (insert != null) insert.Checked = isChecked;
+            if (update != null) update.Checked = isChecked;
+            if (delete != null) delete.Checked = isChecked;
+            if (selectById != null) selectById.Checked = isChecked;
         }
     }
 }

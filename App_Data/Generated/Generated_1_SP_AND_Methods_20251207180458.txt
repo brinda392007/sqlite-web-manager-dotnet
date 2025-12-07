@@ -1,0 +1,271 @@
+-- =============================================
+-- STORED PROCEDURES
+-- =============================================
+
+-- =============================================
+-- Table: chaprasi_simulator
+-- Generated: 2025-12-07 18:04:58
+-- =============================================
+IF OBJECT_ID('dbo.chaprasi_simulator_CRUD','P') IS NOT NULL
+    DROP PROC dbo.chaprasi_simulator_CRUD;
+GO
+
+CREATE PROC dbo.chaprasi_simulator_CRUD
+(
+    @id INT = NULL,
+    @naam NVARCHAR(255) = NULL,
+    @tame NVARCHAR(255) = NULL,
+    @janita NVARCHAR(255) = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [chaprasi_simulator];
+    END
+    ELSE IF (@EVENT = 'INSERT')
+    BEGIN
+        INSERT INTO [chaprasi_simulator] ([naam], [tame], [janita])
+        VALUES (@naam, @tame, @janita);
+    END
+    ELSE IF (@EVENT = 'UPDATE')
+    BEGIN
+        UPDATE [chaprasi_simulator]
+        SET [naam] = @naam, [tame] = @tame, [janita] = @janita
+        WHERE [id] = @id;
+    END
+    ELSE IF (@EVENT = 'DELETE')
+    BEGIN
+        DELETE FROM [chaprasi_simulator]
+        WHERE [id] = @id;
+    END
+    ELSE IF (@EVENT = 'SELECT_BY_ID')
+    BEGIN
+        SELECT * FROM [chaprasi_simulator]
+        WHERE [id] = @id;
+    END
+END
+GO
+
+-- =============================================
+-- Table: khavadnadhoha
+-- Generated: 2025-12-07 18:04:58
+-- =============================================
+IF OBJECT_ID('dbo.khavadnadhoha_CRUD','P') IS NOT NULL
+    DROP PROC dbo.khavadnadhoha_CRUD;
+GO
+
+CREATE PROC dbo.khavadnadhoha_CRUD
+(
+    @id INT = NULL,
+    @mardanginivatu NVARCHAR(255) = NULL,
+    @approved NVARCHAR(255) = NULL,
+    @power FLOAT = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [khavadnadhoha];
+    END
+    ELSE IF (@EVENT = 'INSERT')
+    BEGIN
+        INSERT INTO [khavadnadhoha] ([mardanginivatu], [approved], [power])
+        VALUES (@mardanginivatu, @approved, @power);
+    END
+    ELSE IF (@EVENT = 'UPDATE')
+    BEGIN
+        UPDATE [khavadnadhoha]
+        SET [mardanginivatu] = @mardanginivatu, [approved] = @approved, [power] = @power
+        WHERE [id] = @id;
+    END
+    ELSE IF (@EVENT = 'DELETE')
+    BEGIN
+        DELETE FROM [khavadnadhoha]
+        WHERE [id] = @id;
+    END
+    ELSE IF (@EVENT = 'SELECT_BY_ID')
+    BEGIN
+        SELECT * FROM [khavadnadhoha]
+        WHERE [id] = @id;
+    END
+END
+GO
+
+
+
+// =============================================
+// C# METHODS
+// =============================================
+
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+
+public class GeneratedDbMethods
+{
+    private string _connString = ConfigurationManager.ConnectionStrings["AppDb"].ConnectionString;
+
+    public DataTable chaprasi_simulator_Select()
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("chaprasi_simulator_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+    public void chaprasi_simulator_Insert(string naam, string tame, string janita)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("chaprasi_simulator_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "INSERT");
+            cmd.Parameters.AddWithValue("@naam", naam);
+            cmd.Parameters.AddWithValue("@tame", tame);
+            cmd.Parameters.AddWithValue("@janita", janita);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public void chaprasi_simulator_Update(string id, string naam, string tame, string janita)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("chaprasi_simulator_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "UPDATE");
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@naam", naam);
+            cmd.Parameters.AddWithValue("@tame", tame);
+            cmd.Parameters.AddWithValue("@janita", janita);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public void chaprasi_simulator_Delete(string id)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("chaprasi_simulator_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "DELETE");
+            cmd.Parameters.AddWithValue("@id", id);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public DataTable chaprasi_simulator_SelectById(string id)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("chaprasi_simulator_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT_BY_ID");
+            cmd.Parameters.AddWithValue("@id", id);
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+    public DataTable khavadnadhoha_Select()
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("khavadnadhoha_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+    public void khavadnadhoha_Insert(string mardanginivatu, string approved, string power)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("khavadnadhoha_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "INSERT");
+            cmd.Parameters.AddWithValue("@mardanginivatu", mardanginivatu);
+            cmd.Parameters.AddWithValue("@approved", approved);
+            cmd.Parameters.AddWithValue("@power", power);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public void khavadnadhoha_Update(string id, string mardanginivatu, string approved, string power)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("khavadnadhoha_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "UPDATE");
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@mardanginivatu", mardanginivatu);
+            cmd.Parameters.AddWithValue("@approved", approved);
+            cmd.Parameters.AddWithValue("@power", power);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public void khavadnadhoha_Delete(string id)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("khavadnadhoha_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "DELETE");
+            cmd.Parameters.AddWithValue("@id", id);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public DataTable khavadnadhoha_SelectById(string id)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("khavadnadhoha_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT_BY_ID");
+            cmd.Parameters.AddWithValue("@id", id);
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+}
+
