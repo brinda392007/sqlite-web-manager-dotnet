@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -20,6 +25,13 @@ namespace ASPWeBSM
             public bool Update { get; set; }
             public bool Delete { get; set; }
             public bool SelectById { get; set; }
+        }
+
+        private class ColumnInfo
+        {
+            public string Name { get; set; }
+            public string SqlType { get; set; }      // SQL Server type
+            public bool IsPrimaryKey { get; set; }
         }
 
         protected int UploadId
@@ -68,6 +80,7 @@ namespace ASPWeBSM
                 using (var cmd = new SqlCommand("Uploads_CRUD", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+
                     cmd.Parameters.AddWithValue("@EVENT", "SELECT_BY_ID");
                     cmd.Parameters.AddWithValue("@Id", uploadId);
                     cmd.Parameters.AddWithValue("@UserId", Convert.ToInt32(Session["UserId"]));
@@ -97,6 +110,9 @@ namespace ASPWeBSM
             string tempPath = Path.Combine(tempFolder, $"upload_{uploadId}_{fileName}");
             File.WriteAllBytes(tempPath, content);
 
+            // store for later (SP/method generation)
+            ViewState["CurrentDbPath"] = tempPath;
+
             // 3. Read table list using SQLite
             DataTable dtTables = new DataTable();
             dtTables.Columns.Add("TableName", typeof(string));
@@ -106,7 +122,8 @@ namespace ASPWeBSM
             {
                 sqliteConn.Open();
 
-                string sql = "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name";
+                string sql = "SELECT name FROM sqlite_master WHERE type='table' " +
+                             "AND name NOT LIKE 'sqlite_%' ORDER BY name";
 
                 using (var cmd = new SQLiteCommand(sql, sqliteConn))
                 using (SQLiteDataReader reader = cmd.ExecuteReader())
@@ -128,6 +145,11 @@ namespace ASPWeBSM
             rptTables.DataBind();
         }
 
+        private string GetCurrentDbPath()
+        {
+            return ViewState["CurrentDbPath"] as string;
+        }
+
         private List<TableOperationSelection> GetSelectedOperations()
         {
             var list = new List<TableOperationSelection>();
@@ -143,7 +165,6 @@ namespace ASPWeBSM
 
                 if (hfTableName == null) continue;
 
-                // only add if at least one operation is selected
                 if (chkSelect.Checked || chkInsert.Checked || chkUpdate.Checked ||
                     chkDelete.Checked || chkSelectById.Checked)
                 {
@@ -162,6 +183,57 @@ namespace ASPWeBSM
             return list;
         }
 
+        private string BuildOperationsSummary(List<TableOperationSelection> selections)
+        {
+            var parts = new List<string>();
+
+            foreach (var s in selections)
+            {
+                var ops = new List<string>();
+                if (s.Select) ops.Add("SELECT");
+                if (s.Insert) ops.Add("INSERT");
+                if (s.Update) ops.Add("UPDATE");
+                if (s.Delete) ops.Add("DELETE");
+                if (s.SelectById) ops.Add("SELECT_BY_ID");
+
+                parts.Add($"{s.TableName}: {string.Join(", ", ops)}");
+            }
+
+            return string.Join(" | ", parts);
+        }
+
+        private string SaveGeneratedFile(string content, string operationsInfo, string kind)
+        {
+            string genFolder = Server.MapPath("~/App_Data/Generated");
+            if (!Directory.Exists(genFolder))
+                Directory.CreateDirectory(genFolder);
+
+            string fileName = $"Generated_{UploadId}_{kind}_{DateTime.Now:yyyyMMddHHmmss}.txt";
+            string physicalPath = Path.Combine(genFolder, fileName);
+            File.WriteAllText(physicalPath, content);
+
+            // store metadata in GeneratedFiles table
+            using (var conn = DatabaseManager.GetConnection())
+            {
+                conn.Open();
+
+                using (var cmd = new SqlCommand("GeneratedFiles_CRUD", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@EVENT", "INSERT");
+                    cmd.Parameters.AddWithValue("@UserId", Convert.ToInt32(Session["UserId"]));
+                    cmd.Parameters.AddWithValue("@UploadId", UploadId);
+                    cmd.Parameters.AddWithValue("@FileName", fileName);
+                    cmd.Parameters.AddWithValue("@FilePath", "~/App_Data/Generated/" + fileName);
+                    cmd.Parameters.AddWithValue("@OperationsInfo", operationsInfo + $" ({kind})");
+
+                    cmd.ExecuteScalar(); // returns new id, we don't need it here
+                }
+            }
+
+            return fileName;
+        }
+
         protected void btnGenerateSp_OnClick(object sender, EventArgs e)
         {
             var selections = GetSelectedOperations();
@@ -171,9 +243,18 @@ namespace ASPWeBSM
                 return;
             }
 
-            // 🔜 Next step: implement real SP generation here
-            // For now, just show a message with count
-            lblMessage.Text = $"[DEBUG] Will generate SPs for {selections.Count} table(s).";
+            string dbPath = GetCurrentDbPath();
+            if (string.IsNullOrEmpty(dbPath))
+            {
+                lblMessage.Text = "Session expired. Please reload this page.";
+                return;
+            }
+
+            string spText = GenerateSpScript(selections, dbPath);
+            string summary = BuildOperationsSummary(selections);
+            string fileName = SaveGeneratedFile(spText, summary, "SP");
+
+            lblMessage.Text = $"Stored procedures generated in file: {fileName}. You can download it later from your downloads panel.";
         }
 
         protected void btnGenerateMethods_OnClick(object sender, EventArgs e)
@@ -185,7 +266,18 @@ namespace ASPWeBSM
                 return;
             }
 
-            lblMessage.Text = $"[DEBUG] Will generate method code for {selections.Count} table(s).";
+            string dbPath = GetCurrentDbPath();
+            if (string.IsNullOrEmpty(dbPath))
+            {
+                lblMessage.Text = "Session expired. Please reload this page.";
+                return;
+            }
+
+            string methodsText = GenerateMethodsScript(selections, dbPath);
+            string summary = BuildOperationsSummary(selections);
+            string fileName = SaveGeneratedFile(methodsText, summary, "Methods");
+
+            lblMessage.Text = $"C# methods generated in file: {fileName}. You can download it later from your downloads panel.";
         }
 
         protected void btnGenerateBoth_OnClick(object sender, EventArgs e)
@@ -197,7 +289,33 @@ namespace ASPWeBSM
                 return;
             }
 
-            lblMessage.Text = $"[DEBUG] Will generate SPs + methods for {selections.Count} table(s).";
+            string dbPath = GetCurrentDbPath();
+            if (string.IsNullOrEmpty(dbPath))
+            {
+                lblMessage.Text = "Session expired. Please reload this page.";
+                return;
+            }
+
+            string spText = GenerateSpScript(selections, dbPath);
+            string methodsText = GenerateMethodsScript(selections, dbPath);
+
+            var full = new StringBuilder();
+            full.AppendLine("-- =============================================");
+            full.AppendLine("-- STORED PROCEDURES");
+            full.AppendLine("-- =============================================");
+            full.AppendLine();
+            full.AppendLine(spText);
+            full.AppendLine();
+            full.AppendLine("// =============================================");
+            full.AppendLine("// C# METHODS");
+            full.AppendLine("// =============================================");
+            full.AppendLine();
+            full.AppendLine(methodsText);
+
+            string summary = BuildOperationsSummary(selections);
+            string fileName = SaveGeneratedFile(full.ToString(), summary, "SP_AND_Methods");
+
+            lblMessage.Text = $"SP + C# methods generated in file: {fileName}. You can download it later from your downloads panel.";
         }
     }
 }

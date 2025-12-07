@@ -17,6 +17,7 @@ namespace ASPWeBSM
             }
 
             LoadFiles();
+            LoadGeneratedFiles();
         }
 
         private void LoadFiles()
@@ -47,6 +48,40 @@ namespace ASPWeBSM
                 }
             }
         }
+
+        private void LoadGeneratedFiles()
+        {
+            int userId = Convert.ToInt32(Session["UserId"]);
+            DataTable dt = new DataTable();
+
+            using (var conn = DatabaseManager.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand("GeneratedFiles_CRUD", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+
+                    using (var da = new SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+
+            rptGenerated.DataSource = dt;
+            rptGenerated.DataBind();
+
+            lblGeneratedEmpty.Visible = (dt.Rows.Count == 0);
+        }
+
+        protected void btnRefreshGenerated_Click(object sender, EventArgs e)
+        {
+            LoadGeneratedFiles();
+        }
+
+
 
         protected void btnRefreshList_Click(object sender, EventArgs e)
         {
@@ -79,6 +114,78 @@ namespace ASPWeBSM
                 }
 
                 LoadFiles();
+            }
+        }
+
+        protected void rptGenerated_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "DeleteFile")
+            {
+                int fileId;
+                if (!int.TryParse(e.CommandArgument?.ToString(), out fileId))
+                    return;
+
+                int userId = Convert.ToInt32(Session["UserId"]);
+                string filePath = null;
+
+                using (var conn = DatabaseManager.GetConnection())
+                {
+                    conn.Open();
+
+                    // Optional: fetch FilePath and confirm owner (SELECT_BY_ID)
+                    //using (var sel = new SqlCommand("GeneratedFiles_CRUD", conn))
+                    //{
+                    //    sel.CommandType = CommandType.StoredProcedure;
+                    //    sel.Parameters.AddWithValue("@EVENT", "SELECT_BY_ID");
+                    //    sel.Parameters.AddWithValue("@FileID", fileId);
+                    //    sel.Parameters.AddWithValue("@UserId", userId);
+
+                    //    using (var rdr = sel.ExecuteReader())
+                    //    {
+                    //        if (rdr.Read())
+                    //        {
+                    //            filePath = rdr["FilePath"]?.ToString();
+                    //        }
+                    //        else
+                    //        {
+                    //            UiHelper.ShowToast(this, "File not found or access denied.", "error");
+                    //            LoadGeneratedFiles();
+                    //            return;
+                    //        }
+                    //    }
+                    //}
+
+                    // Delete via stored procedure (SP will ensure ownership because we passed @UserId)
+                    using (var cmd = new SqlCommand("GeneratedFiles_CRUD", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@EVENT", "DELETE");
+                        cmd.Parameters.AddWithValue("@FileID", fileId);
+                        cmd.Parameters.AddWithValue("@UserId", userId);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                // Delete physical file (best-effort)
+                try
+                {
+                    if (!string.IsNullOrEmpty(filePath))
+                    {
+                        string physical = Server.MapPath(filePath);
+                        if (System.IO.File.Exists(physical))
+                            System.IO.File.Delete(physical);
+                    }
+                }
+                catch
+                {
+                    // ignore file system errors (DB already cleaned). Optionally log them.
+                }
+
+                UiHelper.ShowToast(this, "Generated file purged.", "success");
+
+                // Refresh UI
+                LoadGeneratedFiles();
             }
         }
 

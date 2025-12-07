@@ -106,6 +106,12 @@
     <Compile Include="Analyze.aspx.designer.cs">
       <DependentUpon>Analyze.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Analyze.Generation.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Analyze.Schema.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="AuthorizedPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -129,6 +135,9 @@
     </Compile>
     <Compile Include="ForgetPassword.aspx.designer.cs">
       <DependentUpon>ForgetPassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GeneratedDownload.ashx.cs">
+      <DependentUpon>GeneratedDownload.ashx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -172,6 +181,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="GeneratedDownload.ashx" />
     <None Include="packages.config" />
     <Content Include="Site.Master" />
     <None Include="Web.Debug.config">
