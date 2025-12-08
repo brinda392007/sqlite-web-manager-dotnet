@@ -40,6 +40,8 @@ BEGIN
     BEGIN
         DELETE FROM dbo.Users
         WHERE Id = @Id;
+	    DELETE FROM dbo.Uploads 
+        WHERE Id = @Id AND UserId = @UserId;
     END
 
     ELSE IF (@EVENT = 'SELECT_BY_ID')

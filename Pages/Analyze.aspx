@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Analyze Database" Language="C#" MasterPageFile="~/Site.Master"
+﻿<%@ Page Title="Analyze Database" Language="C#" MasterPageFile="~/Pages/Site.Master"
     AutoEventWireup="true" CodeBehind="Analyze.aspx.cs" Inherits="ASPWeBSM.Analyze" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">

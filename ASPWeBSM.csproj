@@ -86,104 +86,104 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Analyze.aspx" />
-    <Content Include="Default.aspx" />
-    <Content Include="ForgetPassword.aspx" />
+    <Content Include="Pages\Analyze.aspx" />
+    <Content Include="Pages\Default.aspx" />
+    <Content Include="Pages\ForgetPassword.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="Login.aspx" />
-    <Content Include="Register.aspx" />
+    <Content Include="Pages\Login.aspx" />
+    <Content Include="Pages\Register.aspx" />
     <Content Include="AppSettingsSecrets.config" />
-    <None Include="Download.ashx" />
-    <Content Include="ResetPassword.aspx" />
-    <Content Include="Upload.aspx" />
+    <None Include="Pages\Download.ashx" />
+    <Content Include="Pages\ResetPassword.aspx" />
+    <Content Include="Pages\Upload.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analyze.aspx.cs">
+    <Compile Include="Pages\Analyze.aspx.cs">
       <DependentUpon>Analyze.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Analyze.aspx.designer.cs">
+    <Compile Include="Pages\Analyze.aspx.designer.cs">
       <DependentUpon>Analyze.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Analyze.Generation.cs">
+    <Compile Include="Helper Classes\Analyze.Generation.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Analyze.Schema.cs">
+    <Compile Include="Helper Classes\Analyze.Schema.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AuthorizedPage.cs">
+    <Compile Include="Helper Classes\AuthorizedPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AuthOTP.cs">
+    <Compile Include="Helper Classes\AuthOTP.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="DatabaseManager.cs" />
-    <Compile Include="Default.aspx.cs">
+    <Compile Include="Helper Classes\DatabaseManager.cs" />
+    <Compile Include="Pages\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Default.aspx.designer.cs">
+    <Compile Include="Pages\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Download.ashx.cs">
+    <Compile Include="Pages\Download.ashx.cs">
       <DependentUpon>Download.ashx</DependentUpon>
     </Compile>
-    <Compile Include="ForgetPassword.aspx.cs">
+    <Compile Include="Pages\ForgetPassword.aspx.cs">
       <DependentUpon>ForgetPassword.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ForgetPassword.aspx.designer.cs">
+    <Compile Include="Pages\ForgetPassword.aspx.designer.cs">
       <DependentUpon>ForgetPassword.aspx</DependentUpon>
     </Compile>
-    <Compile Include="GeneratedDownload.ashx.cs">
+    <Compile Include="Pages\GeneratedDownload.ashx.cs">
       <DependentUpon>GeneratedDownload.ashx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Login.aspx.cs">
+    <Compile Include="Pages\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Login.aspx.designer.cs">
+    <Compile Include="Pages\Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Register.aspx.cs">
+    <Compile Include="Pages\Register.aspx.cs">
       <DependentUpon>Register.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Register.aspx.designer.cs">
+    <Compile Include="Pages\Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ResetPassword.aspx.cs">
+    <Compile Include="Pages\ResetPassword.aspx.cs">
       <DependentUpon>ResetPassword.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ResetPassword.aspx.designer.cs">
+    <Compile Include="Pages\ResetPassword.aspx.designer.cs">
       <DependentUpon>ResetPassword.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Site.Master.cs">
+    <Compile Include="Pages\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Site.Master.designer.cs">
+    <Compile Include="Pages\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
-    <Compile Include="UiHelper.cs" />
-    <Compile Include="Upload.aspx.cs">
+    <Compile Include="Helper Classes\UiHelper.cs" />
+    <Compile Include="Pages\Upload.aspx.cs">
       <DependentUpon>Upload.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Upload.aspx.designer.cs">
+    <Compile Include="Pages\Upload.aspx.designer.cs">
       <DependentUpon>Upload.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GeneratedDownload.ashx" />
+    <Content Include="Pages\GeneratedDownload.ashx" />
     <None Include="packages.config" />
-    <Content Include="Site.Master" />
+    <Content Include="Pages\Site.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
