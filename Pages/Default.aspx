@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="ASPWeBSM.Default" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="ASPWeBSM.Default" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -57,6 +57,7 @@
                                                     </a>
 
                                                     <asp:LinkButton ID="btnDelete" runat="server"
+                                                        
                                                         CommandName="DeleteFile"
                                                         CommandArgument='<%# Eval("Id") %>'
                                                         CssClass="bg-red-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-red-400"

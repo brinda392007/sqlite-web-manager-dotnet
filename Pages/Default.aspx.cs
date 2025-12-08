@@ -114,6 +114,10 @@ namespace ASPWeBSM
                 }
 
                 LoadFiles();
+                LoadGeneratedFiles();
+
+                UpdatePanelFiles.Update();
+                UpdatePanelGenerated.Update();
             }
         }
 
@@ -186,6 +190,7 @@ namespace ASPWeBSM
 
                 // Refresh UI
                 LoadGeneratedFiles();
+
             }
         }
 
