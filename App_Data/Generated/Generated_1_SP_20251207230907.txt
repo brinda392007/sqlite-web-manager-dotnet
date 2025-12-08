@@ -1,0 +1,48 @@
+-- =============================================
+-- Table: chaprasi_simulator
+-- Generated: 2025-12-07 23:09:07
+-- =============================================
+IF OBJECT_ID('dbo.chaprasi_simulator_CRUD','P') IS NOT NULL
+    DROP PROC dbo.chaprasi_simulator_CRUD;
+GO
+
+CREATE PROC dbo.chaprasi_simulator_CRUD
+(
+    @id INT = NULL,
+    @naam NVARCHAR(255) = NULL,
+    @tame NVARCHAR(255) = NULL,
+    @janita NVARCHAR(255) = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [chaprasi_simulator];
+    END
+    ELSE IF (@EVENT = 'INSERT')
+    BEGIN
+        INSERT INTO [chaprasi_simulator] ([naam], [tame], [janita])
+        VALUES (@naam, @tame, @janita);
+    END
+    ELSE IF (@EVENT = 'UPDATE')
+    BEGIN
+        UPDATE [chaprasi_simulator]
+        SET [naam] = @naam, [tame] = @tame, [janita] = @janita
+        WHERE [id] = @id;
+    END
+    ELSE IF (@EVENT = 'DELETE')
+    BEGIN
+        DELETE FROM [chaprasi_simulator]
+        WHERE [id] = @id;
+    END
+    ELSE IF (@EVENT = 'SELECT_BY_ID')
+    BEGIN
+        SELECT * FROM [chaprasi_simulator]
+        WHERE [id] = @id;
+    END
+END
+GO
+
