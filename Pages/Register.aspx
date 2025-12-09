@@ -15,16 +15,41 @@
                 <asp:TextBox ID="txtUser" runat="server"
                     CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
                     placeholder="Username"></asp:TextBox>
-
-                <asp:RequiredFieldValidator ID="reqUsername"  runat="server" ControlToValidate="txtUser" ErrorMessage="Please Enter username" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
+                <asp:RegularExpressionValidator
+                    ID="regexValidatorForUSername"
+                    runat="server"
+                    ControlToValidate="txtUser"
+                    ErrorMessage="Username should be longer than 6 letters and less than 10"
+                    ValidationExpression="^[A-Za-z_]{7,10}$"
+                    CssClass="mt-1 block text-xs font-semibold text-red-500"
+                    Display="Dynamic">
+                </asp:RegularExpressionValidator>
+                <asp:RequiredFieldValidator ID="reqUsername" runat="server" ControlToValidate="txtUser" ErrorMessage="Please Enter username" CssClass="mt-1 block text-xs font-semibold text-red-500" Display="Dynamic"></asp:RequiredFieldValidator>
             </div>
-
             <div class="mb-4">
                 <label class="mb-2 block text-sm font-bold text-slate-400">Email</label>
                 <asp:TextBox ID="txtEmail" runat="server" TextMode="Email"
                     CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
                     placeholder="you@example.com"></asp:TextBox>
-                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1"  runat="server" ControlToValidate="txtEmail" ErrorMessage="Please Enter Email" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
+
+                <asp:RequiredFieldValidator
+                    ID="RequiredFieldValidator1"
+                    runat="server"
+                    ControlToValidate="txtEmail"
+                    ErrorMessage="Please Enter Email"
+                    CssClass="mt-1 block text-xs font-semibold text-red-500"
+                    Display="Dynamic">
+                </asp:RequiredFieldValidator>
+
+                <asp:RegularExpressionValidator
+                    ID="revEmail"
+                    runat="server"
+                    ControlToValidate="txtEmail"
+                    ValidationExpression="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                    ErrorMessage="Please enter a valid email address"
+                    CssClass="mt-1 block text-xs font-semibold text-red-500"
+                    Display="Dynamic">
+                </asp:RegularExpressionValidator>
             </div>
 
             <div class="mb-4">
@@ -58,6 +83,13 @@
                         <i id="toggleIcon2" class="fas fa-eye"></i>
                     </span>
                 </div>
+                <asp:CompareValidator ID="CompareValidator1" runat="server"
+                    ControlToValidate="txtConfirmPassword"
+                    ControlToCompare="txtPassword"
+                    ErrorMessage="Passwords do not match"
+                    Display="Dynamic"
+                    CssClass="mt-1 block text-xs font-semibold text-red-500">
+                </asp:CompareValidator>
 
             </div>
             <asp:Label ID="lblMessage" runat="server" CssClass="mb-6 block text-center text-sm font-semibold text-red-500"></asp:Label>

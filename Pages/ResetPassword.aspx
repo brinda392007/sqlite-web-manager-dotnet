@@ -20,9 +20,16 @@
                         ControlToValidate="txtPassword"
                         ErrorMessage="Password is required"
                         Display="Dynamic"
-                        CssClass="absolute -top-3 left-3 bg-slate-800 px-1 text-xs text-red-500"
-                        ValidationGroup="ResetGroup">
+                        ForeColor="Red">
                     </asp:RequiredFieldValidator>
+
+                    <asp:RegularExpressionValidator ID="revPassword" runat="server"
+                        ControlToValidate="txtPassword"
+                        ValidationExpression="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$"
+                        ErrorMessage="Please enter at least 6 characters, including a capital letter, a number, and a symbol."
+                        CssClass="mt-1 block text-xs font-semibold text-red-500"
+                        Display="Dynamic">
+                    </asp:RegularExpressionValidator>
                 </div>
 
                 <div class="relative mb-6">
@@ -36,8 +43,7 @@
                         ControlToValidate="txtCnfPassword"
                         ErrorMessage="Confirmation is required"
                         Display="Dynamic"
-                        CssClass="absolute -top-3 left-3 bg-slate-800 px-1 text-xs text-red-500"
-                        ValidationGroup="ResetGroup">
+                        ForeColor="Red">
                     </asp:RequiredFieldValidator>
 
                     <asp:CompareValidator ID="CompareValidator1" runat="server"
@@ -45,47 +51,15 @@
                         ControlToCompare="txtPassword"
                         ErrorMessage="Passwords do not match"
                         Display="Dynamic"
-                        CssClass="absolute -top-3 left-3 bg-slate-800 px-1 text-xs text-red-500"
-                        ValidationGroup="ResetGroup">
+                        ForeColor="Red">
                     </asp:CompareValidator>
                 </div>
 
                 <div class="mb-4">
                     <asp:Button ID="btnResetPassword" runat="server" Text="Update Password" OnClick="btnResetPassword_Click"
-                        ValidationGroup="ResetGroup"
                         CssClass="w-full transform rounded bg-orange-500 px-4 py-3 font-bold text-white shadow-lg shadow-orange-500/30 transition duration-500 hover:scale-105 hover:bg-orange-600" />
                 </div>
             </asp:Panel>
         </div>
     </div>
-
-    <script type="text/javascript">
-        function ValidatorUpdateDisplay(val) {
-            var ctrl = document.getElementById(val.controltovalidate);
-
-            // Handle the error message visibility
-            val.style.display = val.isvalid ? "none" : "block";
-
-            if (val.isvalid) {
-                // VALID STATE:
-                // 1. Remove Red styles
-                ctrl.classList.remove("border-red-500");
-                ctrl.classList.remove("focus:border-red-500"); // Stop forcing red on focus
-
-                // 2. Add Standard styles (Slate border, Orange focus)
-                ctrl.classList.add("border-slate-600");
-                ctrl.classList.add("focus:border-orange-500");
-            } else {
-                // INVALID STATE:
-                // 1. Remove Standard styles
-                ctrl.classList.remove("border-slate-600");
-                ctrl.classList.remove("focus:border-orange-500"); // Remove the orange focus!
-
-                // 2. Add Red styles
-                ctrl.classList.add("border-red-500");
-                ctrl.classList.add("focus:border-red-500"); // Keep it red even when typing
-            }
-        }
-    </script>
-
 </asp:Content>
