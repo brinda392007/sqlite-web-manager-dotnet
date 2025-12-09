@@ -42,6 +42,15 @@ namespace ASPWeBSM
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvP1;
 
         /// <summary>
+        /// revPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator revPassword;
+
+        /// <summary>
         /// txtCnfPassword control.
         /// </summary>
         /// <remarks>

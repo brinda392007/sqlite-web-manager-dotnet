@@ -1,0 +1,48 @@
+-- =============================================
+-- Table: khavadnadhoha
+-- Generated: 2025-12-09 22:41:41
+-- =============================================
+IF OBJECT_ID('dbo.khavadnadhoha_CRUD','P') IS NOT NULL
+    DROP PROC dbo.khavadnadhoha_CRUD;
+GO
+
+CREATE PROC dbo.khavadnadhoha_CRUD
+(
+    @id INT = NULL,
+    @mardanginivatu NVARCHAR(255) = NULL,
+    @approved NVARCHAR(255) = NULL,
+    @power FLOAT = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [khavadnadhoha];
+    END
+    ELSE IF (@EVENT = 'INSERT')
+    BEGIN
+        INSERT INTO [khavadnadhoha] ([mardanginivatu], [approved], [power])
+        VALUES (@mardanginivatu, @approved, @power);
+    END
+    ELSE IF (@EVENT = 'UPDATE')
+    BEGIN
+        UPDATE [khavadnadhoha]
+        SET [mardanginivatu] = @mardanginivatu, [approved] = @approved, [power] = @power
+        WHERE [id] = @id;
+    END
+    ELSE IF (@EVENT = 'DELETE')
+    BEGIN
+        DELETE FROM [khavadnadhoha]
+        WHERE [id] = @id;
+    END
+    ELSE IF (@EVENT = 'SELECT_BY_ID')
+    BEGIN
+        SELECT * FROM [khavadnadhoha]
+        WHERE [id] = @id;
+    END
+END
+GO
+
