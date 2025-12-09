@@ -36,27 +36,42 @@ namespace ASPWeBSM
             string username = txtUser.Text;
             string email = txtEmail.Text;
             string password = txtPassword.Text;
+            bool isDup = false;
 
             using (var conn = DatabaseManager.GetConnection())
             {
                 conn.Open();
 
-                using (var cmd = new SqlCommand("Users_CRUD", conn))
+                using (var cmd = new SqlCommand("SELECT dbo.IsEmailDuplicate(@Email)", conn))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@EVENT", "INSERT");
-                    cmd.Parameters.AddWithValue("@Username", username);
                     cmd.Parameters.AddWithValue("@Email", email);
-                    cmd.Parameters.AddWithValue("@Password", password);
-
-                    // SP returns SCOPE_IDENTITY(), but we don't really need it here
-                    object newId = cmd.ExecuteScalar();
+                    isDup = (bool)cmd.ExecuteScalar();
                 }
+
+                if (!isDup)
+                {
+                    using (var cmd = new SqlCommand("Users_CRUD", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@EVENT", "INSERT");
+                        cmd.Parameters.AddWithValue("@Username", username);
+                        cmd.Parameters.AddWithValue("@Email", email);
+                        cmd.Parameters.AddWithValue("@Password", password);
+
+                        // SP returns SCOPE_IDENTITY(), but we don't really need it here
+                        object newId = cmd.ExecuteScalar();
+                    }
+                    UiHelper.SetToast("Registration successful. You can now log in.", "success");
+                    // Optional but nice: redirect to login after successful registration
+                    Response.Redirect("Login.aspx");
+                }
+                UiHelper.ShowToast(this, "Duplicate Email deteted", "error");
+                txtUser.Text = "";
+                txtEmail.Text = "";
+                txtPassword.Text = "";
+                txtConfirmPassword.Text = "";
             }
-            UiHelper.SetToast("Registration successful. You can now log in.", "success");
-            // Optional but nice: redirect to login after successful registration
-            Response.Redirect("Login.aspx");
         }
     }
 }
