@@ -25,6 +25,7 @@
                     <asp:Panel ID="pnlReset" runat="server" Visible="true">
 
                         <div class="mb-6">
+                            
                             <asp:TextBox ID="txtEmail" runat="server"
                                 CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 outline-none transition-colors focus:border-orange-500"
                                 placeholder="Enter your email"
