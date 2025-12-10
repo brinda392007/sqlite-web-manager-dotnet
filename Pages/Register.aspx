@@ -13,7 +13,7 @@
             <div class="mb-4">
                 <label class="mb-2 block text-sm font-bold text-slate-400">Username</label>
                 <asp:TextBox ID="txtUser" runat="server"
-                    CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
+                    CssClass="placeholder-slate-500 w-full rounded border border-slate-600 bg-slate-900 p-3 text-white transition-colors focus:border-orange-500 focus:outline-none"
                     placeholder="Username"></asp:TextBox>
                 <asp:RegularExpressionValidator
                     ID="regexValidatorForUSername"
@@ -29,7 +29,7 @@
             <div class="mb-4">
                 <label class="mb-2 block text-sm font-bold text-slate-400">Email</label>
                 <asp:TextBox ID="txtEmail" runat="server" TextMode="Email"
-                    CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
+                    CssClass="placeholder-slate-500 w-full rounded border border-slate-600 bg-slate-900 p-3 text-white transition-colors focus:border-orange-500 focus:outline-none"
                     placeholder="you@example.com"></asp:TextBox>
 
                 <asp:RequiredFieldValidator
@@ -56,7 +56,7 @@
                 <label class="mb-2 block text-sm font-bold text-slate-400">Password</label>
                 <div class="relative">
                     <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" ClientIDMode="Static"
-                        CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 pr-10 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
+                        CssClass="placeholder-slate-500 w-full rounded border border-slate-600 bg-slate-900 p-3 pr-10 text-white transition-colors focus:border-orange-500 focus:outline-none"
                         placeholder="••••••••"></asp:TextBox>
                     <span class="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3 text-slate-400 hover:text-orange-500"
                         onclick="togglePasswordVisibility('txtPassword', 'toggleIcon1')">
@@ -76,7 +76,7 @@
                 <label class="mb-2 block text-sm font-bold text-slate-400">Confirm Password</label>
                 <div class="relative">
                     <asp:TextBox ID="txtConfirmPassword" runat="server" TextMode="Password" ClientIDMode="Static"
-                        CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 pr-10 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
+                        CssClass="placeholder-slate-500 w-full rounded border border-slate-600 bg-slate-900 p-3 pr-10 text-white transition-colors focus:border-orange-500 focus:outline-none"
                         placeholder="••••••••"></asp:TextBox>
                     <span class="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3 text-slate-400 hover:text-orange-500"
                         onclick="togglePasswordVisibility('txtConfirmPassword', 'toggleIcon2')">

@@ -1,0 +1,154 @@
+-- =============================================
+-- STORED PROCEDURES
+-- =============================================
+
+-- =============================================
+-- Table: Customers
+-- Generated: 2025-12-08 12:08:42
+-- =============================================
+IF OBJECT_ID('dbo.Customers_CRUD','P') IS NOT NULL
+    DROP PROC dbo.Customers_CRUD;
+GO
+
+CREATE PROC dbo.Customers_CRUD
+(
+    @CustomerID INT = NULL,
+    @Name NVARCHAR(255) = NULL,
+    @Email NVARCHAR(255) = NULL,
+    @City NVARCHAR(255) = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [Customers];
+    END
+END
+GO
+
+-- =============================================
+-- Table: Orders
+-- Generated: 2025-12-08 12:08:42
+-- =============================================
+IF OBJECT_ID('dbo.Orders_CRUD','P') IS NOT NULL
+    DROP PROC dbo.Orders_CRUD;
+GO
+
+CREATE PROC dbo.Orders_CRUD
+(
+    @OrderID INT = NULL,
+    @ProductID INT = NULL,
+    @CustomerID INT = NULL,
+    @Qty INT = NULL,
+    @Total FLOAT = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'INSERT')
+    BEGIN
+        INSERT INTO [Orders] ([ProductID], [CustomerID], [Qty], [Total])
+        VALUES (@ProductID, @CustomerID, @Qty, @Total);
+    END
+END
+GO
+
+-- =============================================
+-- Table: Products
+-- Generated: 2025-12-08 12:08:42
+-- =============================================
+IF OBJECT_ID('dbo.Products_CRUD','P') IS NOT NULL
+    DROP PROC dbo.Products_CRUD;
+GO
+
+CREATE PROC dbo.Products_CRUD
+(
+    @ProductID INT = NULL,
+    @Name NVARCHAR(255) = NULL,
+    @Price FLOAT = NULL,
+    @Quantity INT = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'UPDATE')
+    BEGIN
+        UPDATE [Products]
+        SET [Name] = @Name, [Price] = @Price, [Quantity] = @Quantity
+        WHERE [ProductID] = @ProductID;
+    END
+END
+GO
+
+
+
+// =============================================
+// C# METHODS
+// =============================================
+
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+
+public class GeneratedDbMethods
+{
+    private string _connString = ConfigurationManager.ConnectionStrings["AppDb"].ConnectionString;
+
+    public DataTable Customers_Select()
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Customers_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+    public void Orders_Insert(string ProductID, string CustomerID, string Qty, string Total)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Orders_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "INSERT");
+            cmd.Parameters.AddWithValue("@ProductID", ProductID);
+            cmd.Parameters.AddWithValue("@CustomerID", CustomerID);
+            cmd.Parameters.AddWithValue("@Qty", Qty);
+            cmd.Parameters.AddWithValue("@Total", Total);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public void Products_Update(string ProductID, string Name, string Price, string Quantity)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Products_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "UPDATE");
+            cmd.Parameters.AddWithValue("@ProductID", ProductID);
+            cmd.Parameters.AddWithValue("@Name", Name);
+            cmd.Parameters.AddWithValue("@Price", Price);
+            cmd.Parameters.AddWithValue("@Quantity", Quantity);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+}
+
