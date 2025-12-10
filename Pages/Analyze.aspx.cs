@@ -178,7 +178,7 @@ namespace ASPWeBSM
                         Delete = true,
                         SelectById = true,
                     });
-                    return list;
+
                 }
 
                 if (chkSelect.Checked || chkInsert.Checked || chkUpdate.Checked ||
