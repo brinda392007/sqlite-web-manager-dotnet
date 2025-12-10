@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="ResetPassword" Language="C#" MasterPageFile="~/Pages/Site.Master" AutoEventWireup="true" CodeBehind="ResetPassword.aspx.cs" Inherits="ASPWeBSM.ResetPassword" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="flex min-h-screen items-center justify-center bg-slate-900">
@@ -10,11 +11,16 @@
             <asp:Panel ID="pnlChange" runat="server" Visible="true">
 
                 <div class="relative mb-6">
-                    <asp:TextBox ID="txtPassword" runat="server" TextMode="Password"
-                        CssClass="validate-me w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 outline-none transition-colors focus:border-orange-500"
-                        placeholder="Enter New Password"
-                        ValidationGroup="ResetGroup">
-                    </asp:TextBox>
+
+                    <div class="relative">
+                        <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" ClientIDMode="Static"
+                            CssClass="placeholder-slate-500 w-full rounded border border-slate-600 bg-slate-900 p-3 pr-10 text-white transition-colors focus:border-orange-500 focus:outline-none"
+                            placeholder="••••••••"></asp:TextBox>
+                        <span class="absolute inset-y-0 right-0 flex z-10 cursor-pointer items-center pr-3 text-slate-400 hover:text-orange-500"
+                            onclick="togglePasswordVisibility('txtPassword', 'toggleIconPass')">
+                            <i id="toggleIconPass" class="fas fa-eye"></i>
+                        </span>
+                    </div>
 
                     <asp:RequiredFieldValidator runat="server" ID="rfvP1"
                         ControlToValidate="txtPassword"
@@ -32,12 +38,16 @@
                     </asp:RegularExpressionValidator>
                 </div>
 
-                <div class="relative mb-6">
-                    <asp:TextBox ID="txtCnfPassword" runat="server" TextMode="Password"
-                        CssClass="validate-me w-full rounded border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 outline-none transition-colors focus:border-orange-500"
-                        placeholder="Confirm Password"
-                        ValidationGroup="ResetGroup">
-                    </asp:TextBox>
+                <div class="mb-6">
+                    <div class="relative">
+                        <asp:TextBox ID="txtCnfPassword" runat="server" TextMode="Password" ClientIDMode="Static"
+                            CssClass="w-full rounded border border-slate-600 bg-slate-900 p-3 pr-10 text-white placeholder-slate-500 transition-colors focus:border-orange-500 focus:outline-none"
+                            placeholder="••••••••"></asp:TextBox>
+                        <span class="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3 text-slate-400 hover:text-orange-500"
+                            onclick="togglePasswordVisibility('txtCnfPassword', 'toggleIcon1')">
+                            <i id="toggleIcon1" class="fas fa-eye"></i>
+                        </span>
+                    </div>
 
                     <asp:RequiredFieldValidator runat="server" ID="rfvP2"
                         ControlToValidate="txtCnfPassword"
@@ -62,4 +72,19 @@
             </asp:Panel>
         </div>
     </div>
+    <script type="text/javascript">
+        function togglePasswordVisibility(passwordTextBoxId, iconId) {
+            var passwordInput = document.getElementById(passwordTextBoxId);
+            var icon = document.getElementById(iconId);
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </asp:Content>
