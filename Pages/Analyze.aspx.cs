@@ -178,7 +178,7 @@ namespace ASPWeBSM
                         Delete = true,
                         SelectById = true,
                     });
-
+                    continue;
                 }
 
                 if (chkSelect.Checked || chkInsert.Checked || chkUpdate.Checked ||
@@ -210,6 +210,7 @@ namespace ASPWeBSM
                 if (s.Insert) ops.Add("INSERT");
                 if (s.Update) ops.Add("UPDATE");
                 if (s.Delete) ops.Add("DELETE");
+                if (s.SelectById) ops.Add("SELECT_BY_ID");
 
                 parts.Add($"{s.TableName}: {string.Join(", ", ops)}");
             }
