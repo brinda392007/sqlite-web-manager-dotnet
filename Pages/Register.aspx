@@ -19,8 +19,8 @@
                     ID="regexValidatorForUSername"
                     runat="server"
                     ControlToValidate="txtUser"
-                    ErrorMessage="Username should be longer than 6 letters and less than 10"
-                    ValidationExpression="^[A-Za-z_]{7,10}$"
+                    ErrorMessage="Username should be longer than 6 letters and less than 15"
+                    ValidationExpression="^[A-Za-z_]{7,15}$"
                     CssClass="mt-1 block text-xs font-semibold text-red-500"
                     Display="Dynamic">
                 </asp:RegularExpressionValidator>

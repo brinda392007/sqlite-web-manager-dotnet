@@ -1,0 +1,316 @@
+-- =============================================
+-- STORED PROCEDURES
+-- =============================================
+
+-- =============================================
+-- Table: chaprasi_simulator
+-- Generated: 2025-12-10 10:22:58
+-- =============================================
+IF OBJECT_ID('dbo.chaprasi_simulator_CRUD','P') IS NOT NULL
+    DROP PROC dbo.chaprasi_simulator_CRUD;
+GO
+
+CREATE PROC dbo.chaprasi_simulator_CRUD
+(
+    @id INT = NULL,
+    @naam NVARCHAR(255) = NULL,
+    @tame NVARCHAR(255) = NULL,
+    @janita NVARCHAR(255) = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [chaprasi_simulator];
+    END
+END
+GO
+
+-- =============================================
+-- Table: enimane
+-- Generated: 2025-12-10 10:22:58
+-- =============================================
+IF OBJECT_ID('dbo.enimane_CRUD','P') IS NOT NULL
+    DROP PROC dbo.enimane_CRUD;
+GO
+
+CREATE PROC dbo.enimane_CRUD
+(
+    @id INT = NULL,
+    @name NVARCHAR(255) = NULL,
+    @marks NVARCHAR(255) = NULL,
+    @jaati NVARCHAR(255) = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [enimane];
+    END
+END
+GO
+
+-- =============================================
+-- Table: final_test
+-- Generated: 2025-12-10 10:22:58
+-- =============================================
+IF OBJECT_ID('dbo.final_test_CRUD','P') IS NOT NULL
+    DROP PROC dbo.final_test_CRUD;
+GO
+
+CREATE PROC dbo.final_test_CRUD
+(
+    @id INT = NULL,
+    @name NVARCHAR(255) = NULL,
+    @email NVARCHAR(255) = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [final_test];
+    END
+END
+GO
+
+-- =============================================
+-- Table: khavadnadhoha
+-- Generated: 2025-12-10 10:22:58
+-- =============================================
+IF OBJECT_ID('dbo.khavadnadhoha_CRUD','P') IS NOT NULL
+    DROP PROC dbo.khavadnadhoha_CRUD;
+GO
+
+CREATE PROC dbo.khavadnadhoha_CRUD
+(
+    @id INT = NULL,
+    @mardanginivatu NVARCHAR(255) = NULL,
+    @approved NVARCHAR(255) = NULL,
+    @power FLOAT = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [khavadnadhoha];
+    END
+END
+GO
+
+-- =============================================
+-- Table: niga
+-- Generated: 2025-12-10 10:22:58
+-- =============================================
+IF OBJECT_ID('dbo.niga_CRUD','P') IS NOT NULL
+    DROP PROC dbo.niga_CRUD;
+GO
+
+CREATE PROC dbo.niga_CRUD
+(
+    @id INT = NULL,
+    @niganame NVARCHAR(255) = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [niga];
+    END
+END
+GO
+
+-- =============================================
+-- Table: sinh
+-- Generated: 2025-12-10 10:22:58
+-- =============================================
+IF OBJECT_ID('dbo.sinh_CRUD','P') IS NOT NULL
+    DROP PROC dbo.sinh_CRUD;
+GO
+
+CREATE PROC dbo.sinh_CRUD
+(
+    @id INT = NULL,
+    @name NVARCHAR(255) = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [sinh];
+    END
+END
+GO
+
+-- =============================================
+-- Table: users
+-- Generated: 2025-12-10 10:22:58
+-- =============================================
+IF OBJECT_ID('dbo.users_CRUD','P') IS NOT NULL
+    DROP PROC dbo.users_CRUD;
+GO
+
+CREATE PROC dbo.users_CRUD
+(
+    @id INT = NULL,
+    @name NVARCHAR(255) = NULL,
+    @age INT = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [users];
+    END
+END
+GO
+
+
+
+// =============================================
+// C# METHODS
+// =============================================
+
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+
+public class GeneratedDbMethods
+{
+    private string _connString = ConfigurationManager.ConnectionStrings["AppDb"].ConnectionString;
+
+    public DataTable chaprasi_simulator_Select()
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("chaprasi_simulator_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+    public DataTable enimane_Select()
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("enimane_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+    public DataTable final_test_Select()
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("final_test_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+    public DataTable khavadnadhoha_Select()
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("khavadnadhoha_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+    public DataTable niga_Select()
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("niga_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+    public DataTable sinh_Select()
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("sinh_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+    public DataTable users_Select()
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("users_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+}
+

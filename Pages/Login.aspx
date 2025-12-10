@@ -18,8 +18,8 @@
                     ID="regexValidatorForUSername"
                     runat="server"
                     ControlToValidate="txtUser"
-                    ErrorMessage="Username should be longer than 6 letters and must contain a number"
-                    ValidationExpression="^[A-Za-z_]{7,10}$"
+                    ErrorMessage="Username should be longer than 6 letters and less than 15"
+                    ValidationExpression="^[A-Za-z_]{7,15}$"
                     CssClass="mt-1 block text-xs font-semibold text-red-500"
                     Display="Dynamic">
                 </asp:RegularExpressionValidator>
@@ -30,7 +30,7 @@
                     <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" ClientIDMode="Static"
                         CssClass="placeholder-slate-500 w-full rounded border border-slate-600 bg-slate-900 p-3 pr-10 text-white transition-colors focus:border-orange-500 focus:outline-none"
                         placeholder="••••••••"></asp:TextBox>
-                    <span class="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3 text-slate-400 hover:text-orange-500"
+                    <span class="absolute inset-y-0 right-0 z-10 flex cursor-pointer items-center pr-3 text-slate-400 hover:text-orange-500"
                         onclick="togglePasswordVisibility('txtPassword', 'toggleIconLogin')">
                         <i id="toggleIconLogin" class="fas fa-eye"></i>
                     </span>
