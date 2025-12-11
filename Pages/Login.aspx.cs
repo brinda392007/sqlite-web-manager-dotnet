@@ -44,7 +44,7 @@ namespace ASPWeBSM
                             UiHelper.SetToast("Login successful", "success");
 
                             // *** CORRECT LOG CALL: Calls LogManager.Success (Green) ***
-                            LogManager.Success($"User {name} logged in successfully.");
+                            LogManager.Success($"logged in successfully.");
 
                             Response.Redirect("Default.aspx");
                         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SQLite; // CRITICAL: Use SQLite namespace
+using System.Web; // CRITICAL: Needed to access HttpContext and Session
 
 namespace ASPWeBSM
 {
@@ -30,6 +31,21 @@ namespace ASPWeBSM
 
         private static void Log(string message, string level, Exception ex = null)
         {
+            // 1. SAFELY RETRIEVE THE CURRENT USER'S ID FROM THE SESSION
+            int? userId = null; // Use nullable int to handle cases where there is no user
+            try
+            {
+                // HttpContext.Current gives access to the session in a static method
+                if (System.Web.HttpContext.Current?.Session != null)
+                {
+                    if (int.TryParse(System.Web.HttpContext.Current.Session["UserId"]?.ToString(), out int id))
+                    {
+                        userId = id;
+                    }
+                }
+            }
+            catch { /* Suppress context errors */ }
+
             try
             {
                 // CRITICAL: Use the dedicated SQLite connection
@@ -37,8 +53,8 @@ namespace ASPWeBSM
                 {
                     conn.Open();
 
-                    // SQLite SQL query
-                    string sql = "INSERT INTO Logs (LogLevel, Message, StackTrace, LogTime) VALUES (@Level, @Message, @StackTrace, CURRENT_TIMESTAMP)";
+                    // CRITICAL FIX 1: Add UserId to the INSERT statement
+                    string sql = "INSERT INTO Logs (LogLevel, Message, StackTrace, LogTime, UserId) VALUES (@Level, @Message, @StackTrace, CURRENT_TIMESTAMP, @UserId)";
 
                     using (var cmd = new SQLiteCommand(sql, conn)) // CRITICAL: Use SQLiteCommand
                     {
@@ -60,9 +76,8 @@ namespace ASPWeBSM
 
                         cmd.Parameters.AddWithValue("@StackTrace", stackTraceParameter);
 
-                        // NOTE: Since the Logs table in SQLite is now decoupled from Users, 
-                        // we cannot easily save the UserId here without another lookup step, 
-                        // which we will skip for now to simplify the LogManager.
+                        // CRITICAL FIX 2: Pass the retrieved UserId (or DBNull.Value if none)
+                        cmd.Parameters.AddWithValue("@UserId", userId.HasValue ? (object)userId.Value : DBNull.Value);
 
                         cmd.ExecuteNonQuery();
                     }
