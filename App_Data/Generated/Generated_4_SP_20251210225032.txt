@@ -1,0 +1,31 @@
+-- =============================================
+-- Table: Courses
+-- Generated: 2025-12-10 22:50:32
+-- =============================================
+IF OBJECT_ID('dbo.Courses_CRUD','P') IS NOT NULL
+    DROP PROC dbo.Courses_CRUD;
+GO
+
+CREATE PROC dbo.Courses_CRUD
+(
+    @CourseID INT = NULL,
+    @CourseName NVARCHAR(255) = NULL,
+    @Credits INT = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [Courses];
+    END
+    ELSE IF (@EVENT = 'INSERT')
+    BEGIN
+        INSERT INTO [Courses] ([CourseName], [Credits])
+        VALUES (@CourseName, @Credits);
+    END
+END
+GO
+

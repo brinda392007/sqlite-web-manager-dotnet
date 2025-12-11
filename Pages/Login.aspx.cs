@@ -18,7 +18,7 @@ namespace ASPWeBSM
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            string name = txtUser.Text;
+            string name = txtUser.Text; // This variable holds the username
             string pass = txtPassword.Text;
 
             using (var conn = DatabaseManager.GetConnection())
@@ -37,15 +37,26 @@ namespace ASPWeBSM
                     {
                         if (reader.Read())
                         {
+                            // SUCCESSFUL LOGIN BLOCK
                             Session["UserId"] = reader["Id"];
                             Session["Username"] = reader["Username"];
+
                             UiHelper.SetToast("Login successful", "success");
+
+                            // *** CORRECT LOG CALL: Calls LogManager.Success (Green) ***
+                            LogManager.Success($"User {name} logged in successfully.");
+
                             Response.Redirect("Default.aspx");
                         }
                         else
                         {
+                            // FAILED LOGIN BLOCK
                             txtUser.Text = "";
                             txtPassword.Text = "";
+
+                            // *** CORRECT LOG CALL: Calls LogManager.Info (Yellow/Orange) ***
+                            LogManager.Info($"Failed login attempt for username: {name}.");
+
                             UiHelper.ShowToast(this, "Invalid username or password.", "error");
                         }
                     }

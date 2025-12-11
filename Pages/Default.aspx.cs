@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SQLite;
+using System.Text;
+using System.Web; // Needed for HttpUtility.HtmlEncode
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Diagnostics; // Added for the Debug.WriteLine diagnostic
 
 namespace ASPWeBSM
 {
@@ -12,16 +16,104 @@ namespace ASPWeBSM
         {
             if (!IsPostBack)
             {
-                lblWelcome.Text = "Welcome, Operator " + Session["Username"];
-                UiHelper.ShowSessionToast(this);  // shows login toast
+                // Assuming you have a label named lblWelcome
+                if (Session["Username"] != null)
+                {
+                    lblWelcome.Text = "Welcome, Operator " + Session["Username"];
+                }
+
+                UiHelper.ShowSessionToast(this); // shows login toast
             }
 
             LoadFiles();
             LoadGeneratedFiles();
+
+            // CRITICAL CALL: Load logs on every page load
+            GetLogsHtml();
+        }
+
+        private void GetLogsHtml()
+        {
+            var logHtml = new StringBuilder();
+            logHtml.AppendLine("<div class=\"log-entry text-sm text-slate-400\"><span class=\"text-orange-400\">[Time]</span> (Level) Message...</div><hr class=\"border-slate-700 my-1\">");
+
+            try
+            {
+                // Use the dedicated SQLite connection
+                using (var conn = DatabaseManager.GetLogConnection())
+                {
+                    conn.Open();
+
+                    // SQLITE QUERY: Standard log retrieval
+                    string sql = @"
+SELECT 
+    LogTime,
+    Message,
+    LogLevel
+FROM 
+    Logs 
+ORDER BY 
+    LogTime DESC
+LIMIT 50;";
+
+                    using (var cmd = new System.Data.SQLite.SQLiteCommand(sql, conn)) // Use SQLiteCommand
+                    {
+                        using (System.Data.SQLite.SQLiteDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                // 1. Read and process data
+                                string timestamp = Convert.ToDateTime(reader["LogTime"]).ToString("HH:mm:ss");
+                                string level = reader["LogLevel"].ToString().ToLowerInvariant();
+                                string message = reader["Message"].ToString();
+                                string username = "SYSTEM"; // Hardcoded username
+
+                                // 2. Determine CSS class based on log level
+                                string colorClass = "text-slate-400"; // Default (e.g., for DEBUG)
+
+                                if (level == "error")
+                                {
+                                    colorClass = "text-red-400"; // Red for ERROR
+                                }
+                                else if (level == "success") // Check for SUCCESS
+                                {
+                                    colorClass = "text-emerald-400"; // Green for SUCCESS
+                                }
+                                else if (level == "info") // Check for INFO
+                                {
+                                    colorClass = "text-yellow-400"; // Yellow/Orange for INFO
+                                }
+
+                                // Diagnostics (Optional, but useful to see the read level)
+                                // Debug.WriteLine($"Log Level: {level}, Color: {colorClass}");
+
+
+                                // 3. Build the HTML for one log entry
+                                logHtml.AppendLine($"<div class=\"log-entry text-sm\">");
+                                logHtml.AppendLine($"<span class=\"{colorClass}\">[{timestamp}]</span> ");
+                                logHtml.AppendLine($"<span class=\"text-slate-500\">({username})</span>: ");
+                                // FIX APPLIED HERE: Using {colorClass} for the message text
+                                logHtml.AppendLine($"<span class=\"{colorClass}\">{HttpUtility.HtmlEncode(message)}</span>");
+                                logHtml.AppendLine($"</div>");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error retrieving SQLite logs: {ex.Message}");
+                logHtml.AppendLine("<div class=\"log-entry text-red-500 text-sm\">[ERROR] Failed to load log history.</div>");
+            }
+
+            // Inject the generated HTML
+            string script = $"document.getElementById('log-panel-content').innerHTML = \"{logHtml.ToString().Replace("\"", "\\\"").Replace("\r\n", "")}\";";
+            ScriptManager.RegisterStartupScript(this, GetType(), "LoadLogsScript", script, true);
         }
 
         private void LoadFiles()
         {
+            // ... (Your LoadFiles implementation) ...
             int userId = Convert.ToInt32(Session["UserId"]);
 
             using (var conn = DatabaseManager.GetConnection())
@@ -51,6 +143,7 @@ namespace ASPWeBSM
 
         private void LoadGeneratedFiles()
         {
+            // ... (Your LoadGeneratedFiles implementation) ...
             int userId = Convert.ToInt32(Session["UserId"]);
             DataTable dt = new DataTable();
 
@@ -79,13 +172,14 @@ namespace ASPWeBSM
         protected void btnRefreshGenerated_Click(object sender, EventArgs e)
         {
             LoadGeneratedFiles();
+            GetLogsHtml();
         }
-
 
 
         protected void btnRefreshList_Click(object sender, EventArgs e)
         {
             LoadFiles();
+            GetLogsHtml();
         }
 
         protected void rptFiles_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -95,29 +189,43 @@ namespace ASPWeBSM
                 int fileId = Convert.ToInt32(e.CommandArgument);
                 int userId = Convert.ToInt32(Session["UserId"]);
 
-                using (var conn = DatabaseManager.GetConnection())
+                try
                 {
-                    conn.Open();
-
-                    using (var cmd = new SqlCommand("Uploads_CRUD", conn))
+                    using (var conn = DatabaseManager.GetConnection())
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
+                        conn.Open();
 
-                        cmd.Parameters.AddWithValue("@EVENT", "DELETE");
-                        cmd.Parameters.AddWithValue("@Id", fileId);
-                        cmd.Parameters.AddWithValue("@UserId", userId);
+                        using (var cmd = new SqlCommand("Uploads_CRUD", conn))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.ExecuteNonQuery();
+                            cmd.Parameters.AddWithValue("@EVENT", "DELETE");
+                            cmd.Parameters.AddWithValue("@Id", fileId);
+                            cmd.Parameters.AddWithValue("@UserId", userId);
 
-                        UiHelper.ShowToast(this, "File deleted successfully.", "success");
+                            cmd.ExecuteNonQuery();
+
+                            // Log successful deletion
+                            // IMPORTANT: Delete is a completed action, should be SUCCESS.
+                            LogManager.Success($"User {Session["Username"]} deleted uploaded file ID: {fileId}.");
+                            UiHelper.ShowToast(this, "File deleted successfully.", "success");
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    LogManager.Error($"Error deleting uploaded file ID: {fileId}.", ex);
+                    UiHelper.ShowToast(this, "Error deleting file.", "error");
+                }
+
 
                 LoadFiles();
                 LoadGeneratedFiles();
+                GetLogsHtml(); // Refresh logs after an action
 
-                UpdatePanelFiles.Update();
-                UpdatePanelGenerated.Update();
+                // Assuming these UpdatePanels exist
+                // UpdatePanelFiles.Update();
+                // UpdatePanelGenerated.Update();
             }
         }
 
@@ -132,65 +240,54 @@ namespace ASPWeBSM
                 int userId = Convert.ToInt32(Session["UserId"]);
                 string filePath = null;
 
-                using (var conn = DatabaseManager.GetConnection())
-                {
-                    conn.Open();
-
-                    // Optional: fetch FilePath and confirm owner (SELECT_BY_ID)
-                    //using (var sel = new SqlCommand("GeneratedFiles_CRUD", conn))
-                    //{
-                    //    sel.CommandType = CommandType.StoredProcedure;
-                    //    sel.Parameters.AddWithValue("@EVENT", "SELECT_BY_ID");
-                    //    sel.Parameters.AddWithValue("@FileID", fileId);
-                    //    sel.Parameters.AddWithValue("@UserId", userId);
-
-                    //    using (var rdr = sel.ExecuteReader())
-                    //    {
-                    //        if (rdr.Read())
-                    //        {
-                    //            filePath = rdr["FilePath"]?.ToString();
-                    //        }
-                    //        else
-                    //        {
-                    //            UiHelper.ShowToast(this, "File not found or access denied.", "error");
-                    //            LoadGeneratedFiles();
-                    //            return;
-                    //        }
-                    //    }
-                    //}
-
-                    // Delete via stored procedure (SP will ensure ownership because we passed @UserId)
-                    using (var cmd = new SqlCommand("GeneratedFiles_CRUD", conn))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@EVENT", "DELETE");
-                        cmd.Parameters.AddWithValue("@FileID", fileId);
-                        cmd.Parameters.AddWithValue("@UserId", userId);
-
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
-                // Delete physical file (best-effort)
                 try
                 {
-                    if (!string.IsNullOrEmpty(filePath))
+                    using (var conn = DatabaseManager.GetConnection())
                     {
-                        string physical = Server.MapPath(filePath);
-                        if (System.IO.File.Exists(physical))
-                            System.IO.File.Delete(physical);
-                    }
-                }
-                catch
-                {
-                    // ignore file system errors (DB already cleaned). Optionally log them.
-                }
+                        conn.Open();
 
-                UiHelper.ShowToast(this, "Generated file purged.", "success");
+                        // Delete via stored procedure
+                        using (var cmd = new SqlCommand("GeneratedFiles_CRUD", conn))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@EVENT", "DELETE");
+                            cmd.Parameters.AddWithValue("@FileID", fileId);
+                            cmd.Parameters.AddWithValue("@UserId", userId);
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    // Delete physical file (best-effort)
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(filePath))
+                        {
+                            string physical = Server.MapPath(filePath);
+                            if (System.IO.File.Exists(physical))
+                                System.IO.File.Delete(physical);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log file system errors (DB cleaned, but file remained)
+                        LogManager.Error($"Filesystem error deleting generated file ID: {fileId} at {filePath}", ex);
+                    }
+
+                    // Log successful deletion
+                    // IMPORTANT: Purge is a completed action, should be SUCCESS.
+                    LogManager.Success($"User {Session["Username"]} purged generated file ID: {fileId}.");
+                    UiHelper.ShowToast(this, "Generated file purged.", "success");
+                }
+                catch (Exception ex)
+                {
+                    LogManager.Error($"Error purging generated file ID: {fileId}.", ex);
+                    UiHelper.ShowToast(this, "Error purging generated file.", "error");
+                }
 
                 // Refresh UI
                 LoadGeneratedFiles();
-
+                GetLogsHtml(); // Refresh logs after an action
             }
         }
 

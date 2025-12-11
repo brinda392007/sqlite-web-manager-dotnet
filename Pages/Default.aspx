@@ -147,14 +147,13 @@
                 <a href="#" class="block w-full rounded border border-slate-600 bg-slate-700 py-3 text-center text-white transition hover:bg-slate-600">View Analytics
                 </a>
             </div>
-            <div class="rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-xl">
-                <h2 class="mb-4 text-xl font-bold text-orange-400">Logs</h2>
-                <div id="log-panel" class="font-vt323 mb-3 max-h-[110px] w-full overflow-auto rounded border bg-slate-900 p-3 font-mono">
-                    <p class="font-vt323 text-2xl">hello</p>
-                    <p class="font-vt323 text-2xl">hello</p>
-                    <p class="font-vt323 text-2xl">hello</p>
-                </div>
-            </div>
+          <div class="rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-xl">
+    <h2 class="mb-4 text-xl font-bold text-orange-400">Application Logs</h2>
+    <div id="log-panel-content" 
+         class="font-mono mb-3 max-h-[200px] w-full overflow-y-scroll rounded border bg-slate-900 p-3 text-slate-400 border-slate-700 text-sm">
+        Loading logs...
+    </div>
+</div>
         </div>
     </div>
 </asp:Content>

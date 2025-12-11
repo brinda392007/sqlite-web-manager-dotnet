@@ -1,0 +1,143 @@
+-- =============================================
+-- STORED PROCEDURES
+-- =============================================
+
+-- =============================================
+-- Table: Courses
+-- Generated: 2025-12-10 12:22:24
+-- =============================================
+IF OBJECT_ID('dbo.Courses_CRUD','P') IS NOT NULL
+    DROP PROC dbo.Courses_CRUD;
+GO
+
+CREATE PROC dbo.Courses_CRUD
+(
+    @CourseID INT = NULL,
+    @CourseName NVARCHAR(255) = NULL,
+    @Credits INT = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [Courses];
+    END
+    ELSE IF (@EVENT = 'INSERT')
+    BEGIN
+        INSERT INTO [Courses] ([CourseName], [Credits])
+        VALUES (@CourseName, @Credits);
+    END
+    ELSE IF (@EVENT = 'UPDATE')
+    BEGIN
+        UPDATE [Courses]
+        SET [CourseName] = @CourseName, [Credits] = @Credits
+        WHERE [CourseID] = @CourseID;
+    END
+    ELSE IF (@EVENT = 'DELETE')
+    BEGIN
+        DELETE FROM [Courses]
+        WHERE [CourseID] = @CourseID;
+    END
+    ELSE IF (@EVENT = 'SELECT_BY_ID')
+    BEGIN
+        SELECT * FROM [Courses]
+        WHERE [CourseID] = @CourseID;
+    END
+END
+GO
+
+
+
+// =============================================
+// C# METHODS
+// =============================================
+
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+
+public class GeneratedDbMethods
+{
+    private string _connString = ConfigurationManager.ConnectionStrings["AppDb"].ConnectionString;
+
+    public DataTable Courses_Select()
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Courses_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+    public void Courses_Insert(string CourseName, string Credits)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Courses_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "INSERT");
+            cmd.Parameters.AddWithValue("@CourseName", CourseName);
+            cmd.Parameters.AddWithValue("@Credits", Credits);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public void Courses_Update(string CourseID, string CourseName, string Credits)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Courses_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "UPDATE");
+            cmd.Parameters.AddWithValue("@CourseID", CourseID);
+            cmd.Parameters.AddWithValue("@CourseName", CourseName);
+            cmd.Parameters.AddWithValue("@Credits", Credits);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public void Courses_Delete(string CourseID)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Courses_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "DELETE");
+            cmd.Parameters.AddWithValue("@CourseID", CourseID);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public DataTable Courses_SelectById(string CourseID)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Courses_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT_BY_ID");
+            cmd.Parameters.AddWithValue("@CourseID", CourseID);
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+}
+
