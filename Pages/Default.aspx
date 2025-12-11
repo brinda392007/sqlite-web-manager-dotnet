@@ -51,7 +51,7 @@
                                                 <td class="px-6 py-4 text-sm text-slate-500">
                                                     <%# Eval("UploadedAt") %>
                                                 </td>
-                                                <td class="space-x-2 px-6 py-4 text-right">
+                                                <td class="space-x-2 px-6 py-4 text-right whitespace-nowrap">
                                                     <a href='Download.ashx?id=<%# Eval("Id") %>' target="_blank"
                                                         class="inline-block bg-orange-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-orange-400">Download
                                                     </a>
