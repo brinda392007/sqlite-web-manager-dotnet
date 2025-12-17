@@ -271,6 +271,7 @@ namespace ASPWeBSM
             string fileName = SaveGeneratedFile(spText, summary, "SP");
 
             lblMessage.Text = $"Stored procedures generated in file: {fileName}. You can download it later from your downloads panel.";
+            Response.Redirect("Default.aspx");
         }
 
         protected void btnGenerateMethods_OnClick(object sender, EventArgs e)
@@ -294,6 +295,7 @@ namespace ASPWeBSM
             string fileName = SaveGeneratedFile(methodsText, summary, "Methods");
 
             lblMessage.Text = $"C# methods generated in file: {fileName}. You can download it later from your downloads panel.";
+            Response.Redirect("Default.aspx");
         }
 
         protected void btnGenerateBoth_OnClick(object sender, EventArgs e)
@@ -332,6 +334,7 @@ namespace ASPWeBSM
             string fileName = SaveGeneratedFile(full.ToString(), summary, "SP_AND_Methods");
 
             lblMessage.Text = $"SP + C# methods generated in file: {fileName}. You can download it later from your downloads panel.";
+            Response.Redirect("Default.aspx");
         }
 
         //handles the Select all button
