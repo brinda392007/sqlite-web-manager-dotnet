@@ -64,6 +64,7 @@ namespace ASPWeBSM
                         // SP returns SCOPE_IDENTITY(), but we don't really need it here
                         object newId = cmd.ExecuteScalar();
                     }
+                    LogManager.Success($"Registed successfully.");
                     UiHelper.SetToast("Registration successful. You can now log in.", "success");
                     // Optional but nice: redirect to login after successful registration
                     Response.Redirect("Login.aspx");

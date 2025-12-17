@@ -1,0 +1,190 @@
+-- =============================================
+-- STORED PROCEDURES
+-- =============================================
+
+-- =============================================
+-- Table: Courses
+-- Generated: 2025-12-10 12:07:51
+-- =============================================
+IF OBJECT_ID('dbo.Courses_CRUD','P') IS NOT NULL
+    DROP PROC dbo.Courses_CRUD;
+GO
+
+CREATE PROC dbo.Courses_CRUD
+(
+    @CourseID INT = NULL,
+    @CourseName NVARCHAR(255) = NULL,
+    @Credits INT = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT * FROM [Courses];
+    END
+    ELSE IF (@EVENT = 'INSERT')
+    BEGIN
+        INSERT INTO [Courses] ([CourseName], [Credits])
+        VALUES (@CourseName, @Credits);
+    END
+END
+GO
+
+-- =============================================
+-- Table: Enrollments
+-- Generated: 2025-12-10 12:07:51
+-- =============================================
+IF OBJECT_ID('dbo.Enrollments_CRUD','P') IS NOT NULL
+    DROP PROC dbo.Enrollments_CRUD;
+GO
+
+CREATE PROC dbo.Enrollments_CRUD
+(
+    @EnrollmentID INT = NULL,
+    @StudentID INT = NULL,
+    @CourseID INT = NULL,
+    @Grade NVARCHAR(255) = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'UPDATE')
+    BEGIN
+        UPDATE [Enrollments]
+        SET [StudentID] = @StudentID, [CourseID] = @CourseID, [Grade] = @Grade
+        WHERE [EnrollmentID] = @EnrollmentID;
+    END
+    ELSE IF (@EVENT = 'DELETE')
+    BEGIN
+        DELETE FROM [Enrollments]
+        WHERE [EnrollmentID] = @EnrollmentID;
+    END
+END
+GO
+
+-- =============================================
+-- Table: Students
+-- Generated: 2025-12-10 12:07:51
+-- =============================================
+IF OBJECT_ID('dbo.Students_CRUD','P') IS NOT NULL
+    DROP PROC dbo.Students_CRUD;
+GO
+
+CREATE PROC dbo.Students_CRUD
+(
+    @StudentID INT = NULL,
+    @Name NVARCHAR(255) = NULL,
+    @Age INT = NULL,
+    @Department NVARCHAR(255) = NULL
+    ,@EVENT VARCHAR(50) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF (@EVENT = 'SELECT_BY_ID')
+    BEGIN
+        SELECT * FROM [Students]
+        WHERE [StudentID] = @StudentID;
+    END
+END
+GO
+
+
+
+// =============================================
+// C# METHODS
+// =============================================
+
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+
+public class GeneratedDbMethods
+{
+    private string _connString = ConfigurationManager.ConnectionStrings["AppDb"].ConnectionString;
+
+    public DataTable Courses_Select()
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Courses_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+    public void Courses_Insert(string CourseName, string Credits)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Courses_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "INSERT");
+            cmd.Parameters.AddWithValue("@CourseName", CourseName);
+            cmd.Parameters.AddWithValue("@Credits", Credits);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public void Enrollments_Update(string EnrollmentID, string StudentID, string CourseID, string Grade)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Enrollments_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "UPDATE");
+            cmd.Parameters.AddWithValue("@EnrollmentID", EnrollmentID);
+            cmd.Parameters.AddWithValue("@StudentID", StudentID);
+            cmd.Parameters.AddWithValue("@CourseID", CourseID);
+            cmd.Parameters.AddWithValue("@Grade", Grade);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public void Enrollments_Delete(string EnrollmentID)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Enrollments_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "DELETE");
+            cmd.Parameters.AddWithValue("@EnrollmentID", EnrollmentID);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public DataTable Students_SelectById(string StudentID)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Students_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT_BY_ID");
+            cmd.Parameters.AddWithValue("@StudentID", StudentID);
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+}
+
