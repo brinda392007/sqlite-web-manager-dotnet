@@ -1,28 +1,67 @@
 ﻿using System;
 using System.Configuration;
-using System.Data.SqlClient;
+using System.Data.SqlClient;          // SQL Server (Main App)
+using System.Data.SQLite;              // SQLite (Logs)
+using System.IO;
 using BCrypt.Net;
+using System.Diagnostics;
 
 namespace ASPWeBSM
 {
     public class DatabaseManager
     {
-        // Connection string from Web.config
-        private static string _connectionString =
+        // =========================================
+        // SQL SERVER CONFIG (MAIN APPLICATION)
+        // =========================================
+        private static readonly string _sqlServerConnectionString =
             ConfigurationManager.ConnectionStrings["MyDb"].ConnectionString;
 
+        // =========================================
+        // SQLITE CONFIG (LOGS ONLY)
+        // =========================================
+        private static readonly string LogDbFileName = "Logs_new.sqlite";
+        private static readonly string AppDataPath =
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data");
+        private static readonly string LogDbPath =
+            Path.Combine(AppDataPath, LogDbFileName);
+
+        private static readonly string _sqliteConnectionString =
+            $"Data Source={LogDbPath};Version=3;";
+
+        // =========================================
+        // CONNECTIONS
+        // =========================================
+
+        // SQL Server connection
         public static SqlConnection GetConnection()
         {
-            return new SqlConnection(_connectionString);
+            return new SqlConnection(_sqlServerConnectionString);
         }
 
+        // SQLite connection (Logs only)
+        public static SQLiteConnection GetLogConnection()
+        {
+            return new SQLiteConnection(_sqliteConnectionString);
+        }
+
+        // =========================================
+        // INITIALIZATION (RUNS ON APP START)
+        // =========================================
         public static void Initialize()
         {
+            // Ensure App_Data exists
+            if (!Directory.Exists(AppDataPath))
+            {
+                Directory.CreateDirectory(AppDataPath);
+            }
+
+            // -----------------------------
+            // SQL SERVER INIT (UNCHANGED)
+            // -----------------------------
             using (var conn = GetConnection())
             {
                 conn.Open();
 
-                // Create Users table if not exists
                 string usersSql = @"
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Users')
 BEGIN
@@ -35,13 +74,11 @@ BEGIN
         CreatedAt DATETIME NOT NULL DEFAULT(GETDATE())
     );
 END";
-
                 using (var cmd = new SqlCommand(usersSql, conn))
                 {
                     cmd.ExecuteNonQuery();
                 }
 
-                // Create Uploads table if not exists
                 string uploadsSql = @"
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Uploads')
 BEGIN
@@ -57,25 +94,53 @@ BEGIN
         CONSTRAINT FK_Uploads_Users FOREIGN KEY (UserId) REFERENCES dbo.Users(Id)
     );
 END";
-
                 using (var cmd = new SqlCommand(uploadsSql, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            // -----------------------------
+            // SQLITE LOG DB INIT (NEW)
+            // -----------------------------
+            using (var conn = GetLogConnection())
+            {
+                conn.Open(); // Auto-creates Logs.sqlite if missing
+
+                string logsSql = @"
+CREATE TABLE IF NOT EXISTS Logs
+(
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserId INTEGER NOT NULL,
+    LogType TEXT NOT NULL,      -- INFO / SUCCESS / ERROR
+    Message TEXT NOT NULL,
+    LogTime DATETIME DEFAULT CURRENT_TIMESTAMP
+);";
+
+                using (var cmd = new SQLiteCommand(logsSql, conn))
                 {
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
+        // =========================================
+        // PASSWORD RESET (UNCHANGED)
+        // =========================================
         internal static void resetPassword(string email, string newPassword)
         {
             try
             {
-                using(var conn = GetConnection())
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
+
+                using (var conn = GetConnection())
                 {
                     conn.Open();
+
                     string sql = "UPDATE Users SET Password = @pass WHERE Email = @email";
-                    using(var cmd = new SqlCommand(sql, conn))
+                    using (var cmd = new SqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@pass", newPassword);
+                        cmd.Parameters.AddWithValue("@pass", hashedPassword);
                         cmd.Parameters.AddWithValue("@email", email);
                         cmd.ExecuteNonQuery();
                     }
@@ -83,7 +148,7 @@ END";
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.WriteLine($"Error resetting password: {ex.Message}");
             }
         }
     }
