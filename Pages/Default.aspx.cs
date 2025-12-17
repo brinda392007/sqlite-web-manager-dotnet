@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.SQLite;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -13,88 +12,14 @@ namespace ASPWeBSM
         {
             if (!IsPostBack)
             {
-                if (Session["Username"] != null)
-                {
-                    lblWelcome.Text = "Welcome, Operator " + Session["Username"];
-                }
-
-                UiHelper.ShowSessionToast(this);
-
-                LoadFiles();
-                LoadGeneratedFiles();
-                LoadLogs();
-            }
-        }
-
-        // =========================
-        // LOGS (CLEAN + SIMPLE)
-        // =========================
-        private void LoadLogs()
-        {
-            int userId = Convert.ToInt32(Session["UserId"]);
-            DataTable dt = new DataTable();
-
-            dt.Columns.Add("Time");
-            dt.Columns.Add("Message");
-            dt.Columns.Add("ColorClass");
-
-            using (var conn = DatabaseManager.GetLogConnection())
-            {
-                conn.Open();
-
-                string sql = @"
-SELECT LogTime, LogType, Message
-FROM Logs
-WHERE UserId = @UserId
-ORDER BY LogTime DESC
-LIMIT 50;";
-
-                using (var cmd = new SQLiteCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@UserId", userId);
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            DataRow row = dt.NewRow();
-
-                            string level = reader["LogType"].ToString().ToUpperInvariant();
-                            DateTime utcTime = Convert.ToDateTime(reader["LogTime"]);
-                            DateTime localTime = utcTime.ToLocalTime();
-                            row["Time"] = localTime.ToString("HH:mm:ss");
-                            row["Message"] = reader["Message"].ToString();
-
-                            switch (level)
-                            {
-                                case "SUCCESS":
-                                    row["ColorClass"] = "text-emerald-400";
-                                    break;
-                                case "ERROR":
-                                    row["ColorClass"] = "text-red-400";
-                                    break;
-                                case "INFO":
-                                    row["ColorClass"] = "text-yellow-400";
-                                    break;
-                                default:
-                                    row["ColorClass"] = "text-slate-400";
-                                    break;
-                            }
-
-                            dt.Rows.Add(row);
-                        }
-                    }
-                }
+                lblWelcome.Text = "Welcome, Operator " + Session["Username"];
+                UiHelper.ShowSessionToast(this);  // shows login toast
             }
 
-            rptLogs.DataSource = dt;
-            rptLogs.DataBind();
-            lblNoLogs.Visible = (dt.Rows.Count == 0);
+            LoadFiles();
+            LoadGeneratedFiles();
         }
 
-        // =========================
-        // UPLOADS
-        // =========================
         private void LoadFiles()
         {
             int userId = Convert.ToInt32(Session["UserId"]);
@@ -106,6 +31,7 @@ LIMIT 50;";
                 using (var cmd = new SqlCommand("Uploads_CRUD", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+
                     cmd.Parameters.AddWithValue("@EVENT", "SELECT");
                     cmd.Parameters.AddWithValue("@UserId", userId);
 
@@ -123,9 +49,6 @@ LIMIT 50;";
             }
         }
 
-        // =========================
-        // GENERATED FILES
-        // =========================
         private void LoadGeneratedFiles()
         {
             int userId = Convert.ToInt32(Session["UserId"]);
@@ -134,7 +57,6 @@ LIMIT 50;";
             using (var conn = DatabaseManager.GetConnection())
             {
                 conn.Open();
-
                 using (var cmd = new SqlCommand("GeneratedFiles_CRUD", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -150,27 +72,22 @@ LIMIT 50;";
 
             rptGenerated.DataSource = dt;
             rptGenerated.DataBind();
-            lblGeneratedEmpty.Visible = (dt.Rows.Count == 0);
-        }
 
-        // =========================
-        // BUTTONS
-        // =========================
-        protected void btnRefreshList_Click(object sender, EventArgs e)
-        {
-            LoadFiles();
-            LoadLogs();
+            lblGeneratedEmpty.Visible = (dt.Rows.Count == 0);
         }
 
         protected void btnRefreshGenerated_Click(object sender, EventArgs e)
         {
             LoadGeneratedFiles();
-            LoadLogs();
         }
 
-        // =========================
-        // DELETE UPLOAD
-        // =========================
+
+
+        protected void btnRefreshList_Click(object sender, EventArgs e)
+        {
+            LoadFiles();
+        }
+
         protected void rptFiles_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             if (e.CommandName == "DeleteFile")
@@ -178,91 +95,112 @@ LIMIT 50;";
                 int fileId = Convert.ToInt32(e.CommandArgument);
                 int userId = Convert.ToInt32(Session["UserId"]);
 
-                try
+                using (var conn = DatabaseManager.GetConnection())
                 {
-                    using (var conn = DatabaseManager.GetConnection())
+                    conn.Open();
+
+                    using (var cmd = new SqlCommand("Uploads_CRUD", conn))
                     {
-                        conn.Open();
+                        cmd.CommandType = CommandType.StoredProcedure;
 
-                        using (var cmd = new SqlCommand("Uploads_CRUD", conn))
-                        {
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.AddWithValue("@EVENT", "DELETE");
-                            cmd.Parameters.AddWithValue("@Id", fileId);
-                            cmd.Parameters.AddWithValue("@UserId", userId);
+                        cmd.Parameters.AddWithValue("@EVENT", "DELETE");
+                        cmd.Parameters.AddWithValue("@Id", fileId);
+                        cmd.Parameters.AddWithValue("@UserId", userId);
 
-                            cmd.ExecuteNonQuery();
-                        }
+                        cmd.ExecuteNonQuery();
+
+                        UiHelper.ShowToast(this, "File deleted successfully.", "success");
                     }
-
-                    LogManager.Success("Uploaded file deleted.");
-                    UiHelper.ShowToast(this, "File deleted successfully.", "success");
-                }
-                catch (Exception ex)
-                {
-                    LogManager.Error("Error deleting uploaded file. "+ ex);
-                    UiHelper.ShowToast(this, "Error deleting file.", "error");
                 }
 
                 LoadFiles();
                 LoadGeneratedFiles();
-                LoadLogs();
-                
+
+                UpdatePanelFiles.Update();
+                UpdatePanelGenerated.Update();
             }
         }
 
-        // =========================
-        // DELETE GENERATED FILE
-        // =========================
         protected void rptGenerated_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             if (e.CommandName == "DeleteFile")
             {
-                int fileId = Convert.ToInt32(e.CommandArgument);
-                int userId = Convert.ToInt32(Session["UserId"]);
+                int fileId;
+                if (!int.TryParse(e.CommandArgument?.ToString(), out fileId))
+                    return;
 
+                int userId = Convert.ToInt32(Session["UserId"]);
+                string filePath = null;
+
+                using (var conn = DatabaseManager.GetConnection())
+                {
+                    conn.Open();
+
+                    // Optional: fetch FilePath and confirm owner (SELECT_BY_ID)
+                    //using (var sel = new SqlCommand("GeneratedFiles_CRUD", conn))
+                    //{
+                    //    sel.CommandType = CommandType.StoredProcedure;
+                    //    sel.Parameters.AddWithValue("@EVENT", "SELECT_BY_ID");
+                    //    sel.Parameters.AddWithValue("@FileID", fileId);
+                    //    sel.Parameters.AddWithValue("@UserId", userId);
+
+                    //    using (var rdr = sel.ExecuteReader())
+                    //    {
+                    //        if (rdr.Read())
+                    //        {
+                    //            filePath = rdr["FilePath"]?.ToString();
+                    //        }
+                    //        else
+                    //        {
+                    //            UiHelper.ShowToast(this, "File not found or access denied.", "error");
+                    //            LoadGeneratedFiles();
+                    //            return;
+                    //        }
+                    //    }
+                    //}
+
+                    // Delete via stored procedure (SP will ensure ownership because we passed @UserId)
+                    using (var cmd = new SqlCommand("GeneratedFiles_CRUD", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@EVENT", "DELETE");
+                        cmd.Parameters.AddWithValue("@FileID", fileId);
+                        cmd.Parameters.AddWithValue("@UserId", userId);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                // Delete physical file (best-effort)
                 try
                 {
-                    using (var conn = DatabaseManager.GetConnection())
+                    if (!string.IsNullOrEmpty(filePath))
                     {
-                        conn.Open();
-
-                        using (var cmd = new SqlCommand("GeneratedFiles_CRUD", conn))
-                        {
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.AddWithValue("@EVENT", "DELETE");
-                            cmd.Parameters.AddWithValue("@FileID", fileId);
-                            cmd.Parameters.AddWithValue("@UserId", userId);
-
-                            cmd.ExecuteNonQuery();
-                        }
+                        string physical = Server.MapPath(filePath);
+                        if (System.IO.File.Exists(physical))
+                            System.IO.File.Delete(physical);
                     }
-
-                    LogManager.Success("Generated file purged.");
-                    UiHelper.ShowToast(this, "Generated file purged.", "success");
                 }
-                catch (Exception ex)
+                catch
                 {
-                    LogManager.Error("Error purging generated file. " + ex);
-                    UiHelper.ShowToast(this, "Error purging generated file.", "error");
+                    // ignore file system errors (DB already cleaned). Optionally log them.
                 }
 
+                UiHelper.ShowToast(this, "Generated file purged.", "success");
+
+                // Refresh UI
                 LoadGeneratedFiles();
-                LoadLogs();
-                upLogs.Update();
+
             }
         }
 
-        // =========================
-        // SIZE FORMAT
-        // =========================
         public string FormatSize(object sizeObj)
         {
             long bytes = Convert.ToInt64(sizeObj);
 
-            if (bytes >= 1048576)
+            if (bytes >= 1048576) // 1 MB
                 return (bytes / 1024f / 1024f).ToString("0.00") + " MB";
-            if (bytes >= 1024)
+            if (bytes >= 1024) // 1 KB
                 return (bytes / 1024f).ToString("0.00") + " KB";
 
             return bytes + " B";

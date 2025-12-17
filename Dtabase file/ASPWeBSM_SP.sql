@@ -1,7 +1,7 @@
 -- User SP ---
 
 
-Alter PROC dbo.Users_CRUD
+CREATE PROC dbo.Users_CRUD
 (
     @Id        INT            = 0,
     @Username  NVARCHAR(100)  = NULL,
@@ -41,7 +41,7 @@ BEGIN
         DELETE FROM dbo.Users
         WHERE Id = @Id;
 	    DELETE FROM dbo.Uploads 
-        WHERE Id = @Id;
+        WHERE Id = @Id AND UserId = @UserId;
     END
 
     ELSE IF (@EVENT = 'SELECT_BY_ID')
@@ -64,7 +64,8 @@ END
 
 
 ---- Upload SP ---
-Alter PROC dbo.Uploads_CRUD
+
+CREATE PROC dbo.Uploads_CRUD
 (
     @Id          INT              = 0,
     @UserId      INT              = 0,
@@ -117,7 +118,7 @@ BEGIN
     BEGIN
         DELETE FROM dbo.Uploads
         WHERE Id = @Id
-          AND (UserId = @UserId); -- for safety
+          AND (@UserId = 0 OR UserId = @UserId); -- for safety
     END
 
     ELSE IF (@EVENT = 'SELECT_BY_ID')
@@ -196,9 +197,3 @@ BEGIN
           AND (@UserId = 0 OR UserId = @UserId);
     END
 END
-
-
-
-select * from Users
-select * from Uploads
-select * from GeneratedFiles

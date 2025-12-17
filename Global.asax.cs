@@ -12,8 +12,7 @@ namespace ASPWeBSM
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            // THIS IS CRITICAL
-            ASPWeBSM.DatabaseManager.Initialize();
+
         }
 
         protected void Session_Start(object sender, EventArgs e)
