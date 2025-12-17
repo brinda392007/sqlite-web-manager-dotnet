@@ -422,3 +422,5 @@ connectionStrings.local.config
 
 # to keep the apppassword safe
 AppSettingsSecrets.config
+
+App_Data/
