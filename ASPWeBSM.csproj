@@ -99,7 +99,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helper Classes\LogManager.cs" />
+    <Compile Include="LogManager.cs" />
     <Compile Include="Pages\Analyze.aspx.cs">
       <DependentUpon>Analyze.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -207,7 +207,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>62047</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:62047/</IISUrl>
+          <IISUrl>http://localhost:5050/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

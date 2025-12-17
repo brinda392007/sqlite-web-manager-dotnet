@@ -1,0 +1,89 @@
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+
+public class GeneratedDbMethods
+{
+    private string _connString = ConfigurationManager.ConnectionStrings["AppDb"].ConnectionString;
+
+    public DataTable Orders_Select()
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Orders_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT");
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+    public void Orders_Insert(string ProductID, string CustomerID, string Qty, string Total)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Orders_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "INSERT");
+            cmd.Parameters.AddWithValue("@ProductID", ProductID);
+            cmd.Parameters.AddWithValue("@CustomerID", CustomerID);
+            cmd.Parameters.AddWithValue("@Qty", Qty);
+            cmd.Parameters.AddWithValue("@Total", Total);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public void Orders_Update(string OrderID, string ProductID, string CustomerID, string Qty, string Total)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Orders_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "UPDATE");
+            cmd.Parameters.AddWithValue("@OrderID", OrderID);
+            cmd.Parameters.AddWithValue("@ProductID", ProductID);
+            cmd.Parameters.AddWithValue("@CustomerID", CustomerID);
+            cmd.Parameters.AddWithValue("@Qty", Qty);
+            cmd.Parameters.AddWithValue("@Total", Total);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public void Orders_Delete(string OrderID)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Orders_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "DELETE");
+            cmd.Parameters.AddWithValue("@OrderID", OrderID);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public DataTable Orders_SelectById(string OrderID)
+    {
+        using (SqlConnection conn = new SqlConnection(_connString))
+        using (SqlCommand cmd = new SqlCommand("Orders_CRUD", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EVENT", "SELECT_BY_ID");
+            cmd.Parameters.AddWithValue("@OrderID", OrderID);
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+    }
+
+}

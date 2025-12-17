@@ -28,6 +28,7 @@ namespace ASPWeBSM
                     {
                         lblStatus.Text = "Uploaded file is not a .db file.";
                         lblStatus.ForeColor = Color.Red;
+                        LogManager.Error($"It is not .db file");
                         UiHelper.ShowToast(this, "Please upload a .db file.", "error");
 
                         return;
@@ -45,17 +46,17 @@ namespace ASPWeBSM
 
                     //lblStatus.Text = "Uploaded: " + filename;
                     //lblStatus.ForeColor = Color.LightGreen;
-
+                    LogManager.Success($"Uploaded file '{filename}' successfully.");
                     // IMPORTANT: store toast in session, then redirect
                     UiHelper.SetToast("File uploaded successfully.", "success");
-                    Response.Redirect("Default.aspx");
+                    Response.Redirect("Default.aspx",false);
 
                 }
                 catch (Exception ex)
                 {
                     lblStatus.Text = "Upload Failed: " + ex.Message;
                     lblStatus.ForeColor = Color.Red;
-
+                    LogManager.Error($"Uploade fail.");
                     UiHelper.ShowToast(this, "Upload failed: " + ex.Message, "error");
                 }
             }

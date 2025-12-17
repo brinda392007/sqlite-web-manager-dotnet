@@ -1,82 +1,66 @@
 ﻿using System;
 using System.Configuration;
-using System.Data.SqlClient; // Keep for main tables (Users, Uploads)
-using System.Data.SQLite;  // NEW: Add for Logs table
+using System.Data.SqlClient;          // SQL Server (Main App)
+using System.Data.SQLite;              // SQLite (Logs)
 using System.IO;
 using BCrypt.Net;
-using System.Diagnostics; // Added for debugging diagnostics
+using System.Diagnostics;
 
 namespace ASPWeBSM
 {
     public class DatabaseManager
     {
-        // --- SQL SERVER Configuration (Main Application) ---
-        private static string _sqlServerConnectionString =
+        // =========================================
+        // SQL SERVER CONFIG (MAIN APPLICATION)
+        // =========================================
+        private static readonly string _sqlServerConnectionString =
             ConfigurationManager.ConnectionStrings["MyDb"].ConnectionString;
 
-        // --- SQLITE Configuration (Logs Only) ---
-        private static readonly string DbFileName = "Logs.sqlite";
-        // Path.Combine is safer than concatenating strings
-        private static readonly string AppDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data");
-        private static readonly string DbPath = Path.Combine(AppDataPath, DbFileName);
-        // Ensure the connection string includes the full path to the file
-        private static readonly string _sqliteConnectionString = $"Data Source={DbPath};Version=3;";
+        // =========================================
+        // SQLITE CONFIG (LOGS ONLY)
+        // =========================================
+        private static readonly string LogDbFileName = "Logs_new.sqlite";
+        private static readonly string AppDataPath =
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data");
+        private static readonly string LogDbPath =
+            Path.Combine(AppDataPath, LogDbFileName);
 
+        private static readonly string _sqliteConnectionString =
+            $"Data Source={LogDbPath};Version=3;";
 
-        // SQL Server Connection (For Users, Uploads, etc.)
+        // =========================================
+        // CONNECTIONS
+        // =========================================
+
+        // SQL Server connection
         public static SqlConnection GetConnection()
         {
             return new SqlConnection(_sqlServerConnectionString);
         }
 
-        // SQLite Connection (For Logs only)
-        public static SQLiteConnection GetLogConnection() // NEW METHOD
+        // SQLite connection (Logs only)
+        public static SQLiteConnection GetLogConnection()
         {
-            // The connection string uses the globally defined path
             return new SQLiteConnection(_sqliteConnectionString);
         }
 
-
+        // =========================================
+        // INITIALIZATION (RUNS ON APP START)
+        // =========================================
         public static void Initialize()
         {
-            // 1. Ensure App_Data directory exists
+            // Ensure App_Data exists
             if (!Directory.Exists(AppDataPath))
             {
-                try
-                {
-                    Directory.CreateDirectory(AppDataPath);
-                    Debug.WriteLine($"Created directory: {AppDataPath}");
-                }
-                catch (Exception ex)
-                {
-                    // This is a critical failure. Application cannot run without App_Data
-                    Debug.WriteLine($"CRITICAL ERROR: Failed to create App_Data directory at {AppDataPath}. Check permissions. Error: {ex.Message}");
-                    throw new InvalidOperationException($"CRITICAL DB ERROR: Failed to create log directory. Check file system permissions.", ex);
-                }
+                Directory.CreateDirectory(AppDataPath);
             }
 
-            // 2. Create SQLite file and table if it doesn't exist (Runs once)
-            if (!File.Exists(DbPath))
-            {
-                try
-                {
-                    // Use the connection string to create the file
-                    SQLiteConnection.CreateFile(DbPath);
-                    Debug.WriteLine($"Created new SQLite database file: {DbPath}");
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"CRITICAL ERROR: Failed to create SQLite file at {DbPath}. Check permissions. Error: {ex.Message}");
-                    throw new InvalidOperationException($"CRITICAL DB ERROR: Failed to create Logs.sqlite file. Check file system permissions.", ex);
-                }
-            }
-
-            // --- SQL SERVER INITIALIZATION (Existing Logic) ---
-            // (No change needed here, logic is sound)
-            using (var conn = GetConnection()) // Uses SQL Server
+            // -----------------------------
+            // SQL SERVER INIT (UNCHANGED)
+            // -----------------------------
+            using (var conn = GetConnection())
             {
                 conn.Open();
-                // ... (Users and Uploads table creation logic remains here) ...
 
                 string usersSql = @"
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Users')
@@ -91,7 +75,9 @@ BEGIN
     );
 END";
                 using (var cmd = new SqlCommand(usersSql, conn))
-                { cmd.ExecuteNonQuery(); }
+                {
+                    cmd.ExecuteNonQuery();
+                }
 
                 string uploadsSql = @"
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Uploads')
@@ -109,42 +95,48 @@ BEGIN
     );
 END";
                 using (var cmd = new SqlCommand(uploadsSql, conn))
-                { cmd.ExecuteNonQuery(); }
+                {
+                    cmd.ExecuteNonQuery();
+                }
             }
 
-            // --- SQLITE INITIALIZATION (Ensure Logs table has UserId) ---
-            using (var conn = GetLogConnection()) // Uses SQLite
+            // -----------------------------
+            // SQLITE LOG DB INIT (NEW)
+            // -----------------------------
+            using (var conn = GetLogConnection())
             {
-                conn.Open();
+                conn.Open(); // Auto-creates Logs.sqlite if missing
 
                 string logsSql = @"
-CREATE TABLE IF NOT EXISTS Logs -- SQLite syntax for creation
+CREATE TABLE IF NOT EXISTS Logs
 (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    LogLevel TEXT NOT NULL,
+    UserId INTEGER NOT NULL,
+    LogType TEXT NOT NULL,      -- INFO / SUCCESS / ERROR
     Message TEXT NOT NULL,
-    StackTrace TEXT NULL,
-    LogTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-    UserId INTEGER NULL -- CRITICAL: Ensure this column is present
+    LogTime DATETIME DEFAULT CURRENT_TIMESTAMP
 );";
+
                 using (var cmd = new SQLiteCommand(logsSql, conn))
                 {
                     cmd.ExecuteNonQuery();
-                    Debug.WriteLine("Ensured Logs table structure (including UserId) exists in SQLite.");
                 }
             }
         }
 
-        // --- resetPassword() method remains the same (uses SQL Server) ---
+        // =========================================
+        // PASSWORD RESET (UNCHANGED)
+        // =========================================
         internal static void resetPassword(string email, string newPassword)
         {
             try
             {
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
 
-                using (var conn = GetConnection()) // Uses SQL Server
+                using (var conn = GetConnection())
                 {
                     conn.Open();
+
                     string sql = "UPDATE Users SET Password = @pass WHERE Email = @email";
                     using (var cmd = new SqlCommand(sql, conn))
                     {
