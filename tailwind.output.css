@@ -330,6 +330,9 @@
   .max-h-\[200px\] {
     max-height: 200px;
   }
+  .max-h-\[200px\] {
+    max-height: 200px;
+  }
   .min-h-screen {
     min-height: 100vh;
   }
