@@ -26,7 +26,7 @@
 
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-slate-300">
-                                <thead class="bg-slate-700 text-xs uppercase text-slate-400">
+                                <thead class="bg-slate-700 text-xs text-slate-400 uppercase">
                                     <tr>
                                         <th class="px-6 py-3">File Name</th>
                                         <th class="px-6 py-3">Size</th>
@@ -51,7 +51,7 @@
                                                 <td class="px-6 py-4 text-sm text-slate-500">
                                                     <%# Eval("UploadedAt") %>
                                                 </td>
-                                                <td class="space-x-2 px-6 py-4 text-right whitespace-nowrap">
+                                                <td class="space-x-2 px-6 py-4 text-right">
                                                     <a href='Download.ashx?id=<%# Eval("Id") %>' target="_blank"
                                                         class="inline-block bg-orange-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-orange-400">Download
                                                     </a>
@@ -71,7 +71,7 @@
                                 </tbody>
                             </table>
 
-                            <asp:Label ID="lblEmpty" runat="server" Text="No data artifacts found." Visible="false" CssClass="block py-8 text-center italic text-slate-500"></asp:Label>
+                            <asp:Label ID="lblEmpty" runat="server" Text="No data artifacts found." Visible="false" CssClass="block py-8 text-center text-slate-500 italic"></asp:Label>
                         </div>
 
 
@@ -93,7 +93,7 @@
         <ContentTemplate>
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-slate-300">
-                    <thead class="bg-slate-700 text-xs uppercase text-slate-400">
+                    <thead class="bg-slate-700 text-xs text-slate-400 uppercase">
                         <tr>
                             <th class="px-6 py-3">File Name</th>
                             <th class="px-6 py-3">Operations</th>
@@ -114,7 +114,7 @@
                                     <td class="px-6 py-4 text-sm text-slate-500">
                                         <%# Eval("GeneratedDate") %>
                                     </td>
-                                    <td class="space-x-2 whitespace-nowrap px-6 py-4 text-right">
+                                    <td class="space-x-2 px-6 py-4 text-right whitespace-nowrap">
 
                                         <a href='GeneratedDownload.ashx?id=<%# Eval("FileID") %>' target="_blank"
                                             class="inline-block bg-orange-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-orange-400">Download
@@ -134,7 +134,7 @@
                     </tbody>
                 </table>
 
-                <asp:Label ID="lblGeneratedEmpty" runat="server" Text="No generated files found." Visible="false" CssClass="block py-8 text-center italic text-slate-500"></asp:Label>
+                <asp:Label ID="lblGeneratedEmpty" runat="server" Text="No generated files found." Visible="false" CssClass="block py-8 text-center text-slate-500 italic"></asp:Label>
             </div>
         </ContentTemplate>
     </asp:UpdatePanel>
@@ -147,14 +147,35 @@
                 <a href="#" class="block w-full rounded border border-slate-600 bg-slate-700 py-3 text-center text-white transition hover:bg-slate-600">View Analytics
                 </a>
             </div>
-            <div class="rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-xl">
-                <h2 class="mb-4 text-xl font-bold text-orange-400">Logs</h2>
-                <div id="log-panel" class="font-vt323 mb-3 max-h-[110px] w-full overflow-auto rounded border bg-slate-900 p-3 font-mono">
-                    <p class="font-vt323 text-2xl">hello</p>
-                    <p class="font-vt323 text-2xl">hello</p>
-                    <p class="font-vt323 text-2xl">hello</p>
-                </div>
+          <div class="rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-xl">
+    <h2 class="mb-4 text-xl font-bold text-orange-400">Application Logs</h2>
+
+    <asp:UpdatePanel ID="upLogs" runat="server">
+        <ContentTemplate>
+            <div class="max-h-[200px] overflow-y-auto rounded border border-slate-700 bg-slate-900 p-3">
+                <asp:Repeater ID="rptLogs" runat="server">
+                    <ItemTemplate>
+                        <div class="mb-1 text-sm">
+                            <span class="<%# Eval("ColorClass") %>">
+                                [<%# Eval("Time") %>]
+                            </span>
+                            <span class="text-slate-200">
+                                <%# Eval("Message") %>
+                            </span>
+                        </div>
+                    </ItemTemplate>
+                </asp:Repeater>
+
+                <asp:Label ID="lblNoLogs" runat="server"
+                    Text="No activity yet."
+                    Visible="false"
+                    CssClass="text-sm text-slate-500 italic">
+                </asp:Label>
             </div>
+        </ContentTemplate>
+    </asp:UpdatePanel>
+</div>
+
         </div>
     </div>
 </asp:Content>
