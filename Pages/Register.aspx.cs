@@ -15,6 +15,7 @@ namespace ASPWeBSM
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            Page.Master.FindControl("btnLogOut").Visible = false;
             UiHelper.ShowSessionToast(this);
         }
 
