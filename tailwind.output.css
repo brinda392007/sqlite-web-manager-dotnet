@@ -463,6 +463,9 @@
       border-color: color-mix(in oklab, var(--color-red-500) 70%, transparent);
     }
   }
+  .border-slate-500 {
+    border-color: var(--color-slate-500);
+  }
   .border-slate-600 {
     border-color: var(--color-slate-600);
   }
@@ -495,6 +498,9 @@
   }
   .bg-red-500 {
     background-color: var(--color-red-500);
+  }
+  .bg-slate-600 {
+    background-color: var(--color-slate-600);
   }
   .bg-slate-700 {
     background-color: var(--color-slate-700);
@@ -813,6 +819,16 @@
   .file\:text-white {
     &::file-selector-button {
       color: var(--color-white);
+    }
+  }
+  .checked\:border-orange-500 {
+    &:checked {
+      border-color: var(--color-orange-500);
+    }
+  }
+  .checked\:bg-orange-600 {
+    &:checked {
+      background-color: var(--color-orange-600);
     }
   }
   .hover\:scale-105 {
