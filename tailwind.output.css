@@ -1,4 +1,4 @@
-/*! tailwindcss v4.1.17 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.1.18 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
@@ -230,9 +230,6 @@
   .inset-y-0 {
     inset-block: calc(var(--spacing) * 0);
   }
-  .-top-3 {
-    top: calc(var(--spacing) * -3);
-  }
   .right-0 {
     right: calc(var(--spacing) * 0);
   }
@@ -241,9 +238,6 @@
   }
   .bottom-6 {
     bottom: calc(var(--spacing) * 6);
-  }
-  .left-3 {
-    left: calc(var(--spacing) * 3);
   }
   .z-10 {
     z-index: 10;
@@ -477,6 +471,9 @@
       border-color: color-mix(in oklab, var(--color-red-500) 70%, transparent);
     }
   }
+  .border-slate-500 {
+    border-color: var(--color-slate-500);
+  }
   .border-slate-600 {
     border-color: var(--color-slate-600);
   }
@@ -512,6 +509,9 @@
   }
   .bg-red-500 {
     background-color: var(--color-red-500);
+  }
+  .bg-slate-600 {
+    background-color: var(--color-slate-600);
   }
   .bg-slate-700 {
     background-color: var(--color-slate-700);
@@ -557,9 +557,6 @@
   }
   .p-8 {
     padding: calc(var(--spacing) * 8);
-  }
-  .px-1 {
-    padding-inline: calc(var(--spacing) * 1);
   }
   .px-2 {
     padding-inline: calc(var(--spacing) * 2);
@@ -850,6 +847,16 @@
   .file\:text-white {
     &::file-selector-button {
       color: var(--color-white);
+    }
+  }
+  .checked\:border-orange-500 {
+    &:checked {
+      border-color: var(--color-orange-500);
+    }
+  }
+  .checked\:bg-orange-600 {
+    &:checked {
+      background-color: var(--color-orange-600);
     }
   }
   .hover\:scale-105 {
