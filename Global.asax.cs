@@ -12,7 +12,16 @@ namespace ASPWeBSM
 
         protected void Application_Start(object sender, EventArgs e)
         {
-
+            try
+            {
+                ASPWeBSM.DatabaseManager.Initialize();
+            }
+            catch (Exception ex)
+            {
+                // Optional: log or Debug.WriteLine
+                System.Diagnostics.Debug.WriteLine($"Database initialization failed: {ex.Message}");
+                throw;
+            }
         }
 
         protected void Session_Start(object sender, EventArgs e)
