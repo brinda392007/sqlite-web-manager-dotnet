@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 
@@ -8,34 +9,53 @@ namespace ASPWeBSM
     {
         private List<ColumnInfo> GetTableColumns(string dbPath, string tableName)
         {
-            var cols = new List<ColumnInfo>();
 
-            string connStr = $"Data Source={dbPath};Version=3;";
-            using (var conn = new SQLiteConnection(connStr))
+            if (CurrentSqlSchema != null && CurrentSqlSchema.ContainsKey(tableName))
             {
-                conn.Open();
+                var sqlCols = CurrentSqlSchema[tableName];
+                var result = new List<ColumnInfo>();
 
-                string sql = $"PRAGMA table_info([{tableName}]);";
-                using (var cmd = new SQLiteCommand(sql, conn))
-                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                foreach (var col in sqlCols)
                 {
-                    while (reader.Read())
+                    result.Add(new ColumnInfo
                     {
-                        string colName = reader["name"].ToString();
-                        string type = reader["type"].ToString();
-                        bool isPk = Convert.ToInt32(reader["pk"]) == 1;
+                        Name = col.Name,
+                        SqlType = col.DataType, 
+                        IsPrimaryKey = col.IsPrimaryKey
+                    });
+                }
+                return result;
+            }
+            else
+            {
+                var cols = new List<ColumnInfo>();
+                string connStr = $"Data Source={dbPath};Version=3;";
+                using (var conn = new SQLiteConnection(connStr))
+                {
+                    conn.Open();
 
-                        cols.Add(new ColumnInfo
+                    string sql = $"PRAGMA table_info([{tableName}]);";
+                    using (var cmd = new SQLiteCommand(sql, conn))
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
                         {
-                            Name = colName,
-                            SqlType = MapSqlType(type),
-                            IsPrimaryKey = isPk
-                        });
+                            string colName = reader["name"].ToString();
+                            string type = reader["type"].ToString();
+                            bool isPk = Convert.ToInt32(reader["pk"]) == 1;
+
+                            cols.Add(new ColumnInfo
+                            {
+                                Name = colName,
+                                SqlType = MapSqlType(type),
+                                IsPrimaryKey = isPk
+                            });
+                        }
                     }
                 }
+                return cols;
             }
 
-            return cols;
         }
 
         private string MapSqlType(string sqliteType)
