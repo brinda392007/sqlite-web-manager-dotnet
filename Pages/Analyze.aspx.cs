@@ -155,7 +155,7 @@ namespace ASPWeBSM
 
                 //bind datatables
                 DataTable dtTables = new DataTable();
-                dtTables.Columns.Add("name");
+                dtTables.Columns.Add("TableName");
 
                 foreach (var tableName in schema.Keys)
                 {

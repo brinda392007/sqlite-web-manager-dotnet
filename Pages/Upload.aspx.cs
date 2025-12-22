@@ -21,7 +21,7 @@ namespace ASPWeBSM
             {
                 try
                 {
-                    List<string> allowedExtentions = [".db", ".sql"];
+                    List<string> allowedExtentions = new List<string> { ".db", ".sql" };
                     string filename = fileUpload.FileName;
                     string contentType = fileUpload.PostedFile.ContentType;
                     int size = fileUpload.PostedFile.ContentLength;
