@@ -116,7 +116,7 @@ namespace ASPWeBSM
             return sb.ToString();
         }
 
-        private string GenerateMethodsScript(List<TableOperationSelection> selections, string dbPath)
+        private string GenerateMethodsScript(List<TableOperationSelection> selections, string dbPath, bool parameterized)
         {
             var sb = new StringBuilder();
 
@@ -166,8 +166,16 @@ namespace ASPWeBSM
                 // INSERT
                 if (sel.Insert)
                 {
-                    string paramList = string.Join(", ", nonPkCols.Select(c => "string " + c.Name));
-                    sb.AppendLine($"    public void {sel.TableName}_Insert({paramList})");
+                    if (parameterized)
+                    {
+                        string paramList = string.Join(", ", nonPkCols.Select(c => "string " + c.Name));
+                        sb.AppendLine($"    public void {sel.TableName}_Insert({paramList})");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"    public void {sel.TableName}_Insert()");
+                    }
+                  
                     sb.AppendLine("    {");
                     sb.AppendLine("        using (SqlConnection conn = new SqlConnection(_connString))");
                     sb.AppendLine($"        using (SqlCommand cmd = new SqlCommand(\"{procName}\", conn))");
@@ -177,7 +185,10 @@ namespace ASPWeBSM
 
                     foreach (var c in nonPkCols)
                     {
-                        sb.AppendLine($"            cmd.Parameters.AddWithValue(\"@{c.Name}\", {c.Name});");
+                        if (parameterized)
+                            sb.AppendLine($"            cmd.Parameters.AddWithValue(\"@{c.Name}\", {c.Name});");
+                        else
+                            sb.AppendLine($"            cmd.Parameters.AddWithValue(\"@{c.Name}\", /* TODO: assign value */);");
                     }
 
                     sb.AppendLine("            conn.Open();");
@@ -190,8 +201,16 @@ namespace ASPWeBSM
                 // UPDATE
                 if (sel.Update)
                 {
-                    string paramList = string.Join(", ", cols.Select(c => "string " + c.Name));
-                    sb.AppendLine($"    public void {sel.TableName}_Update({paramList})");
+                    if (parameterized)
+                    {
+                        string paramList = string.Join(", ", nonPkCols.Select(c => "string " + c.Name));
+                        sb.AppendLine($"    public void {sel.TableName}_Update({paramList})");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"    public void {sel.TableName}_Update()");
+                    }
+
                     sb.AppendLine("    {");
                     sb.AppendLine("        using (SqlConnection conn = new SqlConnection(_connString))");
                     sb.AppendLine($"        using (SqlCommand cmd = new SqlCommand(\"{procName}\", conn))");
@@ -201,8 +220,12 @@ namespace ASPWeBSM
 
                     foreach (var c in cols)
                     {
-                        sb.AppendLine($"            cmd.Parameters.AddWithValue(\"@{c.Name}\", {c.Name});");
+                        if (parameterized)
+                            sb.AppendLine($"            cmd.Parameters.AddWithValue(\"@{c.Name}\", {c.Name});");
+                        else
+                            sb.AppendLine($"            cmd.Parameters.AddWithValue(\"@{c.Name}\", /* TODO: assign value */);");
                     }
+
 
                     sb.AppendLine("            conn.Open();");
                     sb.AppendLine("            cmd.ExecuteNonQuery();");
@@ -214,14 +237,26 @@ namespace ASPWeBSM
                 // DELETE
                 if (sel.Delete)
                 {
-                    sb.AppendLine($"    public void {sel.TableName}_Delete(string {pk.Name})");
+                    if (parameterized) 
+                    { sb.AppendLine($"    public void {sel.TableName}_Delete(string {pk.Name})"); 
+                    }
+                    else
+                    {
+                        sb.AppendLine($"    public void {sel.TableName}_Delete()");
+                    }
+
                     sb.AppendLine("    {");
                     sb.AppendLine("        using (SqlConnection conn = new SqlConnection(_connString))");
                     sb.AppendLine($"        using (SqlCommand cmd = new SqlCommand(\"{procName}\", conn))");
                     sb.AppendLine("        {");
                     sb.AppendLine("            cmd.CommandType = CommandType.StoredProcedure;");
                     sb.AppendLine("            cmd.Parameters.AddWithValue(\"@EVENT\", \"DELETE\");");
-                    sb.AppendLine($"            cmd.Parameters.AddWithValue(\"@{pk.Name}\", {pk.Name});");
+
+                    if (parameterized) 
+                        sb.AppendLine($"            cmd.Parameters.AddWithValue(\"@{pk.Name}\", {pk.Name});");
+                    else
+                        sb.AppendLine($"            cmd.Parameters.AddWithValue(\"@{pk.Name}\", /* TODO: assign value */);");
+
                     sb.AppendLine("            conn.Open();");
                     sb.AppendLine("            cmd.ExecuteNonQuery();");
                     sb.AppendLine("        }");
@@ -232,14 +267,27 @@ namespace ASPWeBSM
                 // SELECT_BY_ID
                 if (sel.SelectById)
                 {
-                    sb.AppendLine($"    public DataTable {sel.TableName}_SelectById(string {pk.Name})");
+                    if (parameterized)
+                    {
+                        sb.AppendLine($"    public DataTable {sel.TableName}_SelectById(string {pk.Name})");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"    public DataTable {sel.TableName}_SelectById()");
+                    }
+                    
                     sb.AppendLine("    {");
                     sb.AppendLine("        using (SqlConnection conn = new SqlConnection(_connString))");
                     sb.AppendLine($"        using (SqlCommand cmd = new SqlCommand(\"{procName}\", conn))");
                     sb.AppendLine("        {");
                     sb.AppendLine("            cmd.CommandType = CommandType.StoredProcedure;");
                     sb.AppendLine("            cmd.Parameters.AddWithValue(\"@EVENT\", \"SELECT_BY_ID\");");
-                    sb.AppendLine($"            cmd.Parameters.AddWithValue(\"@{pk.Name}\", {pk.Name});");
+
+                    if(parameterized)
+                        sb.AppendLine($"            cmd.Parameters.AddWithValue(\"@{pk.Name}\", {pk.Name});");
+                    else
+                        sb.AppendLine($"            cmd.Parameters.AddWithValue(\"@{pk.Name}\", /* TODO: assign value */);");
+
                     sb.AppendLine("            using (SqlDataAdapter da = new SqlDataAdapter(cmd))");
                     sb.AppendLine("            {");
                     sb.AppendLine("                DataTable dt = new DataTable();");

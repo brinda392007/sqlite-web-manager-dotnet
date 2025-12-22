@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.SQLite;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -27,7 +26,7 @@ namespace ASPWeBSM
         }
 
         // =========================
-        // LOGS (CLEAN + SIMPLE)
+        // LOGS (SQL SERVER VERSION)
         // =========================
         private void LoadLogs()
         {
@@ -38,18 +37,17 @@ namespace ASPWeBSM
             dt.Columns.Add("Message");
             dt.Columns.Add("ColorClass");
 
-            using (var conn = DatabaseManager.GetLogConnection())
+            using (var conn = DatabaseManager.GetConnection()) // ✅ SQL Server
             {
                 conn.Open();
 
                 string sql = @"
-SELECT LogTime, LogType, Message
+SELECT TOP 50 LogTime, LogType, Message
 FROM Logs
 WHERE UserId = @UserId
-ORDER BY LogTime DESC
-LIMIT 50;";
+ORDER BY LogTime DESC";
 
-                using (var cmd = new SQLiteCommand(sql, conn))
+                using (var cmd = new SqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@UserId", userId);
 
@@ -60,9 +58,9 @@ LIMIT 50;";
                             DataRow row = dt.NewRow();
 
                             string level = reader["LogType"].ToString().ToUpperInvariant();
-                            DateTime utcTime = Convert.ToDateTime(reader["LogTime"]);
-                            DateTime localTime = utcTime.ToLocalTime();
-                            row["Time"] = localTime.ToString("HH:mm:ss");
+                            DateTime logTime = Convert.ToDateTime(reader["LogTime"]);
+
+                            row["Time"] = logTime.ToString("HH:mm:ss");
                             row["Message"] = reader["Message"].ToString();
 
                             switch (level)
@@ -200,14 +198,13 @@ LIMIT 50;";
                 }
                 catch (Exception ex)
                 {
-                    LogManager.Error("Error deleting uploaded file. " + ex);
+                    LogManager.Error("Error deleting uploaded file. " + ex.Message);
                     UiHelper.ShowToast(this, "Error deleting file.", "error");
                 }
 
                 LoadFiles();
                 LoadGeneratedFiles();
                 LoadLogs();
-
             }
         }
 
@@ -243,13 +240,13 @@ LIMIT 50;";
                 }
                 catch (Exception ex)
                 {
-                    LogManager.Error("Error purging generated file. " + ex);
+                    LogManager.Error("Error purging generated file. " + ex.Message);
                     UiHelper.ShowToast(this, "Error purging generated file.", "error");
                 }
 
                 LoadGeneratedFiles();
                 LoadLogs();
-                upLogs.Update();
+                
             }
         }
 

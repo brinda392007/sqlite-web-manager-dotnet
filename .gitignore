@@ -429,3 +429,4 @@ App_Data/Temp
 
 #Keep tailwind output out
 tailwind.output.css
+App_Data/*.sqlite

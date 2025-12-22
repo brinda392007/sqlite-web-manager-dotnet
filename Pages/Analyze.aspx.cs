@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.IO;
@@ -56,6 +53,23 @@ namespace ASPWeBSM
                 int.TryParse(Request.QueryString["uploadId"], out id);
                 return id;
             }
+        }
+
+        // ===============================
+        // NEW: Method generation options
+        // ===============================
+        private bool GenerateParameterizedMethods
+        {
+            get => ViewState["GenerateParameterizedMethods"] == null
+                   ? true
+                   : (bool)ViewState["GenerateParameterizedMethods"];
+            set => ViewState["GenerateParameterizedMethods"] = value;
+        }
+
+        private string PendingAction
+        {
+            get => ViewState["PendingAction"] as string;
+            set => ViewState["PendingAction"] = value;
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -318,6 +332,7 @@ namespace ASPWeBSM
             Response.Redirect("Default.aspx");
         }
 
+
         protected void btnGenerateMethods_OnClick(object sender, EventArgs e)
         {
             var selections = GetSelectedOperations();
@@ -327,18 +342,35 @@ namespace ASPWeBSM
                 return;
             }
 
+            // 🔹 NEW: check if Insert or Update Delete or SelectByID exists
+            bool needsChoice = selections.Any(s => s.Insert || s.Update || s.Delete || s.SelectById);
+
+            if (needsChoice)
+            {
+                PendingAction = "METHODS";
+                pnlMethodChoice.Visible = true;
+                return;
+            }
+
+            // existing behavior (UNCHANGED)
+            GenerateMethods(false);
+        }
+
+        private void GenerateMethods(bool fromPopup)
+        {
             string dbPath = GetCurrentDbPath();
+            var selections = GetSelectedOperations();
             if (string.IsNullOrEmpty(dbPath))
             {
                 lblMessage.Text = "Session expired. Please reload this page.";
                 return;
             }
 
-            string methodsText = GenerateMethodsScript(selections, dbPath);
+            string methodsText = GenerateMethodsScript(selections, dbPath, GenerateParameterizedMethods);
+
             string summary = BuildOperationsSummary(selections);
             string fileName = SaveGeneratedFile(methodsText, summary, "Methods");
 
-            lblMessage.Text = $"C# methods generated in file: {fileName}. You can download it later from your downloads panel.";
             Response.Redirect("Default.aspx");
         }
 
@@ -351,6 +383,21 @@ namespace ASPWeBSM
                 return;
             }
 
+            bool needsChoice = selections.Any(s => s.Insert || s.Update);
+
+            if (needsChoice)
+            {
+                PendingAction = "BOTH";
+                pnlMethodChoice.Visible = true;
+                return;
+            }
+
+            GenerateBoth(false);
+        }
+
+        private void GenerateBoth(bool fromPopup)
+        {
+            var selections = GetSelectedOperations();
             string dbPath = GetCurrentDbPath();
             if (string.IsNullOrEmpty(dbPath))
             {
@@ -358,9 +405,9 @@ namespace ASPWeBSM
                 return;
             }
 
-            string spText = GenerateSpScript(selections, dbPath);
-            string methodsText = GenerateMethodsScript(selections, dbPath);
 
+            string spText = GenerateSpScript(selections, dbPath);
+            string methodsText = GenerateMethodsScript( selections, dbPath,GenerateParameterizedMethods);
             var full = new StringBuilder();
             full.AppendLine("-- =============================================");
             full.AppendLine("-- STORED PROCEDURES");
@@ -380,6 +427,29 @@ namespace ASPWeBSM
             lblMessage.Text = $"SP + C# methods generated in file: {fileName}. You can download it later from your downloads panel.";
             Response.Redirect("Default.aspx");
         }
+
+     
+        protected void btnConfirmMethodType_Click(object sender, EventArgs e)
+        {
+            GenerateParameterizedMethods = rbParameterized.Checked;
+            pnlMethodChoice.Visible = false;
+
+            if (PendingAction == "METHODS")
+                GenerateMethods(true);
+            else if (PendingAction == "BOTH")
+                GenerateBoth(true);
+        }
+
+        protected void btnCancelMethodType_Click(object sender, EventArgs e)
+        {
+            pnlMethodChoice.Visible = false;
+            PendingAction = null;
+        }
+
+
+
+
+
 
         //handles the Select all button
         protected void chkSelectAll_CheckedChanged(object sender, EventArgs e)
