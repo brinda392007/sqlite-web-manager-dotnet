@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -20,16 +21,18 @@ namespace ASPWeBSM
             {
                 try
                 {
+                    List<string> allowedExtentions = [".db", ".sql"];
                     string filename = fileUpload.FileName;
                     string contentType = fileUpload.PostedFile.ContentType;
                     int size = fileUpload.PostedFile.ContentLength;
+                    string ext = Path.GetExtension(fileUpload.FileName);
 
-                    if (contentType != "application/octet-stream")
+                    if (!allowedExtentions.Contains(ext))
                     {
-                        lblStatus.Text = "Uploaded file is not a .db file.";
+                        lblStatus.Text = "Uploaded file is not a .db or .sql file.";
                         lblStatus.ForeColor = Color.Red;
-                        LogManager.Error($"It is not .db file");
-                        UiHelper.ShowToast(this, "Please upload a .db file.", "error");
+                        LogManager.Error($"It is not .db or .sql file");
+                        UiHelper.ShowToast(this, "Please upload a .db or .sql file.", "error");
 
                         return;
                     }

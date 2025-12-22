@@ -109,7 +109,7 @@
     <div class="w-full max-w-lg rounded-2xl border border-slate-700 bg-slate-900 p-8 shadow-2xl">
 
         <!-- Header -->
-        <div class="border-b border-slate-700 px-6 py-4 ">
+        <div class="border-b border-slate-700 px-6 py-4">
             <h3 class="text-lg font-bold text-orange-400">
                 Method Generation Type
             </h3>
@@ -119,24 +119,24 @@
         </div>
 
         <!-- Body -->
-       <div class="mb-4 rounded-lg border border-slate-700 p-4 hover:border-orange-500 transition"  onclick="document.getElementById('<%= rbParameterized.ClientID %>').click();">
+       <div class="mb-4 rounded-lg border border-slate-700 p-4 transition hover:border-orange-500"  onclick="document.getElementById('<%= rbParameterized.ClientID %>').click();">
     <asp:RadioButton ID="rbParameterized" runat="server"
         GroupName="MethodType" Checked="true" />
     <span class="ml-3 font-semibold text-white">
         Parameterized methods
     </span>
-    <p class="ml-7 mt-1 text-sm text-slate-400">
+    <p class="mt-1 ml-7 text-sm text-slate-400">
         Method parameters will be generated automatically.
     </p>
 </div>
 
-               <div class="mb-4 rounded-lg border border-slate-700 p-4 hover:border-orange-500 transition"  onclick="document.getElementById('<%= rbNonParameterized.ClientID %>').click();">
+               <div class="mb-4 rounded-lg border border-slate-700 p-4 transition hover:border-orange-500"  onclick="document.getElementById('<%= rbNonParameterized.ClientID %>').click();">
     <asp:RadioButton ID="rbNonParameterized" runat="server"
         GroupName="MethodType" />
     <span class="ml-3 font-semibold text-white">
         Non-parameterized methods
     </span>
-    <p class="ml-7 mt-1 text-sm text-slate-400">
+    <p class="mt-1 ml-7 text-sm text-slate-400">
         You must manually assign values inside the method body.
     </p>
 </div>
@@ -152,12 +152,12 @@
     <asp:Button ID="btnCancelMethodType" runat="server"
     Text="Cancel"
     OnClick="btnCancelMethodType_Click"
-   CssClass="rounded border border-slate-600 bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-slate-700 transition" />
+   CssClass="rounded border border-slate-600 bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-700" />
 
 <asp:Button ID="btnConfirmMethodType" runat="server"
     Text="Confirm"
     OnClick="btnConfirmMethodType_Click"
-    CssClass="rounded bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-2 text-sm font-semibold text-white shadow-lg hover:from-orange-400 hover:to-orange-500  transition shadow-lg"  />
+    CssClass="rounded bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:from-orange-400 hover:to-orange-500"  />
 </div>
     </div>
 </asp:Panel>
