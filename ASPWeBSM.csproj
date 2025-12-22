@@ -217,6 +217,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Pages\AboutUs.aspx" />
     <Content Include="Pages\Analyze.aspx" />
     <Content Include="Pages\Default.aspx" />
     <Content Include="Pages\ForgetPassword.aspx" />
@@ -231,6 +232,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Logmanager.cs" />
+    <Compile Include="Pages\AboutUs.aspx.cs">
+      <DependentUpon>AboutUs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\AboutUs.aspx.designer.cs">
+      <DependentUpon>AboutUs.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Analyze.aspx.cs">
       <DependentUpon>Analyze.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
