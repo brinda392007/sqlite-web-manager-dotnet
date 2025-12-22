@@ -51,22 +51,22 @@
                                 <%# Eval("TableName") %>
                             </td>
                             <td class="px-4 py-3 text-center">
-                                <asp:CheckBox ID="chkSelect" runat="server" CssClass="checkbox border-slate-500 bg-slate-600 checked:border-orange-500 checked:bg-orange-600" />
+                                <asp:CheckBox ID="chkSelect" runat="server" />
                             </td>
                             <td class="px-4 py-3 text-center">
-                                <asp:CheckBox ID="chkInsert" runat="server" CssClass="checkbox border-slate-500 bg-slate-600 checked:border-orange-500 checked:bg-orange-600" />
+                                <asp:CheckBox ID="chkInsert" runat="server" />
                             </td>
                             <td class="px-4 py-3 text-center">
-                                <asp:CheckBox ID="chkUpdate" runat="server" CssClass="checkbox border-slate-500 bg-slate-600 checked:border-orange-500 checked:bg-orange-600" />
+                                <asp:CheckBox ID="chkUpdate" runat="server" />
                             </td>
                             <td class="px-4 py-3 text-center">
-                                <asp:CheckBox ID="chkDelete" runat="server" CssClass="checkbox border-slate-500 bg-slate-600 checked:border-orange-500 checked:bg-orange-600" />
+                                <asp:CheckBox ID="chkDelete" runat="server" />
                             </td>
                             <td class="px-4 py-3 text-center">
-                                <asp:CheckBox ID="chkSelectById" runat="server" CssClass="checkbox border-slate-500 bg-slate-600 checked:border-orange-500 checked:bg-orange-600" />
+                                <asp:CheckBox ID="chkSelectById" runat="server" />
                             </td>
                             <td class="px-4 py-3 text-center">
-                                <asp:CheckBox ID="chkSelectAll" runat="server" AutoPostBack="true" OnCheckedChanged="chkSelectAll_CheckedChanged" CssClass="checkbox border-slate-500 bg-slate-600 checked:border-orange-500 checked:bg-orange-600" />
+                                <asp:CheckBox ID="chkSelectAll" runat="server" AutoPostBack="true" OnCheckedChanged="chkSelectAll_CheckedChanged" />
                             </td>
                         </tr>
                     </ItemTemplate>
