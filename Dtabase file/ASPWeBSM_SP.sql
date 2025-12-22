@@ -197,3 +197,54 @@ BEGIN
           AND (@UserId = 0 OR UserId = @UserId);
     END
 END
+
+
+
+
+
+------- Log SP ---
+
+CREATE OR ALTER PROCEDURE dbo.Logs_CRUD
+(
+    @EVENT     VARCHAR(50),
+    @UserId    INT = NULL,
+    @LogType  NVARCHAR(20) = NULL,
+    @Message   NVARCHAR(MAX) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- =========================
+    -- INSERT LOG
+    -- =========================
+    IF (@EVENT = 'INSERT')
+    BEGIN
+        INSERT INTO dbo.Logs (UserId, LogType, Message)
+        VALUES (@UserId, @LogType, @Message);
+
+        -- Keep only latest 100 logs per user
+        ;WITH CTE AS
+        (
+            SELECT Id,
+                   ROW_NUMBER() OVER (PARTITION BY UserId ORDER BY LogTime DESC) AS RN
+            FROM dbo.Logs
+            WHERE UserId = @UserId
+        )
+        DELETE FROM CTE WHERE RN > 100;
+    END
+
+    -- =========================
+    -- SELECT LOGS (PER USER)
+    -- =========================
+    ELSE IF (@EVENT = 'SELECT')
+    BEGIN
+        SELECT TOP 50
+            LogTime,
+            LogType,
+            Message
+        FROM dbo.Logs
+        WHERE UserId = @UserId
+        ORDER BY LogTime DESC;
+    END
+END

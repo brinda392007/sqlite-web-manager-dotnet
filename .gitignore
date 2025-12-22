@@ -426,3 +426,5 @@ AppSettingsSecrets.config
 App_Data/Generated
 
 App_Data/Temp
+
+App_Data/*.sqlite
