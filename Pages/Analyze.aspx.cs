@@ -8,12 +8,25 @@ using System.Linq;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using ASPWeBSM.Helper_Classes;
 
 namespace ASPWeBSM
 {
     public partial class Analyze : AuthorizedPage
     {
         // simple class to hold operations per table
+
+        public Dictionary<string, List<SqlSchemaParser.SimpleColumn>> CurrentSqlSchema
+        {
+            get
+            {
+                return ViewState["CurrentSqlSchema"] as Dictionary<string, List<SqlSchemaParser.SimpleColumn>>;
+            }
+            set
+            {
+                ViewState["CurrentSqlSchema"] = value;
+            }
+        }
         private class TableOperationSelection
         {
             public string TableName { get; set; }
@@ -128,36 +141,67 @@ namespace ASPWeBSM
             // store for later (SP/method generation)
             ViewState["CurrentDbPath"] = tempPath;
 
-            // 3. Read table list using SQLite
-            DataTable dtTables = new DataTable();
-            dtTables.Columns.Add("TableName", typeof(string));
+            string extention = Path.GetExtension(tempPath).ToLower();
 
-            string sqliteConnStr = $"Data Source={tempPath};Version=3;";
-            using (var sqliteConn = new SQLiteConnection(sqliteConnStr))
+            if (extention == ".sql")
             {
-                sqliteConn.Open();
+                //use the helper
+                var Parser = new SqlSchemaParser();
 
-                string sql = "SELECT name FROM sqlite_master WHERE type='table' " +
-                            "AND name NOT LIKE 'sqlite_%' ORDER BY name";
+                //Parse
+                var schema = Parser.ParseSqlFile(tempPath);
 
-                using (var cmd = new SQLiteCommand(sql, sqliteConn))
-                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                CurrentSqlSchema = schema;
+
+                //bind datatables
+                DataTable dtTables = new DataTable();
+                dtTables.Columns.Add("TableName");
+
+                foreach (var tableName in schema.Keys)
                 {
-                    while (reader.Read())
+                    dtTables.Rows.Add(tableName);
+                }
+
+                //GridViewTables.DataSource = dtTables;
+                //GridViewTables.DataBind();
+                rptTables.DataSource = dtTables;
+                rptTables.DataBind();
+            }
+            else
+            {
+                // 3. Read table list using SQLite
+                DataTable dtTables = new DataTable();
+                dtTables.Columns.Add("TableName", typeof(string));
+
+                string sqliteConnStr = $"Data Source={tempPath};Version=3;";
+                using (var sqliteConn = new SQLiteConnection(sqliteConnStr))
+                {
+                    sqliteConn.Open();
+
+                    string sql = "SELECT name FROM sqlite_master WHERE type='table' " +
+                                "AND name NOT LIKE 'sqlite_%' ORDER BY name";
+
+                    using (var cmd = new SQLiteCommand(sql, sqliteConn))
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
                     {
-                        string tblName = reader["name"].ToString();
-                        dtTables.Rows.Add(tblName);
+                        while (reader.Read())
+                        {
+                            string tblName = reader["name"].ToString();
+                            dtTables.Rows.Add(tblName);
+                        }
                     }
                 }
+
+                if (dtTables.Rows.Count == 0)
+                {
+                    lblMessage.Text = "No user tables found in this database.";
+                }
+
+                rptTables.DataSource = dtTables;
+                rptTables.DataBind();
             }
 
-            if (dtTables.Rows.Count == 0)
-            {
-                lblMessage.Text = "No user tables found in this database.";
-            }
 
-            rptTables.DataSource = dtTables;
-            rptTables.DataBind();
         }
 
         private string GetCurrentDbPath()
@@ -417,7 +461,7 @@ namespace ASPWeBSM
             RepeaterItem item = (RepeaterItem)chkAll.NamingContainer;
 
             CheckBox select = (CheckBox)item.FindControl("chkSelect");
-            CheckBox insert= (CheckBox)item.FindControl("chkInsert");
+            CheckBox insert = (CheckBox)item.FindControl("chkInsert");
             CheckBox update = (CheckBox)item.FindControl("chkUpdate");
             CheckBox delete = (CheckBox)item.FindControl("chkDelete");
             CheckBox selectById = (CheckBox)item.FindControl("chkSelectById");
