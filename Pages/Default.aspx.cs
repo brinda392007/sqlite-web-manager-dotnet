@@ -26,7 +26,7 @@ namespace ASPWeBSM
         }
 
         // =========================
-        // LOGS (SQL SERVER VERSION)
+        // LOGS (SQL SERVER VERSION) - UPDATED TO SHOW DATE & TIME
         // =========================
         private void LoadLogs()
         {
@@ -60,7 +60,8 @@ ORDER BY LogTime DESC";
                             string level = reader["LogType"].ToString().ToUpperInvariant();
                             DateTime logTime = Convert.ToDateTime(reader["LogTime"]);
 
-                            row["Time"] = logTime.ToString("HH:mm:ss");
+                            // UPDATED: Show date and time in format: "Dec 24, 2024 14:30:45"
+                            row["Time"] = logTime.ToString("MMM dd, yyyy HH:mm:ss");
                             row["Message"] = reader["Message"].ToString();
 
                             switch (level)
@@ -246,7 +247,7 @@ ORDER BY LogTime DESC";
 
                 LoadGeneratedFiles();
                 LoadLogs();
-                
+
             }
         }
 
