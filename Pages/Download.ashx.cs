@@ -48,6 +48,7 @@ namespace ASPWeBSM
                                 context.Response.ContentType = contentType;
                                 context.Response.AddHeader("Content-Disposition", "attachment; filename=" + fileName);
                                 context.Response.BinaryWrite(fileData);
+                                LogManager.Success($"Uploaded file downloaded: {fileName}");
                                 context.Response.End();
                             }
                         }
