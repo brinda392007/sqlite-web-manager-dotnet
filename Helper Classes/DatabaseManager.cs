@@ -114,8 +114,6 @@ END";
         {
             try
             {
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
-
                 using (var conn = GetConnection())
                 {
                     conn.Open();
@@ -123,7 +121,7 @@ END";
                     string sql = "UPDATE Users SET Password = @pass WHERE Email = @email";
                     using (var cmd = new SqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@pass", hashedPassword);
+                        cmd.Parameters.AddWithValue("@pass", newPassword);
                         cmd.Parameters.AddWithValue("@email", email);
                         cmd.ExecuteNonQuery();
                     }
