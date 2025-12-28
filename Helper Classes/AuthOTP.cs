@@ -5,6 +5,7 @@ using System.Web.UI;
 public class AuthOtp : System.Web.UI.Page
 {
     // This runs BEFORE the Page_Load of the child page (ResetPassword.aspx)
+    // Any hacker cannot access ResetPassword.aspx directly
     protected override void OnLoad(EventArgs e)
     {
         // 1. Check if the "VIP Badge" exists in Session
