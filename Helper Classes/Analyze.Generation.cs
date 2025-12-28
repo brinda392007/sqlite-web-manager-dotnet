@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+// This Class Takes the abstract idea of Classes and Tables and Sps and puts them into valid compilable or iterable strings
+// GenerateSqScript - Generated SQL
+// GenerateMethodsScript - Generate Methods
+
 namespace ASPWeBSM
 {
     public partial class Analyze
     {
         private string GenerateSpScript(List<TableOperationSelection> selections, string dbPath)
         {
+            //Stringbuilder is just faster as string + string generates a new object and shi..
             var sb = new StringBuilder();
 
             foreach (var sel in selections)
