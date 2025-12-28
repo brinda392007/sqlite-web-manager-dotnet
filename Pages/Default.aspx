@@ -53,8 +53,7 @@
                                                 </td>
                                                 <td class="space-x-2 px-6 py-4 text-right whitespace-nowrap">
                                                     <a href='Download.ashx?id=<%# Eval("Id") %>' target="_blank"
-                                                        class="inline-block bg-orange-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-orange-400">
-                                                         Download
+                                                        class="inline-block bg-orange-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-orange-400">Download
                                                     </a>
 
                                                     <asp:LinkButton ID="btnDelete" runat="server"
@@ -81,7 +80,7 @@
 
 
             </div>
-            <!-- Generated files panel (paste below your Uploads panel) -->
+            <!-- Generated files panel -->
             <div class="rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-xl">
                 <div class="mb-6 flex items-center justify-between">
                     <h2 class="text-xl font-bold text-orange-400">Generated Files</h2>
@@ -92,30 +91,35 @@
                 <asp:UpdatePanel ID="UpdatePanelGenerated" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left text-slate-300">
+                            <table class="w-full text-left text-slate-300 table-fixed">
                                 <thead class="bg-slate-700 text-xs text-slate-400 uppercase">
                                     <tr>
-                                        <th class="px-6 py-3">File Name</th>
-                                        <th class="px-6 py-3">Operations</th>
-                                        <th class="px-6 py-3">Generated</th>
-                                        <th class="px-6 py-3 text-right">Action</th>
+                                        <th class="px-6 py-3" style="width: 20%;">File Name</th>
+                                        <th class="px-6 py-3" style="width: 45%;">Operations</th>
+                                        <th class="px-6 py-3" style="width: 20%;">Generated</th>
+                                        <th class="px-6 py-3 text-right" style="width: 15%;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <asp:Repeater ID="rptGenerated" runat="server" OnItemCommand="rptGenerated_ItemCommand">
                                         <ItemTemplate>
                                             <tr class="border-b border-slate-700 transition-colors hover:bg-slate-750">
-                                                <td class="px-6 py-4 font-medium text-white">
+                                                <td class="px-6 py-4 font-medium text-white truncate" title='<%# Eval("FileName") %>'>
                                                     <%# Eval("FileName") %>
                                                 </td>
+
                                                 <td class="px-6 py-4 text-sm text-slate-400">
-                                                    <%# Eval("OperationsInfo") %>
+                                                    <div style="width: 100%; max-height: 80px; overflow-y: auto; word-wrap: break-word; white-space: normal;"
+                                                        class="scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800 pr-2">
+                                                        <%# Eval("OperationsInfo") %>
+                                                    </div>
                                                 </td>
+
                                                 <td class="px-6 py-4 text-sm text-slate-500">
                                                     <%# Eval("GeneratedDate") %>
                                                 </td>
-                                                <td class="space-x-2 px-6 py-4 text-right whitespace-nowrap">
 
+                                                <td class="space-x-2 px-6 py-4 text-right whitespace-nowrap">
                                                     <a href='GeneratedDownload.ashx?id=<%# Eval("FileID") %>' target="_blank"
                                                         class="inline-block bg-orange-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-orange-400">Download
                                                     </a>
@@ -125,7 +129,7 @@
                                                         CommandArgument='<%# Eval("FileID") %>'
                                                         CssClass="bg-red-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-red-400"
                                                         OnClientClick="return confirm('Are you sure you want to purge this generated file?');">
-                                            Purge
+                                        Purge
                                                     </asp:LinkButton>
                                                 </td>
                                             </tr>
@@ -134,7 +138,8 @@
                                 </tbody>
                             </table>
 
-                            <asp:Label ID="lblGeneratedEmpty" runat="server" Text="No generated files found." Visible="false" CssClass="block py-8 text-center text-slate-500 italic"></asp:Label>
+                            <asp:Label ID="lblGeneratedEmpty" runat="server" Text="No generated files found."
+                                Visible="false" CssClass="block py-8 text-center text-slate-500 italic"></asp:Label>
                         </div>
                     </ContentTemplate>
                 </asp:UpdatePanel>
