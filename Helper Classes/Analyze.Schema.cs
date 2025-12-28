@@ -9,7 +9,7 @@ namespace ASPWeBSM
     {
         private List<ColumnInfo> GetTableColumns(string dbPath, string tableName)
         {
-
+            // If file is .sql we do not need to validate it 
             if (CurrentSqlSchema != null && CurrentSqlSchema.ContainsKey(tableName))
             {
                 var sqlCols = CurrentSqlSchema[tableName];
@@ -26,6 +26,7 @@ namespace ASPWeBSM
                 }
                 return result;
             }
+            // If it is a .db file add that too the validator
             else
             {
                 var cols = new List<ColumnInfo>();
@@ -34,10 +35,12 @@ namespace ASPWeBSM
                 {
                     conn.Open();
 
+                    // Read the Pragma Table and get all the Data
                     string sql = $"PRAGMA table_info([{tableName}]);";
                     using (var cmd = new SQLiteCommand(sql, conn))
                     using (SQLiteDataReader reader = cmd.ExecuteReader())
                     {
+                        // Read each data till there is data
                         while (reader.Read())
                         {
                             string colName = reader["name"].ToString();
@@ -58,6 +61,7 @@ namespace ASPWeBSM
 
         }
 
+        // sqlite is Typless but Sql is not
         private string MapSqlType(string sqliteType)
         {
             string t = (sqliteType ?? "").ToUpperInvariant();
@@ -78,6 +82,8 @@ namespace ASPWeBSM
             return "NVARCHAR(255)";
         }
 
+        // sometimes some Identifier names are already taken by System.
+        // So to mark that its User Defined square braces("[ ]") are added 
         private string SqlName(string name)
         {
             return "[" + name + "]";
