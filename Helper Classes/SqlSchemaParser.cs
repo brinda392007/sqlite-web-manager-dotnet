@@ -94,7 +94,7 @@ namespace ASPWeBSM.Helper_Classes
 
             // 1. Initialize the parser (TSql150Parser supports modern SQL Server syntax)
             //    'true' enables QuotedIdentifier support.
-            TSqlParser parser = new TSql150Parser(true);
+            TSqlParser parser = new TSql160Parser(true);
 
             using (var reader = new StringReader(rawSqlContent))
             {
@@ -113,7 +113,7 @@ namespace ASPWeBSM.Helper_Classes
                 }
 
                 // 3. Use a ScriptGenerator to turn the syntax tree back into text strings later
-                SqlScriptGenerator generator = new Sql150ScriptGenerator();
+                SqlScriptGenerator generator = new Sql160ScriptGenerator();
 
                 // 4. Traverse the batches and statements
                 if (fragment is TSqlScript script)

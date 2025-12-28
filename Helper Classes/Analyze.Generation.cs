@@ -39,7 +39,17 @@ namespace ASPWeBSM
                 {
                     var c = cols[i];
                     string comma = (i == cols.Count - 1) ? "" : ",";
-                    sb.AppendLine($"    @{c.Name} {c.SqlType} = NULL{comma}");
+                    string typeStr = c.SqlType.ToLower();
+                    if (typeStr == "decimal" || typeStr == "numeric")
+                    {
+                        typeStr = "decimal(18, 2)";
+                    }
+                    else
+                    {
+                        typeStr = c.SqlType;
+                    }
+                    sb.AppendLine($"    @{c.Name} {typeStr} = NULL{comma}");
+
                 }
 
                 sb.AppendLine($"    ,@EVENT VARCHAR(50) = NULL");
