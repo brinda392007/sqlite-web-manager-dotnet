@@ -63,6 +63,7 @@ namespace ASPWeBSM
                         context.Response.ContentType = "application/octet-stream";
                         context.Response.AddHeader("Content-Disposition", $"attachment; filename={fileName}");
                         context.Response.WriteFile(physical);
+                        LogManager.Success($"Generated file downloaded: {fileName}");
                         context.Response.End();
                         return;
                     }

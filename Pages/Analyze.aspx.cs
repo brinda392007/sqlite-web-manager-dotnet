@@ -329,6 +329,7 @@ namespace ASPWeBSM
             string fileName = SaveGeneratedFile(spText, summary, "SP");
 
             lblMessage.Text = $"Stored procedures generated in file: {fileName}. You can download it later from your downloads panel.";
+            LogManager.Success("Stored procedures generated successfully.");
             Response.Redirect("Default.aspx");
         }
 
@@ -370,7 +371,7 @@ namespace ASPWeBSM
 
             string summary = BuildOperationsSummary(selections);
             string fileName = SaveGeneratedFile(methodsText, summary, "Methods");
-
+            LogManager.Success("C# methods generated successfully.");
             Response.Redirect("Default.aspx");
         }
 
@@ -425,6 +426,7 @@ namespace ASPWeBSM
             string fileName = SaveGeneratedFile(full.ToString(), summary, "SP_AND_Methods");
 
             lblMessage.Text = $"SP + C# methods generated in file: {fileName}. You can download it later from your downloads panel.";
+            LogManager.Success("Stored procedures and methods generated successfully.");
             Response.Redirect("Default.aspx");
         }
 
