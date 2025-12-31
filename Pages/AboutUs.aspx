@@ -120,7 +120,7 @@
         </nav>
 
         <!-- Hero Section -->
-        <section class="relative overflow-hidden pt-32 pb-20 px-4">
+        <section class="relative overflow-hidden min-h-screen flex items-center px-4">
             <div class="absolute inset-0 opacity-10">
                 <div class="absolute inset-0" style="background: linear-gradient(135deg, #f97316 0%, #0f172a 100%);"></div>
             </div>
