@@ -321,6 +321,7 @@ namespace ASPWeBSM
             if (selections.Count == 0)
             {
                 lblMessage.Text = "Select at least one operation for any table.";
+                LogManager.Error("Stored procedure generation failed: no operations were selected.");
                 return;
             }
 
@@ -347,6 +348,7 @@ namespace ASPWeBSM
             if (selections.Count == 0)
             {
                 lblMessage.Text = "Select at least one operation for any table.";
+                LogManager.Error("Method generation failed: no operations were selected.");
                 return;
             }
 
@@ -388,6 +390,7 @@ namespace ASPWeBSM
             if (selections.Count == 0)
             {
                 lblMessage.Text = "Select at least one operation for any table.";
+                LogManager.Error("Stored procedure and Method generation failed: no operations were selected.");
                 return;
             }
 

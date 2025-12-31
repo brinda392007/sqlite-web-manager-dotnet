@@ -166,9 +166,10 @@
                             <asp:Repeater ID="rptLogs" runat="server">
                                 <ItemTemplate>
                                     <div class="mb-1 text-sm">
-                                        <span class="<%# Eval("ColorClass") %>">[<%# Eval("Time") %>]
-                                        </span>
                                         <span class="text-slate-200">
+                                            [<%# Eval("Time") %>]
+                                        </span>
+                                        <span class="<%# Eval("ColorClass") %>">
                                             <%# Eval("Message") %>
                                         </span>
                                     </div>

@@ -127,12 +127,12 @@
 
             <!-- Animated background elements -->
             <div class="absolute inset-0 overflow-hidden">
-                <div class="absolute -top-40 -right-40 w-80 h-200 rounded-full opacity-20"
+                <!--<div class="absolute -top-40 -right-40 w-80 h-200 rounded-full opacity-20"
                     style="background: radial-gradient(circle, #f97316 0%, transparent 70%);">
                 </div>
                 <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-20"
                     style="background: radial-gradient(circle, #fb923c 0%, transparent 70%);">
-                </div>
+                </div>-->
             </div>
 
             <div class="max-w-6xl mx-auto relative z-10 text-center">

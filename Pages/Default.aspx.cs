@@ -47,7 +47,7 @@ namespace ASPWeBSM
             dt.Columns.Add("Message");
             dt.Columns.Add("ColorClass");
 
-            using (var conn = DatabaseManager.GetConnection()) // ✅ SQL Server
+            using (var conn = DatabaseManager.GetConnection()) 
             {
                 conn.Open();
 
@@ -70,7 +70,6 @@ ORDER BY LogTime DESC";
                             string level = reader["LogType"].ToString().ToUpperInvariant();
                             DateTime logTime = Convert.ToDateTime(reader["LogTime"]);
 
-                            // UPDATED: Show date and time in format: "Dec 24, 2024 14:30:45"
                             row["Time"] = logTime.ToString("MMM dd, yyyy HH:mm:ss");
                             row["Message"] = reader["Message"].ToString();
 
@@ -78,6 +77,7 @@ ORDER BY LogTime DESC";
                             {
                                 case "SUCCESS":
                                     row["ColorClass"] = "text-emerald-400";
+                                    
                                     break;
                                 case "ERROR":
                                     row["ColorClass"] = "text-red-400";
@@ -178,7 +178,7 @@ ORDER BY LogTime DESC";
         }
 
         
-        // DELETE UPLOAD
+        // Delete Upload 
         protected void rptFiles_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             if (e.CommandName == "DeleteFile")
@@ -218,9 +218,8 @@ ORDER BY LogTime DESC";
             }
         }
 
-        // =========================
-        // DELETE GENERATED FILE
-        // =========================
+
+        // Delete Generated File
         protected void rptGenerated_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             if (e.CommandName == "DeleteFile")
@@ -260,9 +259,9 @@ ORDER BY LogTime DESC";
             }
         }
 
-        // =========================
-        // SIZE FORMAT
-        // =========================
+       
+        // Size Format
+        
         public string FormatSize(object sizeObj)
         {
             long bytes = Convert.ToInt64(sizeObj);
