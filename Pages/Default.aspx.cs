@@ -25,6 +25,16 @@ namespace ASPWeBSM
             }
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (Request["__EVENTTARGET"] == "RefreshLogs")
+            {
+                LoadLogs(); // UpdatePanel for logs
+            }
+        }
+
         // =========================
         // LOGS (SQL SERVER VERSION) - UPDATED TO SHOW DATE & TIME
         // =========================
@@ -91,9 +101,9 @@ ORDER BY LogTime DESC";
             lblNoLogs.Visible = (dt.Rows.Count == 0);
         }
 
-        // =========================
-        // UPLOADS
-        // =========================
+        
+        // Load Upload Files
+       
         private void LoadFiles()
         {
             int userId = Convert.ToInt32(Session["UserId"]);
@@ -122,9 +132,9 @@ ORDER BY LogTime DESC";
             }
         }
 
-        // =========================
-        // GENERATED FILES
-        // =========================
+        
+        // Load Generated Files
+       
         private void LoadGeneratedFiles()
         {
             int userId = Convert.ToInt32(Session["UserId"]);
@@ -152,9 +162,9 @@ ORDER BY LogTime DESC";
             lblGeneratedEmpty.Visible = (dt.Rows.Count == 0);
         }
 
-        // =========================
-        // BUTTONS
-        // =========================
+        
+        
+        //Referesh pannels button
         protected void btnRefreshList_Click(object sender, EventArgs e)
         {
             LoadFiles();
@@ -167,9 +177,8 @@ ORDER BY LogTime DESC";
             LoadLogs();
         }
 
-        // =========================
+        
         // DELETE UPLOAD
-        // =========================
         protected void rptFiles_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             if (e.CommandName == "DeleteFile")

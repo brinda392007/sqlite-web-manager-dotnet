@@ -53,6 +53,7 @@
                                                 </td>
                                                 <td class="space-x-2 px-6 py-4 text-right whitespace-nowrap">
                                                     <a href='Download.ashx?id=<%# Eval("Id") %>' target="_blank"
+                                                        onclick="refreshLogsAfterDownload()"
                                                         class="inline-block bg-orange-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-orange-400">Download
                                                     </a>
 
@@ -121,6 +122,7 @@
 
                                                 <td class="space-x-2 px-6 py-4 text-right whitespace-nowrap">
                                                     <a href='GeneratedDownload.ashx?id=<%# Eval("FileID") %>' target="_blank"
+                                                        onclick="refreshLogsAfterDownload()"
                                                         class="inline-block bg-orange-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-orange-400">Download
                                                     </a>
 
@@ -182,4 +184,11 @@
 
         </div>
     </div>
+    <script>
+function refreshLogsAfterDownload() {
+    setTimeout(function () {
+        __doPostBack('RefreshLogs', '');
+    }, 700);
+}
+    </script>
 </asp:Content>
