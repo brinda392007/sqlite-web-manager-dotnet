@@ -122,9 +122,11 @@ namespace ASPWeBSM.Helper_Classes
                     foreach (var err in errors)
                     {
                         LogManager.Error(err.Message);
-
                     }
 
+                }
+                else
+                {
                     // 3. Use a ScriptGenerator to turn the syntax tree back into text strings later
                     SqlScriptGenerator generator = new Sql160ScriptGenerator();
 
@@ -149,7 +151,6 @@ namespace ASPWeBSM.Helper_Classes
                         }
                     }
                 }
-
                 return createTableScripts;
             }
         }

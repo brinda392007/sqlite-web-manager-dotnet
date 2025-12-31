@@ -71,7 +71,10 @@
                                 </tbody>
                             </table>
 
-                            <asp:Label ID="lblEmpty" runat="server" Text="No data artifacts found." Visible="false" CssClass="block py-8 text-center text-slate-500 italic"></asp:Label>
+                            <asp:Literal ID="ltrEmpty" runat="server" Visible="false">
+                                <a id="noFileUpload" href="Upload.aspx" class="block w-full rounded border  border-slate-600 bg-slate-400 py-3 text-center text-orange transition hover:bg-slate-600">Upload New File</a>
+                            </asp:Literal>
+
                         </div>
 
 

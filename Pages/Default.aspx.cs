@@ -126,7 +126,7 @@ ORDER BY LogTime DESC";
                         rptFiles.DataSource = dt;
                         rptFiles.DataBind();
 
-                        lblEmpty.Visible = (dt.Rows.Count == 0);
+                        ltrEmpty.Visible = (dt.Rows.Count == 0);
                     }
                 }
             }

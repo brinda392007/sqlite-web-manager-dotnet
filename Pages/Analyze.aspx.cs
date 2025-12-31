@@ -9,6 +9,7 @@ using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using ASPWeBSM.Helper_Classes;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ASPWeBSM
 {
@@ -150,6 +151,12 @@ namespace ASPWeBSM
 
                 //Parse
                 var schema = Parser.ParseSqlFile(tempPath);
+
+                if (schema.IsNullOrEmpty())
+                {
+                    LogManager.Error("Errors during parsing");
+                    return;
+                }
 
                 CurrentSqlSchema = schema;
 
