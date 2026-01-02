@@ -162,6 +162,11 @@
                         onmouseover="this.style.background='rgba(249, 115, 22, 0.1)';"
                         onmouseout="this.style.background='transparent';">Learn More
                     </a>
+                    <a href="#section-contact" class="px-8 py-4 rounded-lg font-bold text-lg border-2 transition-all transform hover:scale-105"
+                        style="border-color: #f97316; color: #f97316;"
+                        onmouseover="this.style.background='rgba(249, 115, 22, 0.1)';"
+                        onmouseout="this.style.background='transparent';">Contact Us
+                    </a>
                 </div>
 
                 <div class="mt-12 flex items-center justify-center space-x-8 text-slate-400">

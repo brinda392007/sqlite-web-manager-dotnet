@@ -50,9 +50,9 @@ namespace ASPWeBSM
                     //lblStatus.Text = "Uploaded: " + filename;
                     //lblStatus.ForeColor = Color.LightGreen;
                     LogManager.Success($"Uploaded file '{filename}' successfully.");
-                    // IMPORTANT: store toast in session, then redirect
+                    // store toast in session, then redirect
                     UiHelper.SetToast("File uploaded successfully.", "success");
-                    Response.Redirect("Default.aspx", false);
+                    Response.Redirect("Analyze.aspx?uploadId="+, false);
 
                 }
                 catch (Exception ex)

@@ -154,7 +154,7 @@
                 <h2 class="mb-4 text-xl font-bold text-orange-400">Quick Actions</h2>
                 <a href="Upload.aspx" class="mb-3 block w-full rounded border border-slate-600 bg-slate-700 py-3 text-center text-white transition hover:bg-slate-600">Upload New File
                 </a>
-                <a href="#" class="block w-full rounded border border-slate-600 bg-slate-700 py-3 text-center text-white transition hover:bg-slate-600">View Analytics
+                <a href="AboutUs.aspx#section-contact" class="block w-full rounded border border-slate-600 bg-slate-700 py-3 text-center text-white transition hover:bg-slate-600">Contact Us
                 </a>
             </div>
             <div class="rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-xl">
