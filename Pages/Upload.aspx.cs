@@ -45,15 +45,22 @@ namespace ASPWeBSM
 
                     int userId = Convert.ToInt32(Session["UserId"]);
 
-                    SaveFileToDatabase(userId, filename, contentType, fileData, size);
+                    int? newUploadId = SaveFileToDatabase(userId, filename, contentType, fileData, size);
 
-                    //lblStatus.Text = "Uploaded: " + filename;
-                    //lblStatus.ForeColor = Color.LightGreen;
-                    LogManager.Success($"Uploaded file '{filename}' successfully.");
-                    // store toast in session, then redirect
-                    UiHelper.SetToast("File uploaded successfully.", "success");
-                    Response.Redirect("Analyze.aspx?uploadId="+, false);
+                    if (newUploadId.HasValue)
+                    {
+                        LogManager.Success($"Uploaded file '{filename}' successfully.");
+                        UiHelper.SetToast("File uploaded successfully.", "success");
 
+                        string url = $"Analyze.aspx?uploadId={newUploadId}";
+
+                        Response.Redirect(url, false);
+                    }
+                    else
+                    {
+                        UiHelper.SetToast("Server Did not return an upload id", "info");
+                        LogManager.Error($"Warning server did not return an upload id for the last file upload.");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -72,7 +79,7 @@ namespace ASPWeBSM
             }
         }
 
-        protected void SaveFileToDatabase(int userId, string name, string type, byte[] data, int size)
+        protected int? SaveFileToDatabase(int userId, string name, string type, byte[] data, int size)
         {
             using (var conn = DatabaseManager.GetConnection())
             {
@@ -89,8 +96,27 @@ namespace ASPWeBSM
                     cmd.Parameters.AddWithValue("@Content", data);
                     cmd.Parameters.AddWithValue("@Size", size);
 
-                    // returns NewUploadId, if you ever need it:
-                    object newUploadId = cmd.ExecuteScalar();
+                    // returns NewUploadId
+                    object result = cmd.ExecuteScalar();
+
+                    if(result == null || result == DBNull.Value)
+                    {
+                        return null;
+                    }
+
+                    if(int.TryParse(result.ToString(), out int id))
+                    {
+                        return id;
+                    }
+
+                    try
+                    {
+                        return Convert.ToInt32(result);
+                    }
+                    catch
+                    {
+                        return null;
+                    }
                 }
             }
         }
