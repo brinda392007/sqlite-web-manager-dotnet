@@ -65,7 +65,7 @@ BEGIN
     );
 END
 
-SELECT * FROM Logs
+SELECT * FROM Users
 
 
 Drop table Logs

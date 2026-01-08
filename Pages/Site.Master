@@ -27,6 +27,34 @@
 .animate-fadeIn {
     animation: fadeIn 0.2s ease-out;
 }
+ .file-name-clamp {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-word;
+            line-height: 1.4;
+            max-height: 2.8em;
+        }
+
+ .file-upload-clamp {
+           display: -webkit-box;
+           -webkit-line-clamp: 2;
+           -webkit-box-orient: vertical;
+           overflow: hidden;
+           text-overflow: ellipsis;
+           word-break: break-word;
+           line-height: 1.4;
+           max-height: 2.8em;
+       }
+
+/* .file-name-expanded {
+    display: block;
+    -webkit-line-clamp: unset;
+    max-height: none;
+    overflow: visible;
+}*/
     </style>
 
     <asp:ContentPlaceHolder ID="head" runat="server">

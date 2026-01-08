@@ -26,7 +26,7 @@ namespace ASPWeBSM
             set
             {
                 ViewState["CurrentSqlSchema"] = value;
-            }
+            }   
         }
         private class TableOperationSelection
         {
@@ -56,9 +56,8 @@ namespace ASPWeBSM
             }
         }
 
-        // ===============================
-        // NEW: Method generation options
-        // ===============================
+      
+        // Method generation options
         private bool GenerateParameterizedMethods
         {
             get => ViewState["GenerateParameterizedMethods"] == null
@@ -280,7 +279,7 @@ namespace ASPWeBSM
                 parts.Add($"{s.TableName}: {string.Join(", ", ops)}");
             }
 
-            return string.Join(" | ", parts);
+            return string.Join("\n", parts);
         }
 
         private string SaveGeneratedFile(string content, string operationsInfo, string kind)
@@ -289,7 +288,7 @@ namespace ASPWeBSM
             if (!Directory.Exists(genFolder))
                 Directory.CreateDirectory(genFolder);
 
-            string fileName = $"Generated_{UploadId}_{kind}_{DateTime.Now:yyyyMMddHHmmss}.txt";
+            string fileName = $"Generated_{kind}.txt";
             string physicalPath = Path.Combine(genFolder, fileName);
             File.WriteAllText(physicalPath, content);
 
@@ -306,7 +305,7 @@ namespace ASPWeBSM
                     cmd.Parameters.AddWithValue("@UploadId", UploadId);
                     cmd.Parameters.AddWithValue("@FileName", fileName);
                     cmd.Parameters.AddWithValue("@FilePath", "~/App_Data/Generated/" + fileName);
-                    cmd.Parameters.AddWithValue("@OperationsInfo", operationsInfo + $" ({kind})");
+                    cmd.Parameters.AddWithValue("@OperationsInfo", operationsInfo);
 
                     cmd.ExecuteScalar(); // returns new id, we don't need it here
                 }
@@ -352,7 +351,7 @@ namespace ASPWeBSM
                 return;
             }
 
-            // 🔹 NEW: check if Insert or Update Delete or SelectByID exists
+            // check if Insert or Update Delete or SelectByID exists
             bool needsChoice = selections.Any(s => s.Insert || s.Update || s.Delete || s.SelectById);
 
             if (needsChoice)
@@ -362,7 +361,6 @@ namespace ASPWeBSM
                 return;
             }
 
-            // existing behavior (UNCHANGED)
             GenerateMethods(false);
         }
 

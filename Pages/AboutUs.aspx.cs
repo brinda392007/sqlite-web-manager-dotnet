@@ -27,6 +27,7 @@ namespace ASPWebSM
 
         protected void btnSendMessage_Click(object sender, EventArgs e)
         {
+            
             try
             {
                 // Get current email count from session
@@ -97,13 +98,16 @@ namespace ASPWebSM
                 {
                     ShowModal("error", "Failed to send message. Please check your internet connection and try again.");
                 }
+
             }
+
             catch (Exception ex)
             {
                 ShowModal("error", "An error occurred while sending your message. Please try again later.");
                 // Log the error
                 System.Diagnostics.Debug.WriteLine($"Error in btnSendMessage_Click: {ex.Message}");
             }
+           
         }
 
         private bool SendEmail(string senderName, string senderEmail, string subject, string message)

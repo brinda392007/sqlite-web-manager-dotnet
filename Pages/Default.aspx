@@ -24,7 +24,7 @@
                 <asp:UpdatePanel ID="UpdatePanelFiles" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
 
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto max-h-[100px]">
                             <table class="w-full text-left text-slate-300">
                                 <thead class="bg-slate-700 text-xs text-slate-400 uppercase">
                                     <tr>
@@ -40,15 +40,19 @@
                                             <tr class="border-b border-slate-700 transition-colors hover:bg-slate-750">
                                                 <td class="px-6 py-4 font-medium">
                                                     <a href='<%# "Analyze.aspx?uploadId=" + Eval("Id") %>'
-                                                        class="text-orange-400 hover:text-orange-300 underline decoration-dotted">
-                                                        <%# Eval("FileName") %>
-                                                    </a>
+                                                        
+                                                        class="text-orange-400 hover:text-orange-300 underline decoration-dotted"> 
+                                                        <div class="file-upload-clamp cursor-pointer">
+    <%# Eval("FileName") %>
+</div>
+      </a>                                               
+                                                   
                                                 </td>
 
                                                 <td class="px-6 py-4">
                                                     <%# FormatSize(Eval("Size")) %>
                                                 </td>
-                                                <td class="px-6 py-4 text-sm text-slate-500">
+                                                <td class="px-6 py-4 text-sm text-slate-400">
                                                     <%# Eval("UploadedAt") %>
                                                 </td>
                                                 <td class="space-x-2 px-6 py-4 text-right whitespace-nowrap">
@@ -85,21 +89,21 @@
 
             </div>
             <!-- Generated files panel -->
-            <div class="rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-xl">
+            <div class="rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-xl overflow-x-hidden">
                 <div class="mb-6 flex items-center justify-between">
                     <h2 class="text-xl font-bold text-orange-400">Generated Files</h2>
                     <asp:Button ID="btnRefreshGenerated" runat="server" Text="↻ Sync" OnClick="btnRefreshGenerated_Click"
                         CssClass="cursor-pointer rounded border border-slate-600 bg-transparent px-2 py-1 text-xs text-slate-400 hover:text-white" />
                 </div>
 
-                <asp:UpdatePanel ID="UpdatePanelGenerated" runat="server" UpdateMode="Conditional">
+                <asp:UpdatePanel ID="UpdatePanelGenerated" runat="server" UpdateMode="Conditional" Class="max-h-[272px] overflow-y-auto">
                     <ContentTemplate>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-slate-300 table-fixed">
+                        <div class="overflow-x-auto max-h-[100px]">
+                            <table class="w-full text-left text-slate-300 table-fixed ">
                                 <thead class="bg-slate-700 text-xs text-slate-400 uppercase">
                                     <tr>
                                         <th class="px-6 py-3" style="width: 20%;">File Name</th>
-                                        <th class="px-6 py-3" style="width: 45%;">Operations</th>
+                                     
                                         <th class="px-6 py-3" style="width: 20%;">Generated</th>
                                         <th class="px-6 py-3 text-right" style="width: 15%;">Action</th>
                                     </tr>
@@ -108,18 +112,14 @@
                                     <asp:Repeater ID="rptGenerated" runat="server" OnItemCommand="rptGenerated_ItemCommand">
                                         <ItemTemplate>
                                             <tr class="border-b border-slate-700 transition-colors hover:bg-slate-750">
-                                                <td class="px-6 py-4 font-medium text-white truncate" title='<%# Eval("FileName") %>'>
-                                                    <%# Eval("FileName") %>
-                                                </td>
-
-                                                <td class="px-6 py-4 text-sm text-slate-400">
-                                                    <div style="width: 100%; max-height: 80px; overflow-y: auto; word-wrap: break-word; white-space: normal;"
-                                                        class="scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800 pr-2">
-                                                        <%# Eval("OperationsInfo") %>
+                                                <td class="px-6 py-4 font-medium text-white" title='<%# Eval("OperationsInfo") %>'>
+                                                    <div class="file-name-clamp cursor-pointer">
+                                                        <%# Eval("FileName") %>
                                                     </div>
                                                 </td>
 
-                                                <td class="px-6 py-4 text-sm text-slate-500">
+
+                                                <td class="px-6 py-4 text-sm text-slate-400">
                                                     <%# Eval("GeneratedDate") %>
                                                 </td>
 
@@ -134,9 +134,10 @@
                                                         CommandArgument='<%# Eval("FileID") %>'
                                                         CssClass="bg-red-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-red-400"
                                                         OnClientClick="return confirm('Are you sure you want to purge this generated file?');">
-                                        Purge
+                         Purge
                                                     </asp:LinkButton>
                                                 </td>
+
                                             </tr>
                                         </ItemTemplate>
                                     </asp:Repeater>
@@ -166,8 +167,7 @@
                             <asp:Repeater ID="rptLogs" runat="server">
                                 <ItemTemplate>
                                     <div class="mb-1 text-sm">
-                                        <span class="text-slate-200">
-                                            [<%# Eval("Time") %>]
+                                        <span class="text-slate-200">[<%# Eval("Time") %>]
                                         </span>
                                         <span class="<%# Eval("ColorClass") %>">
                                             <%# Eval("Message") %>
@@ -189,10 +189,15 @@
         </div>
     </div>
     <script>
-function refreshLogsAfterDownload() {
-    setTimeout(function () {
-        __doPostBack('RefreshLogs', '');
-    }, 700);
-}
+        function refreshLogsAfterDownload() {
+            setTimeout(function () {
+                __doPostBack('RefreshLogs', '');
+            }, 700);
+        }
+    </script>
+    <script>
+        function toggleFileName(el) {
+            el.classList.toggle('file-name-expanded');
+        }
     </script>
 </asp:Content>

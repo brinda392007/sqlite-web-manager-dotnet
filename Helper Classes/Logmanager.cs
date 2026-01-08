@@ -6,10 +6,6 @@ namespace ASPWeBSM
 {
     public static class LogManager
     {
-        // ==========================
-        // PUBLIC METHODS (DO NOT CHANGE)
-        // ==========================
-
         public static void Info(string message)
         {
             WriteLog("INFO", message);
@@ -25,14 +21,12 @@ namespace ASPWeBSM
             WriteLog("ERROR", message);
         }
 
-        // ==========================
-        // CORE LOGIC (SQL SERVER)
-        // ==========================
-
+       
+      //Write logs to SQL sever
         private static void WriteLog(string logType, string message)
         {
             int? userId = GetCurrentUserId();
-            if (userId == null) return; // No user = no log (same behavior)
+            if (userId == null) return; // No user = no log 
 
             try
             {
@@ -40,7 +34,7 @@ namespace ASPWeBSM
                 {
                     conn.Open();
 
-                    // 1️⃣ INSERT LOG (SQL Server)
+                    // INSERT LOG (SQL Server)
                     string insertSql = @"
 INSERT INTO Logs (UserId, LogType, Message)
 VALUES (@UserId, @LogType, @Message);";
@@ -54,7 +48,7 @@ VALUES (@UserId, @LogType, @Message);";
                         cmd.ExecuteNonQuery();
                     }
 
-                    // 2️⃣ KEEP ONLY LAST 100 LOGS PER USER
+                    // KEEP ONLY LAST 100 LOGS PER USER
                     string cleanupSql = @"
 DELETE FROM Logs
 WHERE LogID NOT IN
@@ -75,15 +69,13 @@ AND UserId = @UserId;";
             }
             catch
             {
-                // ❗ NEVER allow logging to crash the app
+                //  NEVER allow logging to crash the app
                
             }
         }
 
-        // ==========================
         // SESSION HELPER
-        // ==========================
-
+    
         private static int? GetCurrentUserId()
         {
             try
