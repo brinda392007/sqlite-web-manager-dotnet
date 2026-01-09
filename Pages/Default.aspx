@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="ASPWeBSM.Default" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+  
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -24,9 +25,9 @@
                 <asp:UpdatePanel ID="UpdatePanelFiles" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
 
-                        <div class="overflow-x-auto max-h-[100px]">
+                     <div class="custom-scroll">
                             <table class="w-full text-left text-slate-300">
-                                <thead class="bg-slate-700 text-xs text-slate-400 uppercase">
+                               <thead class="bg-slate-700 text-xs text-slate-400 uppercase sticky top-0">
                                     <tr>
                                         <th class="px-6 py-3">File Name</th>
                                         <th class="px-6 py-3">Size</th>
@@ -34,7 +35,7 @@
                                         <th class="px-6 py-3 text-right">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="bg-slate-800">
                                     <asp:Repeater ID="rptFiles" runat="server" OnItemCommand="rptFiles_ItemCommand">
                                         <ItemTemplate>
                                             <tr class="border-b border-slate-700 transition-colors hover:bg-slate-750">
@@ -96,11 +97,11 @@
                         CssClass="cursor-pointer rounded border border-slate-600 bg-transparent px-2 py-1 text-xs text-slate-400 hover:text-white" />
                 </div>
 
-                <asp:UpdatePanel ID="UpdatePanelGenerated" runat="server" UpdateMode="Conditional" Class="max-h-[272px] overflow-y-auto">
+                <asp:UpdatePanel ID="UpdatePanelGenerated" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
-                        <div class="overflow-x-auto max-h-[100px]">
+                         <div class="custom-scroll">
                             <table class="w-full text-left text-slate-300 table-fixed ">
-                                <thead class="bg-slate-700 text-xs text-slate-400 uppercase">
+                               <thead class="bg-slate-700 text-xs text-slate-400 uppercase sticky top-0">
                                     <tr>
                                         <th class="px-6 py-3" style="width: 20%;">File Name</th>
                                      
@@ -108,7 +109,7 @@
                                         <th class="px-6 py-3 text-right" style="width: 15%;">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="bg-slate-800">
                                     <asp:Repeater ID="rptGenerated" runat="server" OnItemCommand="rptGenerated_ItemCommand">
                                         <ItemTemplate>
                                             <tr class="border-b border-slate-700 transition-colors hover:bg-slate-750">
@@ -163,7 +164,8 @@
 
                 <asp:UpdatePanel ID="upLogs" runat="server">
                     <ContentTemplate>
-                        <div class="max-h-[200px] overflow-y-auto rounded border border-slate-700 bg-slate-900 p-3">
+                      <div class="max-h-[200px] overflow-y-auto rounded border border-slate-700 bg-slate-900 p-3 custom-scroll-style">
+                           <!--   <div class="custom-scroll">-->
                             <asp:Repeater ID="rptLogs" runat="server">
                                 <ItemTemplate>
                                     <div class="mb-1 text-sm">

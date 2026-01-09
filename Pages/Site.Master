@@ -49,6 +49,37 @@
            max-height: 2.8em;
        }
 
+  .custom-scroll::-webkit-scrollbar,
+.custom-scroll-style::-webkit-scrollbar {
+    width: 8px;
+}
+.custom-scroll::-webkit-scrollbar-track,
+.custom-scroll-style::-webkit-scrollbar-track {
+    background: #1e293b;
+    border-radius: 4px;
+}
+.custom-scroll::-webkit-scrollbar-thumb,
+.custom-scroll-style::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-radius: 4px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover,
+.custom-scroll-style::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+/* Scrollable container */
+.custom-scroll {
+    max-height: 272px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+ /* Sticky header fix */
+.custom-scroll thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
 /* .file-name-expanded {
     display: block;
     -webkit-line-clamp: unset;
