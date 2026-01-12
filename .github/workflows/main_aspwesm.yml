@@ -26,13 +26,13 @@ jobs:
         run: msbuild ASPWeBSM.sln /p:Configuration=Release
 
       - name: Publish artifacts
-        run: |
-          msbuild ASPWeBSM.sln ^
-            /p:Configuration=Release ^
-            /p:DeployOnBuild=true ^
-            /p:WebPublishMethod=Package ^
-            /p:PackageAsSingleFile=true ^
-            /p:PackageLocation="${{ github.workspace }}\publish"
+        run: >
+          msbuild ASPWeBSM.sln
+          /p:Configuration=Release
+          /p:DeployOnBuild=true
+          /p:WebPublishMethod=Package
+          /p:PackageAsSingleFile=true
+          /p:PackageLocation="${{ github.workspace }}\publish"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -55,3 +55,4 @@ jobs:
         with:
           app-name: ASPWeSM
           package: .
+
