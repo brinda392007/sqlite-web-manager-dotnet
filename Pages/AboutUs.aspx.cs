@@ -25,6 +25,7 @@ namespace ASPWebSM
             }
         }
 
+        //ADD project to Azure added this comment we can remove it after 
         protected void btnSendMessage_Click(object sender, EventArgs e)
         {
             

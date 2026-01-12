@@ -67,5 +67,6 @@ END
 
 SELECT * FROM Users
 
+delete from Users where Id=16
 
 Drop table Logs

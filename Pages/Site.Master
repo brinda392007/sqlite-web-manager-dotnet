@@ -80,12 +80,7 @@
     top: 0;
     z-index: 10;
 }
-/* .file-name-expanded {
-    display: block;
-    -webkit-line-clamp: unset;
-    max-height: none;
-    overflow: visible;
-}*/
+
     </style>
 
     <asp:ContentPlaceHolder ID="head" runat="server">
