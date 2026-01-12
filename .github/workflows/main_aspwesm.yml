@@ -43,17 +43,20 @@ jobs:
   deploy:
     runs-on: windows-latest
     needs: build
-
+  
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: aspnet-app
-
-      - name: Deploy to Azure Web App
+          path: publish
+  
+      - name: Deploy to Azure Web App (extract package)
         uses: azure/webapps-deploy@v2
         with:
           app-name: ASPWeSM
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: .
+          package: publish/ASPWeBSM.zip
+
+
 
