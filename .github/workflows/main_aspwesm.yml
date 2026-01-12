@@ -21,16 +21,14 @@ jobs:
       - name: Restore NuGet packages
         run: nuget restore ASPWeBSM.sln
 
-      - name: Publish Web Forms site
+      - name: Publish Web Forms site (explicit target)
         shell: cmd
         run: |
-          msbuild ASPWeBSM.csproj ^
+          msbuild ASPWeBSM.csproj /t:WebPublish ^
             /p:Configuration=Release ^
-            /p:DeployOnBuild=true ^
             /p:WebPublishMethod=FileSystem ^
-            /p:PublishUrl=%GITHUB_WORKSPACE%\publish ^
-            /p:DeleteExistingFiles=True
-
+            /p:PublishUrl=%GITHUB_WORKSPACE%\publish
+            
       - name: Verify publish output
         shell: cmd
         run: |
@@ -63,6 +61,7 @@ jobs:
           app-name: ASPWeSM
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: site.zip
+
 
 
 
