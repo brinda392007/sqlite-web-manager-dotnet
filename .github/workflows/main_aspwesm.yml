@@ -25,38 +25,39 @@ jobs:
       - name: Build solution
         run: msbuild ASPWeBSM.sln /p:Configuration=Release
 
-      - name: Publish artifacts
-        run: >
-          msbuild ASPWeBSM.sln
-          /p:Configuration=Release
-          /p:DeployOnBuild=true
-          /p:WebPublishMethod=Package
-          /p:PackageAsSingleFile=true
-          /p:PackageLocation="${{ github.workspace }}\publish"
+      - name: Publish website to folder
+        run: |
+          msbuild ASPWeBSM.csproj ^
+            /p:Configuration=Release ^
+            /p:DeployOnBuild=true ^
+            /p:WebPublishMethod=FileSystem ^
+            /p:PublishUrl=${{ github.workspace }}\publish ^
+            /p:DeleteExistingFiles=True
 
-      - name: Upload artifact
+      - name: Upload published site
         uses: actions/upload-artifact@v4
         with:
-          name: aspnet-app
+          name: site
           path: publish
 
   deploy:
     runs-on: windows-latest
     needs: build
-  
+
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: aspnet-app
-          path: publish
-  
-      - name: Deploy to Azure Web App (extract package)
+          name: site
+          path: site
+
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: ASPWeSM
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: publish/ASPWeBSM.zip
+          package: site
+
 
 
 
