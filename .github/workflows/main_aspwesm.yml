@@ -13,8 +13,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
@@ -22,23 +21,29 @@ jobs:
       - name: Restore NuGet packages
         run: nuget restore ASPWeBSM.sln
 
-      - name: Build solution
-        run: msbuild ASPWeBSM.sln /p:Configuration=Release
+      - name: Publish Web Forms site (explicit target)
+        shell: cmd
+        run: |
+          msbuild ASPWeBSM.csproj /t:WebPublish ^
+            /p:Configuration=Release ^
+            /p:WebPublishMethod=FileSystem ^
+            /p:PublishUrl=%GITHUB_WORKSPACE%\publish
+            
+      - name: Verify publish output
+        shell: cmd
+        run: |
+          dir %GITHUB_WORKSPACE%\publish
 
-      - name: Publish artifacts
-        run: >
-          msbuild ASPWeBSM.sln
-          /p:Configuration=Release
-          /p:DeployOnBuild=true
-          /p:WebPublishMethod=Package
-          /p:PackageAsSingleFile=true
-          /p:PackageLocation="${{ github.workspace }}\publish"
+      - name: Zip published site
+        shell: powershell
+        run: |
+          Compress-Archive -Path publish\* -DestinationPath site.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: aspnet-app
-          path: publish
+          name: site
+          path: site.zip
 
   deploy:
     runs-on: windows-latest
@@ -48,11 +53,21 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: aspnet-app
+          name: site
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: ASPWeSM
-          package: .
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: site.zip
+
+
+
+
+
+
+
+
+
 
