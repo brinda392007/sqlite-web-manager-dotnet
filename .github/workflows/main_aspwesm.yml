@@ -25,20 +25,23 @@ jobs:
       - name: Build solution
         run: msbuild ASPWeBSM.sln /p:Configuration=Release
 
-      - name: Create publish directory
-        shell: cmd
-        run: mkdir publish
-
       - name: Publish website to folder
         shell: cmd
-        run: msbuild ASPWeBSM.csproj /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:PublishUrl=publish /p:DeleteExistingFiles=True
+        run: |
+          mkdir publish
+          msbuild ASPWeBSM.csproj /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:PublishUrl=publish
+
+      - name: Zip published site
+        shell: powershell
+        run: Compress-Archive -Path publish\* -DestinationPath site.zip
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: ASPWeSM
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: publish
+          package: site.zip
+
 
 
 
