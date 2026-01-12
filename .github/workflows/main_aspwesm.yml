@@ -9,12 +9,11 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
@@ -22,32 +21,48 @@ jobs:
       - name: Restore NuGet packages
         run: nuget restore ASPWeBSM.sln
 
-      - name: Build solution
-        run: msbuild ASPWeBSM.sln /p:Configuration=Release
-
-      - name: Publish website to folder
+      - name: Publish Web Forms site
         shell: cmd
         run: |
-          mkdir publish
-          msbuild ASPWeBSM.csproj /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:PublishUrl=publish
+          msbuild ASPWeBSM.csproj ^
+            /p:Configuration=Release ^
+            /p:DeployOnBuild=true ^
+            /p:WebPublishMethod=FileSystem ^
+            /p:PublishUrl=%GITHUB_WORKSPACE%\publish ^
+            /p:DeleteExistingFiles=True
+
+      - name: Verify publish output
+        shell: cmd
+        run: |
+          dir %GITHUB_WORKSPACE%\publish
 
       - name: Zip published site
         shell: powershell
         run: |
-          Get-ChildItem
-          Compress-Archive -Path publish\* -DestinationPath $env:GITHUB_WORKSPACE\site.zip
+          Compress-Archive -Path publish\* -DestinationPath site.zip
 
-      - name: Verify zip exists
-        shell: powershell
-        run: |
-          Get-Item $env:GITHUB_WORKSPACE\site.zip
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: site.zip
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: ASPWeSM
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ${{ github.workspace }}\site.zip
+          package: site.zip
 
 
 
