@@ -28,6 +28,7 @@ namespace ASPWeBSM
 
             int userId = Convert.ToInt32(context.Session["UserId"]);
 
+            DatabaseManager.Initialize();
             using (var conn = DatabaseManager.GetConnection())
             {
                 conn.Open();

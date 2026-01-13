@@ -30,6 +30,7 @@ namespace ASPWeBSM
 
             try
             {
+                DatabaseManager.Initialize();
                 using (var conn = DatabaseManager.GetConnection())
                 {
                     conn.Open();

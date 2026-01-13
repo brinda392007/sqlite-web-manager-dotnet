@@ -6,7 +6,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <title>ASPWeBSM</title>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="<%= ResolveUrl("~/tailwind.output.css") %>" rel="stylesheet" />
     <link href="../tailwind.output.css" rel="stylesheet" />
     <style>
         .font-vt323 {

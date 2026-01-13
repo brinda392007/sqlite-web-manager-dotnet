@@ -224,10 +224,10 @@
     <Content Include="Global.asax" />
     <Content Include="Pages\Login.aspx" />
     <Content Include="Pages\Register.aspx" />
-	  <None Include="AppSettingsSecrets.config">
-		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		  <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-	  </None>
+    <None Include="AppSettingsSecrets.config">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
     <None Include="Pages\Download.ashx" />
     <Content Include="Pages\ResetPassword.aspx" />
     <Content Include="Pages\Upload.aspx" />

@@ -22,6 +22,7 @@ namespace ASPWeBSM
             string name = txtUser.Text; // This variable holds the username
             string pass = txtPassword.Text;
 
+            DatabaseManager.Initialize();
             using (var conn = DatabaseManager.GetConnection())
             {
                 conn.Open();

@@ -39,6 +39,7 @@ namespace ASPWeBSM
             string password = txtPassword.Text;
             bool isDup = false;
 
+            DatabaseManager.Initialize();
             using (var conn = DatabaseManager.GetConnection())
             {
                 conn.Open();

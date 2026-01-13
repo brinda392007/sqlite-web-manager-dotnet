@@ -81,6 +81,7 @@ namespace ASPWeBSM
 
         protected int? SaveFileToDatabase(int userId, string name, string type, byte[] data, int size)
         {
+            DatabaseManager.Initialize();
             using (var conn = DatabaseManager.GetConnection())
             {
                 conn.Open();

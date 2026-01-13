@@ -101,6 +101,7 @@ namespace ASPWeBSM
             string fileName;
             byte[] content;
 
+            DatabaseManager.Initialize();
             using (var conn = DatabaseManager.GetConnection())
             {
                 conn.Open();
@@ -292,6 +293,8 @@ namespace ASPWeBSM
             string physicalPath = Path.Combine(genFolder, fileName);
             File.WriteAllText(physicalPath, content);
 
+
+            DatabaseManager.Initialize();
             // store metadata in GeneratedFiles table
             using (var conn = DatabaseManager.GetConnection())
             {

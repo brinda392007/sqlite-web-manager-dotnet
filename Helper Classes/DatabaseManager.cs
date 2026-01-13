@@ -9,11 +9,13 @@ namespace ASPWeBSM
 {
     public class DatabaseManager
     {
+        private static bool _isInitialized = false;
         // =========================================
         // SQL SERVER CONFIG (MAIN APPLICATION + LOGS)
         // =========================================
         private static readonly string _sqlServerConnectionString =
-            ConfigurationManager.ConnectionStrings["MyDb"].ConnectionString;
+     ConfigurationManager.ConnectionStrings["MyDb"]?.ConnectionString
+     ?? throw new InvalidOperationException("Connection string 'MyDb' not found.");
 
         // =========================================
         // CONNECTION
@@ -28,6 +30,7 @@ namespace ASPWeBSM
         // =========================================
         public static void Initialize()
         {
+            if (_isInitialized) return;
             // Ensure App_Data exists (used elsewhere in app)
             string appDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data");
             if (!Directory.Exists(appDataPath))
@@ -105,6 +108,7 @@ END";
                     cmd.ExecuteNonQuery();
                 }
             }
+            _isInitialized = true;
         }
 
         // =========================================
@@ -116,6 +120,7 @@ END";
             {
                 using (var conn = GetConnection())
                 {
+                    DatabaseManager.Initialize();
                     conn.Open();
 
                     string sql = "UPDATE Users SET Password = @pass WHERE Email = @email";

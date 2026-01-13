@@ -10,6 +10,7 @@ namespace ASPWeBSM
     {
         public void ProcessRequest(HttpContext context)
         {
+           
             if (context.Session["UserId"] == null)
             {
                 context.Response.StatusCode = 403;
@@ -24,6 +25,7 @@ namespace ASPWeBSM
             {
                 int fileId = Convert.ToInt32(fileIdStr);
 
+                DatabaseManager.Initialize();
                 using (var conn = DatabaseManager.GetConnection())
                 {
                     conn.Open();

@@ -47,6 +47,7 @@ namespace ASPWeBSM
             dt.Columns.Add("Message");
             dt.Columns.Add("ColorClass");
 
+            DatabaseManager.Initialize();
             using (var conn = DatabaseManager.GetConnection()) 
             {
                 conn.Open();
@@ -108,6 +109,7 @@ ORDER BY LogTime DESC";
         {
             int userId = Convert.ToInt32(Session["UserId"]);
 
+            DatabaseManager.Initialize();
             using (var conn = DatabaseManager.GetConnection())
             {
                 conn.Open();
@@ -140,6 +142,7 @@ ORDER BY LogTime DESC";
             int userId = Convert.ToInt32(Session["UserId"]);
             DataTable dt = new DataTable();
 
+            DatabaseManager.Initialize();
             using (var conn = DatabaseManager.GetConnection())
             {
                 conn.Open();
@@ -188,6 +191,7 @@ ORDER BY LogTime DESC";
 
                 try
                 {
+                    //DatabaseManager.Initialize();
                     using (var conn = DatabaseManager.GetConnection())
                     {
                         conn.Open();
@@ -229,6 +233,7 @@ ORDER BY LogTime DESC";
 
                 try
                 {
+                    //DatabaseManager.Initialize();
                     using (var conn = DatabaseManager.GetConnection())
                     {
                         conn.Open();
