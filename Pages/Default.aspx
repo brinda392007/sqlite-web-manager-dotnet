@@ -15,7 +15,7 @@
         <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
 
 
-            <div class="rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-xl">
+            <div class="rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-xl ">
                 <div class="mb-6 flex items-center justify-between">
                     <h2 class="text-xl font-bold text-orange-400">Uploads</h2>
                     <asp:Button ID="btnRefreshList" runat="server" Text="↻ Sync" OnClick="btnRefreshList_Click"
@@ -90,7 +90,7 @@
 
             </div>
             <!-- Generated files panel -->
-            <div class="rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-xl overflow-x-hidden">
+            <div class="rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-xl ">
                 <div class="mb-6 flex items-center justify-between">
                     <h2 class="text-xl font-bold text-orange-400">Generated Files</h2>
                     <asp:Button ID="btnRefreshGenerated" runat="server" Text="↻ Sync" OnClick="btnRefreshGenerated_Click"

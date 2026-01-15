@@ -224,6 +224,7 @@
     <Content Include="Global.asax" />
     <Content Include="Pages\Login.aspx" />
     <Content Include="Pages\Register.aspx" />
+    <Content Include="tailwind.output.css" />
     <None Include="AppSettingsSecrets.config">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
@@ -231,6 +232,9 @@
     <None Include="Pages\Download.ashx" />
     <Content Include="Pages\ResetPassword.aspx" />
     <Content Include="Pages\Upload.aspx" />
+    <Content Include="tailwind.output.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
