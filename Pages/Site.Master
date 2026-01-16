@@ -27,27 +27,17 @@
 .animate-fadeIn {
     animation: fadeIn 0.2s ease-out;
 }
- .file-name-clamp {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            word-break: break-word;
-            line-height: 1.4;
-            max-height: 2.8em;
-        }
-
- .file-upload-clamp {
-           display: -webkit-box;
-           -webkit-line-clamp: 2;
-           -webkit-box-orient: vertical;
-           overflow: hidden;
-           text-overflow: ellipsis;
-           word-break: break-word;
-           line-height: 1.4;
-           max-height: 2.8em;
-       }
+.file-name-clamp, .file-upload-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* This is key to prevent long file names from pushing the table width */
+    word-break: break-all; 
+    line-height: 1.4;
+    max-height: 2.8em;
+}
 
   .custom-scroll::-webkit-scrollbar,
 .custom-scroll-style::-webkit-scrollbar {

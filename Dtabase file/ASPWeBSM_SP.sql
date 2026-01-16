@@ -248,3 +248,6 @@ BEGIN
         ORDER BY LogTime DESC;
     END
 END
+ 
+
+Select * from Logs

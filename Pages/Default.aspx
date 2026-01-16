@@ -100,50 +100,43 @@
                 <asp:UpdatePanel ID="UpdatePanelGenerated" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
                          <div class="custom-scroll">
-                            <table class="w-full text-left text-slate-300 table-fixed ">
-                               <thead class="bg-slate-700 text-xs text-slate-400 uppercase sticky top-0">
-                                    <tr>
-                                        <th class="px-6 py-3" style="width: 20%;">File Name</th>
-                                     
-                                        <th class="px-6 py-3" style="width: 20%;">Generated</th>
-                                        <th class="px-6 py-3 text-right" style="width: 15%;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-slate-800">
-                                    <asp:Repeater ID="rptGenerated" runat="server" OnItemCommand="rptGenerated_ItemCommand">
-                                        <ItemTemplate>
-                                            <tr class="border-b border-slate-700 transition-colors hover:bg-slate-750">
-                                                <td class="px-6 py-4 font-medium text-white" title='<%# Eval("OperationsInfo") %>'>
-                                                    <div class="file-name-clamp cursor-pointer">
-                                                        <%# Eval("FileName") %>
-                                                    </div>
-                                                </td>
+                            <table class="w-full text-left text-slate-300">
+    <thead class="bg-slate-700 text-xs text-slate-400 uppercase sticky top-0">
+        <tr>
+            <th class="px-6 py-3">File Name</th>
+            <th class="px-6 py-3">Generated</th>
+            <th class="px-6 py-3 text-right">Action</th>
+        </tr>
+    </thead>
+    <tbody class="bg-slate-800">
+        <asp:Repeater ID="rptGenerated" runat="server" OnItemCommand="rptGenerated_ItemCommand">
+            <ItemTemplate>
+                <tr class="border-b border-slate-700 transition-colors hover:bg-slate-750">
+                    <td class="px-6 py-4 font-medium text-white" title='<%# Eval("OperationsInfo") %>'>
+                        <div class="file-name-clamp cursor-pointer">
+                            <%# Eval("FileName") %>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-400">
+                        <%# Eval("GeneratedDate") %>
+                    </td>
+                    <td class="space-x-2 px-6 py-4 text-right whitespace-nowrap">
+                        <a href='GeneratedDownload.ashx?id=<%# Eval("FileID") %>' target="_blank"
+                            onclick="refreshLogsAfterDownload()"
+                            class="inline-block bg-orange-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-orange-400">Download
+                        </a>
 
-
-                                                <td class="px-6 py-4 text-sm text-slate-400">
-                                                    <%# Eval("GeneratedDate") %>
-                                                </td>
-
-                                                <td class="space-x-2 px-6 py-4 text-right whitespace-nowrap">
-                                                    <a href='GeneratedDownload.ashx?id=<%# Eval("FileID") %>' target="_blank"
-                                                        onclick="refreshLogsAfterDownload()"
-                                                        class="inline-block bg-orange-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-orange-400">Download
-                                                    </a>
-
-                                                    <asp:LinkButton ID="btnPurgeGenerated" runat="server"
-                                                        CommandName="DeleteFile"
-                                                        CommandArgument='<%# Eval("FileID") %>'
-                                                        CssClass="bg-red-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-red-400"
-                                                        OnClientClick="return confirm('Are you sure you want to purge this generated file?');">
-                         Purge
-                                                    </asp:LinkButton>
-                                                </td>
-
-                                            </tr>
-                                        </ItemTemplate>
-                                    </asp:Repeater>
-                                </tbody>
-                            </table>
+                        <asp:LinkButton ID="btnPurgeGenerated" runat="server"
+                            CommandName="DeleteFile"
+                            CommandArgument='<%# Eval("FileID") %>'
+                            CssClass="bg-red-500 text-white px-4 py-2 rounded-md border-0 cursor-pointer no-underline font-medium hover:bg-red-400"
+                            OnClientClick="return confirm('Are you sure you want to purge this generated file?');">Purge</asp:LinkButton>
+                    </td>
+                </tr>
+            </ItemTemplate>
+        </asp:Repeater>
+    </tbody>
+</table>
 
                             <asp:Label ID="lblGeneratedEmpty" runat="server" Text="No generated files found."
                                 Visible="false" CssClass="block py-8 text-center text-slate-500 italic"></asp:Label>
