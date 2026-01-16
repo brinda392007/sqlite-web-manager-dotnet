@@ -324,9 +324,11 @@
                             Style="background: #0f172a; border-color: #334155;">
                         </asp:TextBox>
                         <asp:Button ID="btnSendMessage" runat="server" Text="📧 Send Message" OnClick="btnSendMessage_Click"
-                            CssClass="w-full text-white font-bold py-4 rounded-lg transition-all duration-300"
-                            Style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); box-shadow: 0 4px 14px 0 rgba(249, 115, 22, 0.39); cursor: pointer;" />
-                    </div>
+    OnClientClick="this.value='⏳ Sending...'; this.style.pointerEvents='none'; this.style.opacity='0.6';"
+    CssClass="w-full text-white font-bold py-4 rounded-lg transition-all duration-300"
+    Style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+    box-shadow: 0 4px 14px 0 rgba(249, 115, 22, 0.39); cursor: pointer;" />
+                        </div>
                 </div>
             </div>
         </section>
