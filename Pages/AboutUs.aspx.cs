@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Web.UI;
 
-namespace ASPWebSM
+namespace ASPWeBSM
 {
     public partial class AboutUs : System.Web.UI.Page
     {
@@ -22,6 +22,25 @@ namespace ASPWebSM
                     Session[SESSION_EMAIL_COUNT] = 0;
                 }
                 UpdateEmailCountDisplay();
+            }
+
+        }
+
+
+        protected void lnkHeaderAbout_Click(object sender, EventArgs e)
+        {
+
+            if (Session["UserId"] != null)
+            {
+                // Redirect to your dashboard if logged in
+                Response.Redirect("Default.aspx");
+            }
+            // If not logged in, it does nothing, just like your master page logic
+            if (Session["UserId"] == null)
+            {
+                lnkHeaderAbout.Enabled = false;
+                lnkHeaderAbout.Style["cursor"] = "default";
+                lnkHeaderAbout.Style["pointer-events"] = "none";
             }
         }
 

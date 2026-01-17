@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AboutUs.aspx.cs" Inherits="ASPWebSM.AboutUs" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AboutUs.aspx.cs" Inherits="ASPWeBSM.AboutUs" %>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -101,7 +101,7 @@
                 <div class="flex items-center justify-between">
                     <!-- Brand Name Only -->
                     <div class="flex items-center">
-                        <span class="text-2xl font-bold gradient-text">ASPWebSM</span>
+                        <asp:LinkButton ID="lnkHeaderAbout" runat="server" OnClick="lnkHeaderAbout_Click" CssClass="text-2xl font-bold gradient-text" style="text-decoration:none;">ASPWebSM</asp:LinkButton>
                     </div>
 
                     <!-- Navigation Links -->
