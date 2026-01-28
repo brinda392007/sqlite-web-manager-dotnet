@@ -90,6 +90,175 @@
                 transform: translateY(-2px);
                 box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
             }
+
+        /* Tutorial Section Animations */
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(-5%); }
+            50% { transform: translateY(5%); }
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 3s infinite ease-in-out;
+        }
+
+        /* Collapsible Content Styles */
+.collapsible-header {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.collapsible-header:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(249, 115, 22, 0.3);
+}
+
+.collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
+    opacity: 0;
+}
+
+.collapsible-content.active {
+    max-height: 3000px;
+    opacity: 1;
+    padding-top: 1.5rem;
+}
+
+.chevron-icon {
+    transition: transform 0.3s ease;
+}
+
+.chevron-icon.rotate {
+    transform: rotate(180deg);
+}
+
+/* Badge styles */
+.optional-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    background: rgba(249, 115, 22, 0.1);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fb923c;
+    margin-left: 0.5rem;
+}
+
+/* Pulse animation */
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 20px 8px rgba(249, 115, 22, 0);
+    }
+}
+
+.pulse-on-load {
+    animation: pulse-glow 2s ease-in-out 3;
+}
+
+/* Video container responsive */
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #000;
+}
+
+.video-container iframe,
+.video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Step-by-step guide styles */
+.step-item {
+    position: relative;
+    padding-left: 3rem;
+    padding-bottom: 2rem;
+}
+
+.step-item:last-child {
+    padding-bottom: 0;
+}
+
+.step-item::before {
+    content: '';
+    position: absolute;
+    left: 0.875rem;
+    top: 2.5rem;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #f97316, transparent);
+}
+
+.step-item:last-child::before {
+    display: none;
+}
+
+.step-number {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.875rem;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+}
+
+.code-block {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    color: #94a3b8;
+    overflow-x: auto;
+}
+
+/* Constraint for Tip Box Icons */
+.tip-box svg {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px; /* Prevents the icon from getting squashed */
+    display: block;
+}
+
+.tip-box {
+    display: flex;
+    align-items: flex-start; /* Aligns icon with the first line of text */
+    gap: 12px;
+}
     </style>
 </head>
 <body class="min-h-screen text-white" style="background: #0f172a;">
@@ -167,6 +336,12 @@
                         onmouseover="this.style.background='rgba(249, 115, 22, 0.1)';"
                         onmouseout="this.style.background='transparent';">Contact Us
                     </a>
+
+                     <a href="#section-tutorial" class="px-8 py-4 rounded-lg font-bold text-lg border-2 transition-all transform hover:scale-105"
+     style="border-color: #f97316; color: #f97316;"
+     onmouseover="this.style.background='rgba(249, 115, 22, 0.1)';"
+     onmouseout="this.style.background='transparent';">Get Guidance
+ </a>
                 </div>
 
                 <div class="mt-12 flex items-center justify-center space-x-8 text-slate-400">
@@ -239,6 +414,180 @@
                 </div>
             </div>
         </section>
+
+       <!-- Optional Resources Section -->
+<section id="section-tutorial" class="py-20 px-4 fade-in">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">Developer Knowledge Center</h2>
+            <p class="text-lg text-slate-400">Master ASPWebSM in minutes with curated resources for database automation</p>
+        </div>
+
+        <div class="space-y-6">
+            
+            <!-- Video Tutorial - Collapsible -->
+            <div class="backdrop-blur-lg rounded-2xl border pulse-on-load" 
+                 style="background: rgba(30, 41, 59, 0.6); border-color: #334155;">
+                
+                <!-- Header (Always Visible) -->
+                <div class="collapsible-header p-6 flex items-center justify-between" 
+                     onclick="toggleCollapsible('videoTutorial')">
+                    <div class="flex items-center flex-1">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mr-4"
+                             style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white flex items-center">
+                                Video Tutorial
+                                
+                            </h3>
+                            <p class="text-slate-400 mt-1">Watch our step-by-step video guide</p>
+                        </div>
+                    </div>
+                    <div class="chevron-icon" id="videoTutorial-chevron">
+                        <svg class="w-6 h-6" style="color: #f97316;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Collapsible Content -->
+                <div class="collapsible-content" id="videoTutorial">
+                    <div class="px-6 pb-6">
+                        <div class="backdrop-blur-sm rounded-xl p-6" style="background: rgba(15, 23, 42, 0.5);">
+                            <p class="text-slate-300 mb-4">Master ASPWebSM in minutes. Watch this tutorial to learn how to upload your database schema and generate professional-grade stored procedures.</p>
+                            
+                            <!-- Video Container -->
+                            <div class="video-container">
+                                <video controls>
+                                    <source src="../assets/videos/Website_tour.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+<div class="mt-4 p-3 rounded-xl max-w-2xl mx-auto tip-box" 
+     style="background: rgba(249, 115, 22, 0.05); border: 1px solid rgba(249, 115, 22, 0.1); border-left: 4px solid #f97316;">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #f97316;">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <p class="text-sm text-slate-400">
+        <span class="font-bold" style="color: #fb923c;">Pro Tip:</span> 
+        You can skip the video and jump directly to using the platform—it's designed to be intuitive!
+    </p>
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SSMS SQL Extraction Guide - Collapsible -->
+            <div class="backdrop-blur-lg rounded-2xl border pulse-on-load" 
+                 style="background: rgba(30, 41, 59, 0.6); border-color: #334155; animation-delay: 0.2s;">
+                
+                <!-- Header (Always Visible) -->
+                <div class="collapsible-header p-6 flex items-center justify-between" 
+                     onclick="toggleCollapsible('ssmsGuide')">
+                    <div class="flex items-center flex-1">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mr-4"
+                             style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white flex items-center">
+                                Extract SQL Schema from SSMS
+                               
+                            </h3>
+                            <p class="text-slate-400 mt-1">Learn how to export your database table structure</p>
+                        </div>
+                    </div>
+                    <div class="chevron-icon" id="ssmsGuide-chevron">
+                        <svg class="w-6 h-6" style="color: #f97316;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Collapsible Content -->
+                <div class="collapsible-content" id="ssmsGuide">
+                    <div class="px-6 pb-6">
+                        <div class="backdrop-blur-sm rounded-xl p-6" style="background: rgba(15, 23, 42, 0.5);">
+                            <p class="text-slate-300 mb-6">Follow these steps to extract your table schema from SQL Server Management Studio (SSMS):</p>
+                            
+                            <!-- Step-by-step guide -->
+                            <div class="space-y-6">
+                                <div class="step-item">
+                                    <div class="step-number">1</div>
+                                    <h4 class="font-bold text-lg mb-2">Open SSMS and Connect to Your Database</h4>
+                                    <p class="text-slate-400 text-sm">Launch SQL Server Management Studio and connect to your database server. Navigate to the database containing the table you want to export.</p>
+                                </div>
+
+                                <div class="step-item">
+                                    <div class="step-number">2</div>
+                                    <h4 class="font-bold text-lg mb-2">Right-click on Your Database</h4>
+                                    <p class="text-slate-400 text-sm">In the Object Explorer, right-click on your database and select <span class="font-semibold" style="color: #fb923c;">Tasks → Generate Scripts</span></p>
+                                </div>
+
+                                <div class="step-item">
+                                    <div class="step-number">3</div>
+                                    <h4 class="font-bold text-lg mb-2">Select Database Objects</h4>
+                                    <p class="text-slate-400 text-sm mb-2">Choose <span class="font-semibold" style="color: #fb923c;">"Select specific database objects"</span> and select the tables you want to export.</p>
+                                </div>
+
+                                <div class="step-item">
+                                    <div class="step-number">4</div>
+                                    <h4 class="font-bold text-lg mb-2" style="color: #fb923c;">⚠️ Critical Settings</h4>
+                                    <p class="text-slate-400 text-sm mb-2">Click <span class="font-semibold" style="color: #fb923c;">"Advanced"</span> and set these options:</p>
+                                    <div class="code-block">
+- Types of data to script: Schema only
+- Script Indexes: True
+- Script Triggers: True
+                                    </div>
+                                </div>
+
+                                <div class="step-item">
+                                    <div class="step-number">5</div>
+                                    <h4 class="font-bold text-lg mb-2">Save the Script</h4>
+                                    <p class="text-slate-400 text-sm">Save the generated script as a <code class="px-2 py-1 rounded" style="background: #0f172a; color: #fb923c;">.sql</code> file. You can now upload this file to ASPWebSM!</p>
+                                </div>
+                            </div>
+
+                            <!-- Additional Tips -->
+                      <div class="grid md:grid-cols-2 gap-4 mt-8">
+    
+    <div class="p-3 rounded-lg tip-box" style="background: rgba(34, 197, 94, 0.05); border-left: 3px solid #22c55e;">
+        <svg style="color: #22c55e;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+            <p class="font-bold text-xs mb-0.5" style="color: #22c55e;">Quick Tip</p>
+            <p class="text-xs text-slate-400">Export multiple tables at once by selecting multiple items in the object list.</p>
+        </div>
+    </div>
+
+    <div class="p-3 rounded-lg tip-box" style="background: rgba(249, 115, 22, 0.05); border-left: 3px solid #f97316;">
+        <svg style="color: #f97316;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        </svg>
+        <div>
+            <p class="font-bold text-xs mb-0.5" style="color: #fb923c;">Important Note</p>
+            <p class="text-xs text-slate-400">Ensure the script includes the complete <code class="text-orange-300">CREATE TABLE</code> statement.</p>
+        </div>
+    </div>
+    
+</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+       
+</section>
 
         <!-- Technologies Section -->
         <section id="section-tech" class="py-20 px-4 fade-in" style="background: rgba(15, 23, 42, 0.5);">
@@ -385,7 +734,7 @@
                             <svg class="w-4 h-4 mr-2" style="color: #f97316;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path>
                             </svg>
-                            <span class="text-sm font-semibold">ENR: 23020201048</span>
+                            <span class="text-sm font-semibold">ENR: 23020201148</span>
                         </div>
                     </div>
                 </div>
@@ -528,6 +877,20 @@
                 }
             });
         });
+
+        // Collapsible toggle function
+        function toggleCollapsible(id) {
+            const content = document.getElementById(id);
+            const chevron = document.getElementById(id + '-chevron');
+
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                chevron.classList.remove('rotate');
+            } else {
+                content.classList.add('active');
+                chevron.classList.add('rotate');
+            }
+        }
     </script>
 </body>
 </html>
