@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Configuration;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace ASPWeBSM
 {
@@ -16,6 +18,31 @@ namespace ASPWeBSM
         {
 
         }
+
+        private string GetUsernameByEmail(string email)
+        {
+            string username = "";
+            DatabaseManager.Initialize();
+            using (var conn = DatabaseManager.GetConnection())
+            {
+                conn.Open();
+                string query = "SELECT Username FROM Users WHERE Email = @Email";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Email", email);
+
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        username = result.ToString();
+                    }
+                }
+            }
+
+            return username;
+        }
+
         protected void btnSendOTP_Click(object sender, EventArgs e)
         {
             Page.Validate("EmailStep"); // Manually trigger the group
@@ -30,16 +57,25 @@ namespace ASPWeBSM
             }
             else
             {
+                string email = txtEmail.Text;
+                string username = GetUsernameByEmail(email);
+
+                if (string.IsNullOrEmpty(username))
+                {
+                    UiHelper.ShowToast(this, "Email not found!", "error");
+                    return;
+                }
                 Session["OTP"] = OTP.ToString();
-                Session["Email"] = txtEmail.Text;
+                Session["Email"] = email;
                 
-                SendEmail(txtEmail.Text, OTP);
+                
+                SendEmail(email,username, OTP);
             }
 
             pnlVerify.Visible = true;
         }
 
-        private void SendEmail(string reciever_email, int OTP)
+        private void SendEmail(string reciever_email, string username, int OTP)
         {
             try
             {
@@ -63,7 +99,15 @@ namespace ASPWeBSM
                 msg.From = new MailAddress(email);
                 msg.To.Add(reciever_email);
                 msg.Subject = "Password Reset OTP";
-                msg.Body = "This is your six digit OTP: " + OTP;
+                msg.Body = $@"
+            <h3>Hello {username},</h3>
+            <p>You requested to reset your password.</p>
+            <p><strong>Your 6-digit OTP is:</strong></p>
+            <h2 style='color:blue;'>{OTP}</h2>
+            <p>Please do not share this OTP with anyone.</p>
+            <br/>
+            <p>Regards,<br/>ASPWeBSM</p>
+        ";
                 msg.IsBodyHtml = true;
 
                 //send the email
