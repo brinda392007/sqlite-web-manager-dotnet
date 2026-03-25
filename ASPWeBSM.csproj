@@ -229,7 +229,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
-    <None Include="Pages\Download.ashx" />
+    <Content Include="Pages\Download.ashx" />
     <Content Include="Pages\ResetPassword.aspx" />
     <Content Include="Pages\Upload.aspx" />
     <Content Include="tailwind.output.css">
