@@ -13,7 +13,21 @@ namespace ASPWeBSM
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // 🔴 Hide logout button
             Page.Master.FindControl("btnLogOut").Visible = false;
+
+            // 🔴 Prevent caching
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetNoStore();
+            Response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1));
+
+            // ✅ If already logged in → redirect to Home
+            if (Session["UserId"] != null)
+            {
+                Response.Redirect("~/Pages/Default.aspx");
+                return;
+            }
+
             UiHelper.ShowSessionToast(this);
         }
 
