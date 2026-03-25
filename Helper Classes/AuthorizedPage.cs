@@ -12,6 +12,11 @@ namespace ASPWeBSM
     {
         protected override void OnLoad(EventArgs e)
         {
+            // 🔴 Disable caching (IMPORTANT)
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetNoStore();
+            Response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1));
+            Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
             if (Session["UserId"] == null)
             {
                 Response.Redirect("Login.aspx");
